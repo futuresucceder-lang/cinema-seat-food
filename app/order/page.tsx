@@ -1,35 +1,29 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 
-const foodItems = [
-  {
-    id: 1,
-    name: "Classic Popcorn",
-    price: 180,
-    emoji: "🍿",
-  },
-  {
-    id: 2,
-    name: "Cheese Nachos",
-    price: 220,
-    emoji: "🧀",
-  },
-  {
-    id: 3,
-    name: "Cold Drink",
-    price: 120,
-    emoji: "🥤",
-  },
-  {
-    id: 4,
-    name: "Veg Burger",
-    price: 200,
-    emoji: "🍔",
-  },
-];
+type FoodItem = {
+  id: string;
+  name: string;
+  price: number;
+  category: string | null;
+  image_url: string | null;
+};
+
+function getEmoji(name: string, category: string | null) {
+  if (name.toLowerCase().includes("popcorn")) return "🍿";
+  if (name.toLowerCase().includes("nachos")) return "🧀";
+  if (name.toLowerCase().includes("drink")) return "🥤";
+  if (name.toLowerCase().includes("burger")) return "🍔";
+
+  if (category === "Beverages") return "🥤";
+  if (category === "Snacks") return "🍿";
+  if (category === "Food") return "🍔";
+
+  return "🍽️";
+}
 
 function OrderPage() {
   const searchParams = useSearchParams();
@@ -37,18 +31,46 @@ function OrderPage() {
   const screen = searchParams.get("screen") || "3";
   const seat = searchParams.get("seat") || "F12";
 
-  const [cart, setCart] = useState<Record<number, number>>({});
+  const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
+  const [cart, setCart] = useState<Record<string, number>>({});
+  const [isLoadingMenu, setIsLoadingMenu] = useState(true);
+  const [menuError, setMenuError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderCode, setOrderCode] = useState("");
 
-  function addToCart(id: number) {
+  useEffect(() => {
+    async function loadFoodItems() {
+      setIsLoadingMenu(true);
+      setMenuError("");
+
+      const { data, error } = await supabase
+        .from("food_items")
+        .select("id, name, price, category, image_url")
+        .eq("is_available", true)
+        .order("name");
+
+      if (error) {
+        console.error("Food menu error:", error);
+        setMenuError(error.message);
+        setFoodItems([]);
+      } else {
+        setFoodItems((data || []) as FoodItem[]);
+      }
+
+      setIsLoadingMenu(false);
+    }
+
+    loadFoodItems();
+  }, []);
+
+  function addToCart(id: string) {
     setCart((previous) => ({
       ...previous,
       [id]: (previous[id] || 0) + 1,
     }));
   }
 
-  function removeFromCart(id: number) {
+  function removeFromCart(id: string) {
     setCart((previous) => {
       const currentQuantity = previous[id] || 0;
 
@@ -71,9 +93,7 @@ function OrderPage() {
   );
 
   const total = Object.entries(cart).reduce((sum, [id, quantity]) => {
-    const item = foodItems.find(
-      (food) => food.id === Number(id)
-    );
+    const item = foodItems.find((food) => food.id === id);
 
     return sum + (item?.price || 0) * quantity;
   }, 0);
@@ -92,15 +112,13 @@ function OrderPage() {
 
     const orderedFoodItems = Object.entries(cart).map(
       ([id, quantity]) => {
-        const item = foodItems.find(
-          (food) => food.id === Number(id)
-        );
+        const item = foodItems.find((food) => food.id === id);
 
         return {
           id: item?.id,
           name: item?.name,
           price: item?.price,
-          emoji: item?.emoji,
+          category: item?.category,
           quantity,
         };
       }
@@ -199,88 +217,140 @@ function OrderPage() {
         </p>
 
         <div style={{ marginTop: "20px" }}>
-          {foodItems.map((item) => {
-            const quantity = cart[item.id] || 0;
+          {isLoadingMenu && (
+            <div
+              style={{
+                background: "#222",
+                padding: "25px",
+                borderRadius: "15px",
+                textAlign: "center",
+              }}
+            >
+              Loading menu...
+            </div>
+          )}
 
-            return (
+          {!isLoadingMenu && menuError && (
+            <div
+              style={{
+                background: "#222",
+                padding: "25px",
+                borderRadius: "15px",
+                textAlign: "center",
+                color: "#ff7777",
+              }}
+            >
+              <strong>Could not load the food menu.</strong>
+
+              <p style={{ marginTop: "10px" }}>
+                {menuError}
+              </p>
+            </div>
+          )}
+
+          {!isLoadingMenu &&
+            !menuError &&
+            foodItems.length === 0 && (
               <div
-                key={item.id}
                 style={{
                   background: "#222",
-                  padding: "18px",
+                  padding: "25px",
                   borderRadius: "15px",
-                  marginBottom: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  textAlign: "center",
                 }}
               >
-                <div>
-                  <div
-                    style={{
-                      fontSize: "35px",
-                    }}
-                  >
-                    {item.emoji}
-                  </div>
+                No food items are currently available.
+              </div>
+            )}
 
-                  <strong>{item.name}</strong>
+          {!isLoadingMenu &&
+            !menuError &&
+            foodItems.map((item) => {
+              const quantity = cart[item.id] || 0;
+              const emoji = getEmoji(
+                item.name,
+                item.category
+              );
 
-                  <div
-                    style={{
-                      color: "#aaa",
-                      marginTop: "5px",
-                    }}
-                  >
-                    ₹{item.price}
-                  </div>
-                </div>
-
+              return (
                 <div
+                  key={item.id}
                   style={{
+                    background: "#222",
+                    padding: "18px",
+                    borderRadius: "15px",
+                    marginBottom: "12px",
                     display: "flex",
                     alignItems: "center",
-                    gap: "10px",
+                    justifyContent: "space-between",
                   }}
                 >
-                  {quantity > 0 && (
-                    <>
-                      <button
-                        onClick={() =>
-                          removeFromCart(item.id)
-                        }
-                        style={{
-                          padding: "8px 12px",
-                          borderRadius: "8px",
-                          border: "none",
-                        }}
-                      >
-                        −
-                      </button>
+                  <div>
+                    <div
+                      style={{
+                        fontSize: "35px",
+                      }}
+                    >
+                      {emoji}
+                    </div>
 
-                      <strong>{quantity}</strong>
-                    </>
-                  )}
+                    <strong>{item.name}</strong>
 
-                  <button
-                    onClick={() =>
-                      addToCart(item.id)
-                    }
+                    <div
+                      style={{
+                        color: "#aaa",
+                        marginTop: "5px",
+                      }}
+                    >
+                      ₹{item.price}
+                    </div>
+                  </div>
+
+                  <div
                     style={{
-                      background: "#e50914",
-                      color: "white",
-                      border: "none",
-                      padding: "12px 18px",
-                      borderRadius: "10px",
-                      fontWeight: "bold",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
                     }}
                   >
-                    + Add
-                  </button>
+                    {quantity > 0 && (
+                      <>
+                        <button
+                          onClick={() =>
+                            removeFromCart(item.id)
+                          }
+                          style={{
+                            padding: "8px 12px",
+                            borderRadius: "8px",
+                            border: "none",
+                          }}
+                        >
+                          −
+                        </button>
+
+                        <strong>{quantity}</strong>
+                      </>
+                    )}
+
+                    <button
+                      onClick={() =>
+                        addToCart(item.id)
+                      }
+                      style={{
+                        background: "#e50914",
+                        color: "white",
+                        border: "none",
+                        padding: "12px 18px",
+                        borderRadius: "10px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      + Add
+                    </button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
 
         <div
@@ -307,7 +377,7 @@ function OrderPage() {
 
           <button
             onClick={handleCheckout}
-            disabled={isSubmitting}
+            disabled={isSubmitting || isLoadingMenu}
             style={{
               marginTop: "15px",
               padding: "14px 30px",

@@ -1,48 +1,65 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "../lib/supabase";
 
-const foodItems = [
+type Category = "All" | "Snacks" | "Drinks" | "Meals";
+
+type FoodItem = {
+  id: number;
+  name: string;
+  price: number;
+  emoji: string;
+  category: Exclude<Category, "All">;
+};
+
+const foodItems: FoodItem[] = [
   {
     id: 1,
     name: "Classic Popcorn",
     price: 180,
     emoji: "🍿",
+    category: "Snacks",
   },
   {
     id: 2,
     name: "Cheese Nachos",
     price: 220,
     emoji: "🧀",
+    category: "Snacks",
   },
   {
     id: 3,
     name: "Cold Drink",
     price: 120,
     emoji: "🥤",
+    category: "Drinks",
   },
   {
     id: 4,
     name: "Veg Burger",
     price: 200,
     emoji: "🍔",
+    category: "Meals",
   },
+];
+
+const categories: Category[] = [
+  "All",
+  "Snacks",
+  "Drinks",
+  "Meals",
 ];
 
 export default function Home() {
   const [cart, setCart] = useState<Record<number, number>>({});
+  const [selectedCategory, setSelectedCategory] =
+    useState<Category>("All");
 
-  // Current page of the app
   const [currentScreen, setCurrentScreen] = useState("3");
-
-  // Actual cinema screen number
   const [cinemaScreen, setCinemaScreen] = useState("3");
-
   const [seat, setSeat] = useState("F12");
-
   const [orderCode, setOrderCode] = useState("");
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -67,11 +84,43 @@ export default function Home() {
     }));
   }
 
-  const total = Object.entries(cart).reduce((sum, [id, quantity]) => {
-    const item = foodItems.find((food) => food.id === Number(id));
+  function removeFromCart(id: number) {
+    setCart((prev) => {
+      const currentQuantity = prev[id] || 0;
 
-    return sum + (item?.price || 0) * quantity;
-  }, 0);
+      if (currentQuantity <= 1) {
+        const updated = { ...prev };
+        delete updated[id];
+        return updated;
+      }
+
+      return {
+        ...prev,
+        [id]: currentQuantity - 1,
+      };
+    });
+  }
+
+  const filteredFoodItems = useMemo(() => {
+    if (selectedCategory === "All") {
+      return foodItems;
+    }
+
+    return foodItems.filter(
+      (item) => item.category === selectedCategory
+    );
+  }, [selectedCategory]);
+
+  const total = Object.entries(cart).reduce(
+    (sum, [id, quantity]) => {
+      const item = foodItems.find(
+        (food) => food.id === Number(id)
+      );
+
+      return sum + (item?.price || 0) * quantity;
+    },
+    0
+  );
 
   const itemCount = Object.values(cart).reduce(
     (sum, quantity) => sum + quantity,
@@ -86,11 +135,10 @@ export default function Home() {
 
     setIsSubmitting(true);
 
-    // Create a unique order code
     const newOrderCode =
-      "CINEMA-" + crypto.randomUUID().slice(0, 8).toUpperCase();
+      "CINEMA-" +
+      crypto.randomUUID().slice(0, 8).toUpperCase();
 
-    // Convert cart into readable food-order data
     const orderedFoodItems = Object.entries(cart).map(
       ([id, quantity]) => {
         const item = foodItems.find(
@@ -121,20 +169,24 @@ export default function Home() {
       console.error("Order error:", error);
 
       alert(
-        "Order could not be submitted.\n\n" + error.message
+        "Order could not be submitted.\n\n" +
+          error.message
       );
 
       setIsSubmitting(false);
       return;
     }
 
-    // Save the order code so we can show it later
     setOrderCode(newOrderCode);
-
-    // Move to confirmation screen
     setCurrentScreen("4");
-
     setIsSubmitting(false);
+  }
+
+  function backToMenu() {
+    setCart({});
+    setOrderCode("");
+    setCurrentScreen("3");
+    setSelectedCategory("All");
   }
 
   return (
@@ -143,236 +195,553 @@ export default function Home() {
         minHeight: "100vh",
         background: "#111",
         color: "white",
-        padding: "30px 20px",
+        padding: "20px",
         fontFamily: "Arial, sans-serif",
       }}
     >
       {currentScreen === "3" && (
         <div
           style={{
-            maxWidth: "600px",
+            maxWidth: "700px",
             margin: "0 auto",
           }}
         >
+          {/* HEADER */}
           <div
             style={{
               textAlign: "center",
-              marginBottom: "30px",
+              marginBottom: "25px",
             }}
           >
-            <div style={{ fontSize: "50px" }}>🎬</div>
+            <div style={{ fontSize: "48px" }}>
+              🎬
+            </div>
 
             <h1
               style={{
                 fontSize: "32px",
-                margin: "10px 0",
+                margin: "8px 0",
               }}
             >
               Cinema Food
             </h1>
 
-            <p style={{ color: "#aaa" }}>
+            <p
+              style={{
+                color: "#aaa",
+                margin: 0,
+              }}
+            >
               Order food directly from your seat
             </p>
           </div>
 
+          {/* SEAT INFORMATION */}
           <div
             style={{
               background: "#222",
               padding: "18px",
               borderRadius: "15px",
               marginBottom: "25px",
+              display: "flex",
+              justifyContent: "space-around",
               textAlign: "center",
             }}
           >
-            <p style={{ margin: "5px" }}>
-              <strong>
-                Screen {cinemaScreen}
-              </strong>
-            </p>
-
-            <p
-              style={{
-                margin: "5px",
-                color: "#aaa",
-              }}
-            >
-              Seat {seat}
-            </p>
-          </div>
-
-          <h2>🍿 Food & Drinks</h2>
-
-          <div>
-            {foodItems.map((item) => (
+            <div>
               <div
-                key={item.id}
                 style={{
-                  background: "#222",
-                  padding: "18px",
-                  borderRadius: "15px",
-                  marginBottom: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
+                  color: "#999",
+                  fontSize: "13px",
                 }}
               >
-                <div>
-                  <div style={{ fontSize: "30px" }}>
-                    {item.emoji}
-                  </div>
-
-                  <strong>{item.name}</strong>
-
-                  <div
-                    style={{
-                      color: "#aaa",
-                      marginTop: "5px",
-                    }}
-                  >
-                    ₹{item.price}
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => addToCart(item.id)}
-                  style={{
-                    background: "#e50914",
-                    color: "white",
-                    border: "none",
-                    padding: "12px 20px",
-                    borderRadius: "10px",
-                    cursor: "pointer",
-                    fontWeight: "bold",
-                  }}
-                >
-                  + Add
-                </button>
+                SCREEN
               </div>
-            ))}
-          </div>
 
-          <div
-            style={{
-              background: "#e50914",
-              padding: "20px",
-              borderRadius: "15px",
-              marginTop: "25px",
-              textAlign: "center",
-            }}
-          >
-            <h3 style={{ margin: "0 0 8px 0" }}>
-              🛒 {itemCount} item(s)
-            </h3>
+              <strong
+                style={{
+                  fontSize: "20px",
+                }}
+              >
+                🎬 {cinemaScreen}
+              </strong>
+            </div>
 
             <div
               style={{
-                fontSize: "24px",
-                fontWeight: "bold",
+                width: "1px",
+                background: "#444",
+              }}
+            />
+
+            <div>
+              <div
+                style={{
+                  color: "#999",
+                  fontSize: "13px",
+                }}
+              >
+                SEAT
+              </div>
+
+              <strong
+                style={{
+                  fontSize: "20px",
+                }}
+              >
+                💺 {seat}
+              </strong>
+            </div>
+          </div>
+
+          {/* CATEGORY BUTTONS */}
+          <div
+            style={{
+              display: "flex",
+              gap: "8px",
+              overflowX: "auto",
+              paddingBottom: "10px",
+              marginBottom: "20px",
+            }}
+          >
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() =>
+                  setSelectedCategory(category)
+                }
+                style={{
+                  flex: "0 0 auto",
+                  padding: "10px 16px",
+                  borderRadius: "20px",
+                  border: "none",
+                  background:
+                    selectedCategory === category
+                      ? "#e50914"
+                      : "#292929",
+                  color: "white",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
+                {category === "All" && "🍽️ "}
+                {category === "Snacks" && "🍿 "}
+                {category === "Drinks" && "🥤 "}
+                {category === "Meals" && "🍔 "}
+                {category}
+              </button>
+            ))}
+          </div>
+
+          <h2
+            style={{
+              marginBottom: "15px",
+            }}
+          >
+            🍿 Food & Drinks
+          </h2>
+
+          {/* FOOD ITEMS */}
+          <div>
+            {filteredFoodItems.map((item) => {
+              const quantity = cart[item.id] || 0;
+
+              return (
+                <div
+                  key={item.id}
+                  style={{
+                    background: "#222",
+                    padding: "16px",
+                    borderRadius: "15px",
+                    marginBottom: "12px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "15px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "14px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "38px",
+                      }}
+                    >
+                      {item.emoji}
+                    </div>
+
+                    <div>
+                      <strong
+                        style={{
+                          fontSize: "17px",
+                        }}
+                      >
+                        {item.name}
+                      </strong>
+
+                      <div
+                        style={{
+                          color: "#aaa",
+                          marginTop: "5px",
+                        }}
+                      >
+                        ₹{item.price}
+                      </div>
+                    </div>
+                  </div>
+
+                  {quantity === 0 ? (
+                    <button
+                      onClick={() =>
+                        addToCart(item.id)
+                      }
+                      style={{
+                        background: "#e50914",
+                        color: "white",
+                        border: "none",
+                        padding: "10px 18px",
+                        borderRadius: "10px",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      + Add
+                    </button>
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        background: "#333",
+                        padding: "5px",
+                        borderRadius: "10px",
+                      }}
+                    >
+                      <button
+                        onClick={() =>
+                          removeFromCart(item.id)
+                        }
+                        style={{
+                          width: "34px",
+                          height: "34px",
+                          border: "none",
+                          borderRadius: "8px",
+                          background: "#555",
+                          color: "white",
+                          fontSize: "20px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        −
+                      </button>
+
+                      <strong
+                        style={{
+                          minWidth: "20px",
+                          textAlign: "center",
+                        }}
+                      >
+                        {quantity}
+                      </strong>
+
+                      <button
+                        onClick={() =>
+                          addToCart(item.id)
+                        }
+                        style={{
+                          width: "34px",
+                          height: "34px",
+                          border: "none",
+                          borderRadius: "8px",
+                          background: "#e50914",
+                          color: "white",
+                          fontSize: "20px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* CART */}
+          <div
+            style={{
+              background: "#222",
+              padding: "20px",
+              borderRadius: "15px",
+              marginTop: "25px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              ₹{total}
+              <h3
+                style={{
+                  margin: 0,
+                }}
+              >
+                🛒 Your Cart
+              </h3>
+
+              <strong>
+                {itemCount} item
+                {itemCount !== 1 ? "s" : ""}
+              </strong>
             </div>
+
+            {itemCount === 0 ? (
+              <p
+                style={{
+                  color: "#888",
+                  textAlign: "center",
+                  margin: "20px 0 5px",
+                }}
+              >
+                Your cart is empty
+              </p>
+            ) : (
+              <div
+                style={{
+                  marginTop: "15px",
+                }}
+              >
+                {Object.entries(cart).map(
+                  ([id, quantity]) => {
+                    const item = foodItems.find(
+                      (food) =>
+                        food.id === Number(id)
+                    );
+
+                    if (!item) return null;
+
+                    return (
+                      <div
+                        key={id}
+                        style={{
+                          display: "flex",
+                          justifyContent:
+                            "space-between",
+                          padding: "10px 0",
+                          borderBottom:
+                            "1px solid #333",
+                        }}
+                      >
+                        <span>
+                          {item.emoji} {item.name} ×{" "}
+                          {quantity}
+                        </span>
+
+                        <strong>
+                          ₹{item.price * quantity}
+                        </strong>
+                      </div>
+                    );
+                  }
+                )}
+
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent:
+                      "space-between",
+                    marginTop: "15px",
+                    fontSize: "22px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <span>Total</span>
+                  <span>₹{total}</span>
+                </div>
+              </div>
+            )}
 
             <button
               onClick={handleCheckout}
-              disabled={isSubmitting}
+              disabled={
+                isSubmitting || itemCount === 0
+              }
               style={{
-                marginTop: "12px",
-                padding: "14px 30px",
+                width: "100%",
+                marginTop: "18px",
+                padding: "15px",
                 borderRadius: "10px",
                 border: "none",
+                background:
+                  itemCount === 0
+                    ? "#444"
+                    : "#e50914",
+                color: "white",
                 fontWeight: "bold",
-                cursor: isSubmitting
-                  ? "not-allowed"
-                  : "pointer",
+                fontSize: "16px",
+                cursor:
+                  isSubmitting || itemCount === 0
+                    ? "not-allowed"
+                    : "pointer",
                 opacity: isSubmitting ? 0.6 : 1,
               }}
             >
               {isSubmitting
                 ? "PLACING ORDER..."
-                : "CHECKOUT"}
+                : "CHECKOUT • ₹" + total}
             </button>
           </div>
         </div>
       )}
 
+      {/* CONFIRMATION */}
       {currentScreen === "4" && (
-  <div
+        <div
+          style={{
+            maxWidth: "600px",
+            margin: "0 auto",
+            minHeight: "90vh",
+            padding: "40px 20px",
+            textAlign: "center",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "60px",
+              marginBottom: "10px",
+            }}
+          >
+            🎉
+          </div>
+
+          <h1>Order Confirmation</h1>
+
+          <p
+            style={{
+              marginTop: "20px",
+              color: "#bbb",
+            }}
+          >
+            Your order has been received.
+          </p>
+
+          <div
+            style={{
+              background: "#222",
+              padding: "20px",
+              borderRadius: "15px",
+              marginTop: "25px",
+            }}
+          >
+            <p>
+              <strong>🎬 Screen:</strong>{" "}
+              {cinemaScreen}
+            </p>
+
+            <p>
+              <strong>💺 Seat:</strong> {seat}
+            </p>
+
+            <h2
+              style={{
+                marginTop: "25px",
+              }}
+            >
+              Total: ₹{total}
+            </h2>
+          </div>
+
+          <div
+            style={{
+              marginTop: "20px",
+              background: "#222",
+              padding: "20px",
+              borderRadius: "15px",
+            }}
+          >
+            <p
+              style={{
+                color: "#aaa",
+                marginBottom: "8px",
+              }}
+            >
+              Your Order ID
+            </p>
+
+            <h2
+              style={{
+                margin: 0,
+                color: "#e50914",
+                wordBreak: "break-word",
+              }}
+            >
+              {orderCode}
+            </h2>
+          </div>
+
+          <p
+            style={{
+              marginTop: "20px",
+            }}
+          >
+            Thank you for ordering! 🍿
+          </p>
+
+         <div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px",
+    marginTop: "30px",
+  }}
+>
+  <button
+    onClick={() => {
+      window.location.href =
+        `/order-status?order=${encodeURIComponent(orderCode)}`;
+    }}
     style={{
-      maxWidth: "600px",
-      margin: "0 auto",
-      minHeight: "100vh",
-      padding: "40px 20px",
-      background: "#111",
+      width: "100%",
+      padding: "15px",
+      borderRadius: "10px",
+      border: "none",
+      fontWeight: "bold",
+      cursor: "pointer",
+      background: "#16a34a",
       color: "white",
-      textAlign: "center",
+      fontSize: "16px",
     }}
   >
-    <h1>🎉 Order Confirmation</h1>
+    📍 TRACK MY ORDER
+  </button>
 
-    <p style={{ marginTop: "20px" }}>
-      Your order has been received.
-    </p>
-
-    <p>
-      <strong>Screen:</strong> {cinemaScreen}
-    </p>
-
-    <p>
-      <strong>Seat:</strong> {seat}
-    </p>
-
-    <h2 style={{ marginTop: "30px" }}>
-      Total: ₹{total}
-    </h2>
-
-    <div
-      style={{
-        marginTop: "25px",
-        background: "#222",
-        padding: "20px",
-        borderRadius: "15px",
-      }}
-    >
-      <p
-        style={{
-          color: "#aaa",
-          marginBottom: "8px",
-        }}
-      >
-        Your Order ID
-      </p>
-
-      <h2
-        style={{
-          margin: "0",
-          color: "#e50914",
-        }}
-      >
-        {orderCode}
-      </h2>
-    </div>
-
-    <p style={{ marginTop: "20px" }}>
-      Thank you for ordering!
-    </p>
-
-    <button
-      onClick={() => setCurrentScreen("3")}
-      style={{
-        marginTop: "30px",
-        padding: "14px 30px",
-        borderRadius: "10px",
-        border: "none",
-        fontWeight: "bold",
-        cursor: "pointer",
-      }}
-    >
-      BACK TO MENU
-    </button>
-  </div>
-)}
+  <button
+    onClick={backToMenu}
+    style={{
+      width: "100%",
+      padding: "14px",
+      borderRadius: "10px",
+      border: "none",
+      fontWeight: "bold",
+      cursor: "pointer",
+      background: "#333",
+      color: "white",
+    }}
+  >
+    🍿 BACK TO MENU
+  </button>
+</div>
+        </div>
+      )}
     </main>
   );
 }

@@ -23,25 +23,28 @@ type Order = {
   created_at: string;
 };
 
+type FilterStatus = "ALL" | "NEW" | "PREPARING" | "READY";
+
 export default function FoodCourtPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState<FilterStatus>("ALL");
 
   async function loadOrders() {
-  const { data, error } = await supabase
-    .from("orders")
-    .select("*")
-    .neq("status", "COMPLETED")
-    .order("created_at", { ascending: true });
+    const { data, error } = await supabase
+      .from("orders")
+      .select("*")
+      .order("created_at", { ascending: true });
 
-  if (error) {
-    console.error("Error loading orders:", error);
-    return;
+    if (error) {
+      console.error("Error loading orders:", error);
+      setLoading(false);
+      return;
+    }
+
+    setOrders((data || []) as Order[]);
+    setLoading(false);
   }
-
-  setOrders((data || []) as Order[]);
-  setLoading(false);
-}
 
   useEffect(() => {
     loadOrders();
@@ -76,6 +79,30 @@ export default function FoodCourtPage() {
       console.error("Error updating order:", error);
     }
   }
+
+  const newOrders = orders.filter(
+    (order) => order.status === "NEW"
+  ).length;
+
+  const preparingOrders = orders.filter(
+    (order) => order.status === "PREPARING"
+  ).length;
+
+  const readyOrders = orders.filter(
+    (order) => order.status === "READY"
+  ).length;
+
+  const completedOrders = orders.filter(
+    (order) => order.status === "COMPLETED"
+  ).length;
+
+  const filteredOrders = orders.filter((order) => {
+    if (filter === "ALL") {
+      return order.status !== "COMPLETED";
+    }
+
+    return order.status === filter;
+  });
 
   function getStatusStyle(status: string | null) {
     if (status === "NEW") {
@@ -121,13 +148,14 @@ export default function FoodCourtPage() {
         padding: "25px",
       }}
     >
+      {/* Header */}
       <h1
         style={{
           textAlign: "center",
           marginBottom: "5px",
         }}
       >
-        🍿 Food Court Orders
+        🍿 Food Court Dashboard
       </h1>
 
       <p
@@ -140,37 +168,222 @@ export default function FoodCourtPage() {
         Live orders from cinema seats
       </p>
 
+      {/* Dashboard Stats */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns:
+            "repeat(auto-fit, minmax(180px, 1fr))",
+          gap: "15px",
+          maxWidth: "1200px",
+          margin: "0 auto 30px",
+        }}
+      >
+        {/* New */}
+        <div
+          style={{
+            background: "#7f1d1d",
+            padding: "20px",
+            borderRadius: "15px",
+            textAlign: "center",
+          }}
+        >
+          <div style={{ fontSize: "30px" }}>📥</div>
+          <div
+            style={{
+              fontSize: "32px",
+              fontWeight: "bold",
+            }}
+          >
+            {newOrders}
+          </div>
+          <div>New Orders</div>
+        </div>
+
+        {/* Preparing */}
+        <div
+          style={{
+            background: "#78350f",
+            padding: "20px",
+            borderRadius: "15px",
+            textAlign: "center",
+          }}
+        >
+          <div style={{ fontSize: "30px" }}>👨‍🍳</div>
+          <div
+            style={{
+              fontSize: "32px",
+              fontWeight: "bold",
+            }}
+          >
+            {preparingOrders}
+          </div>
+          <div>Preparing</div>
+        </div>
+
+        {/* Ready */}
+        <div
+          style={{
+            background: "#14532d",
+            padding: "20px",
+            borderRadius: "15px",
+            textAlign: "center",
+          }}
+        >
+          <div style={{ fontSize: "30px" }}>✅</div>
+          <div
+            style={{
+              fontSize: "32px",
+              fontWeight: "bold",
+            }}
+          >
+            {readyOrders}
+          </div>
+          <div>Ready</div>
+        </div>
+
+        {/* Completed */}
+        <div
+          style={{
+            background: "#374151",
+            padding: "20px",
+            borderRadius: "15px",
+            textAlign: "center",
+          }}
+        >
+          <div style={{ fontSize: "30px" }}>🎉</div>
+          <div
+            style={{
+              fontSize: "32px",
+              fontWeight: "bold",
+            }}
+          >
+            {completedOrders}
+          </div>
+          <div>Completed</div>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "10px",
+          flexWrap: "wrap",
+          marginBottom: "30px",
+        }}
+      >
+        <button
+          onClick={() => setFilter("ALL")}
+          style={{
+            padding: "11px 18px",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer",
+            background:
+              filter === "ALL" ? "#fff" : "#333",
+            color:
+              filter === "ALL" ? "#111" : "#fff",
+            fontWeight: "bold",
+          }}
+        >
+          📋 Active Orders
+        </button>
+
+        <button
+          onClick={() => setFilter("NEW")}
+          style={{
+            padding: "11px 18px",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer",
+            background:
+              filter === "NEW" ? "#dc2626" : "#333",
+            color: "#fff",
+            fontWeight: "bold",
+          }}
+        >
+          📥 New ({newOrders})
+        </button>
+
+        <button
+          onClick={() => setFilter("PREPARING")}
+          style={{
+            padding: "11px 18px",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer",
+            background:
+              filter === "PREPARING"
+                ? "#d97706"
+                : "#333",
+            color: "#fff",
+            fontWeight: "bold",
+          }}
+        >
+          👨‍🍳 Preparing ({preparingOrders})
+        </button>
+
+        <button
+          onClick={() => setFilter("READY")}
+          style={{
+            padding: "11px 18px",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer",
+            background:
+              filter === "READY" ? "#16a34a" : "#333",
+            color: "#fff",
+            fontWeight: "bold",
+          }}
+        >
+          ✅ Ready ({readyOrders})
+        </button>
+      </div>
+
+      {/* Loading */}
       {loading && (
         <p style={{ textAlign: "center" }}>
           Loading orders...
         </p>
       )}
 
-      {!loading && orders.length === 0 && (
+      {/* No Orders */}
+      {!loading && filteredOrders.length === 0 && (
         <div
           style={{
             textAlign: "center",
             background: "#222",
             padding: "30px",
             borderRadius: "15px",
+            maxWidth: "600px",
+            margin: "0 auto",
           }}
         >
-          <h2>No orders yet</h2>
+          <h2>No orders here</h2>
           <p style={{ color: "#aaa" }}>
-            New customer orders will appear here automatically.
+            New customer orders will appear here
+            automatically.
           </p>
         </div>
       )}
 
+      {/* Orders */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          gridTemplateColumns:
+            "repeat(auto-fit, minmax(320px, 1fr))",
           gap: "20px",
+          maxWidth: "1400px",
+          margin: "0 auto",
         }}
       >
-        {orders.map((order) => {
-          const statusStyle = getStatusStyle(order.status);
+        {filteredOrders.map((order) => {
+          const statusStyle = getStatusStyle(
+            order.status
+          );
 
           return (
             <div
@@ -179,20 +392,27 @@ export default function FoodCourtPage() {
                 background: "#222",
                 borderRadius: "18px",
                 padding: "22px",
-                boxShadow: "0 5px 20px rgba(0,0,0,0.3)",
+                boxShadow:
+                  "0 5px 20px rgba(0,0,0,0.3)",
               }}
             >
               {/* Order Header */}
               <div
                 style={{
                   display: "flex",
-                  justifyContent: "space-between",
+                  justifyContent:
+                    "space-between",
                   alignItems: "center",
                   gap: "10px",
                   marginBottom: "15px",
                 }}
               >
-                <h2 style={{ margin: 0 }}>
+                <h2
+                  style={{
+                    margin: 0,
+                    fontSize: "18px",
+                  }}
+                >
                   🔔 {order.order_code}
                 </h2>
 
@@ -219,11 +439,13 @@ export default function FoodCourtPage() {
                 }}
               >
                 <p style={{ margin: "5px 0" }}>
-                  🎬 <strong>Screen:</strong> {order.screen}
+                  🎬 <strong>Screen:</strong>{" "}
+                  {order.screen}
                 </p>
 
                 <p style={{ margin: "5px 0" }}>
-                  💺 <strong>Seat:</strong> {order.seat}
+                  💺 <strong>Seat:</strong>{" "}
+                  {order.seat}
                 </p>
               </div>
 
@@ -246,9 +468,11 @@ export default function FoodCourtPage() {
                       key={item.id}
                       style={{
                         display: "flex",
-                        justifyContent: "space-between",
+                        justifyContent:
+                          "space-between",
                         padding: "9px 0",
-                        borderBottom: "1px solid #333",
+                        borderBottom:
+                          "1px solid #333",
                       }}
                     >
                       <span>
@@ -266,7 +490,8 @@ export default function FoodCourtPage() {
               <div
                 style={{
                   display: "flex",
-                  justifyContent: "space-between",
+                  justifyContent:
+                    "space-between",
                   fontSize: "20px",
                   fontWeight: "bold",
                   marginBottom: "18px",
@@ -286,7 +511,10 @@ export default function FoodCourtPage() {
               >
                 <button
                   onClick={() =>
-                    updateStatus(order.id, "PREPARING")
+                    updateStatus(
+                      order.id,
+                      "PREPARING"
+                    )
                   }
                   style={{
                     flex: 1,
@@ -304,7 +532,10 @@ export default function FoodCourtPage() {
 
                 <button
                   onClick={() =>
-                    updateStatus(order.id, "READY")
+                    updateStatus(
+                      order.id,
+                      "READY"
+                    )
                   }
                   style={{
                     flex: 1,
@@ -322,7 +553,10 @@ export default function FoodCourtPage() {
 
                 <button
                   onClick={() =>
-                    updateStatus(order.id, "COMPLETED")
+                    updateStatus(
+                      order.id,
+                      "COMPLETED"
+                    )
                   }
                   style={{
                     flex: 1,

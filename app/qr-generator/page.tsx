@@ -54,7 +54,7 @@ if (!screenData) {
 
       if (screenError) {
         console.error("Screen error:", screenError);
-        setError(screenError.message);
+        setError("Failed to load screen data.");
         setLoading(false);
         return;
       }

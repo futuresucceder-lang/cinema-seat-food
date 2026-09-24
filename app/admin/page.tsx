@@ -213,9 +213,10 @@ export default function AdminDashboard() {
 
           <AdminCard
   href="/screens-seats"
-  icon="🎬"
+  icon="🎟️"
   title="Screens & Seats"
   description="Add screens and manage cinema seats"
+  badge="Manage Seats"
 />
         </section>
 

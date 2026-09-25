@@ -27,14 +27,28 @@ export default function ManagerLoginPage() {
       });
 
     if (loginError) {
-      console.error(loginError);
-      setError("Invalid email or password.");
-      setLoading(false);
-      return;
-    }
+  console.error(loginError);
+  setError("Invalid email or password.");
+  setLoading(false);
+  return;
+}
 
-    router.push("/admin");
-    router.refresh();
+const { data: userData } = await supabase.auth.getUser();
+
+const role = userData.user?.app_metadata?.role;
+
+if (role === "manager") {
+  router.push("/admin");
+} else if (role === "food_court") {
+  router.push("/food-court");
+} else {
+  await supabase.auth.signOut();
+  setError("This account does not have staff access.");
+  setLoading(false);
+  return;
+}
+
+router.refresh();
   }
 
   return (

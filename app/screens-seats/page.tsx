@@ -356,7 +356,11 @@ export default function ScreensSeatsPage() {
 
     if (insertError) {
       console.error("SEAT INSERT ERROR:", insertError);
-      setError("Failed to add seats. Check your Supabase INSERT policy.");
+      setError(
+  `Seat insert failed: ${insertError.message}${
+    insertError.details ? ` — ${insertError.details}` : ""
+  }`
+);
       return;
     }
 

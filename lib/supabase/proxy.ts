@@ -35,61 +35,40 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const claims = data?.claims ?? null;
 
-  // Get the application role from Supabase app_metadata.
-  const appMetadata =
-    (claims?.app_metadata as Record<string, unknown> | undefined) ?? {};
-
-  const userRole =
-    typeof appMetadata.role === "string"
-      ? appMetadata.role
-      : null;
-
   const pathname = request.nextUrl.pathname;
 
-  // Manager-only routes
-  const isManagerRoute =
+  const managerRoutes =
     pathname.startsWith("/admin") ||
     pathname.startsWith("/order-history") ||
     pathname.startsWith("/screens-seats") ||
     pathname.startsWith("/qr-generator");
 
-  // Food Court is accessible by both managers and food court staff
-  const isFoodCourtRoute = pathname.startsWith("/food-court");
+  const foodCourtRoute = pathname.startsWith("/food-court");
 
-  // Any protected staff route
-  const isStaffRoute = isManagerRoute || isFoodCourtRoute;
-
-  // Not logged in → send to manager login
-  if (isStaffRoute && !claims) {
+  // Any protected page requires login.
+  if ((managerRoutes || foodCourtRoute) && !claims) {
     const url = request.nextUrl.clone();
-
     url.pathname = "/manager-login";
     url.searchParams.set("redirect", pathname);
-
     return NextResponse.redirect(url);
   }
 
-  // Manager-only page accessed by Food Court staff
-  if (isManagerRoute && userRole !== "manager") {
-    const url = request.nextUrl.clone();
+  const role =
+    (claims?.app_metadata as { role?: string } | undefined)?.role;
 
+  // Manager-only pages.
+  if (managerRoutes && role !== "manager") {
+    const url = request.nextUrl.clone();
     url.pathname = "/food-court";
     url.search = "";
-
     return NextResponse.redirect(url);
   }
 
-  // Food Court page accessed by a logged-in user without a valid staff role
-  if (
-    isFoodCourtRoute &&
-    userRole !== "manager" &&
-    userRole !== "food_court"
-  ) {
+  // Food Court-only page.
+  if (foodCourtRoute && role !== "food_court") {
     const url = request.nextUrl.clone();
-
-    url.pathname = "/manager-login";
+    url.pathname = "/admin";
     url.search = "";
-
     return NextResponse.redirect(url);
   }
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 
 type Screen = {
   id: string;
@@ -18,6 +18,7 @@ type Seat = {
 };
 
 export default function ScreensSeatsPage() {
+  const supabase = createClient();
   const [screens, setScreens] = useState<Screen[]>([]);
   const [seats, setSeats] = useState<Seat[]>([]);
 

@@ -535,12 +535,10 @@ export default function FoodCourtPage() {
                 </button>
 
                 <button
-                  onClick={() =>
-                    updateStatus(
-                      order.id,
-                      "READY"
-                    )
-                  }
+                  onClick={() => {
+  alert("READY BUTTON CLICKED");
+  updateStatus(order.id, "READY");
+}}
                   style={{
                     flex: 1,
                     padding: "12px",

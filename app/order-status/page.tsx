@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase } from "../../lib/supabase";
 
@@ -23,7 +23,7 @@ type Order = {
   created_at: string;
 };
 
-export default function OrderStatusPage() {
+function OrderStatusContent() {
   const searchParams = useSearchParams();
   const orderCode = searchParams.get("order");
 
@@ -293,5 +293,18 @@ function StatusStep({
         {label}
       </p>
     </div>
+  );
+}
+export default function OrderStatusPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-[#111] text-white flex items-center justify-center">
+          <p className="text-xl">Loading your order...</p>
+        </main>
+      }
+    >
+      <OrderStatusContent />
+    </Suspense>
   );
 }

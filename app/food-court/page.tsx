@@ -70,28 +70,25 @@ export default function FoodCourtPage() {
   }, []);
 
   async function updateStatus(id: number, status: string) {
-  alert("UPDATE STARTED");
+  const { error } = await supabase
+    .from("orders")
+    .update({ status })
+    .eq("id", id);
 
-  try {
-    const { data, error } = await supabase
-      .from("orders")
-      .update({ status })
-      .eq("id", id)
-      .select();
-
-    if (error) {
-      alert("SUPABASE ERROR: " + error.message);
-      console.error(error);
-      return;
-    }
-
-    alert("UPDATE SUCCESS: " + JSON.stringify(data));
-
-    await loadOrders();
-  } catch (err) {
-    alert("JAVASCRIPT ERROR: " + String(err));
-    console.error(err);
+  if (error) {
+    alert("Status update failed: " + error.message);
+    console.error(error);
+    return;
   }
+
+  // Update the screen immediately
+  setOrders((currentOrders) =>
+    currentOrders.map((order) =>
+      order.id === id
+        ? { ...order, status }
+        : order
+    )
+  );
 }
 
   const newOrders = orders.filter(
@@ -545,10 +542,7 @@ export default function FoodCourtPage() {
                 </button>
 
                 <button
-                  onClick={() => {
-  alert("READY BUTTON CLICKED");
-  updateStatus(order.id, "READY");
-}}
+                 onClick={() => updateStatus(order.id, "READY")}
                   style={{
                     flex: 1,
                     padding: "12px",

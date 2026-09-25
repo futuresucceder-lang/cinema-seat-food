@@ -1,19 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { supabase } from "../lib/supabase";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
-type Category = "All" | "Snacks" | "Drinks" | "Meals";
-
-type FoodItem = {
-  id: number;
-  name: string;
-  price: number;
-  emoji: string;
-  category: Exclude<Category, "All">;
-};
-
-const foodItems: FoodItem[] = [
+const foodItems = [
   {
     id: 1,
     name: "Classic Popcorn",
@@ -44,72 +35,62 @@ const foodItems: FoodItem[] = [
   },
 ];
 
-const categories: Category[] = [
-  "All",
-  "Snacks",
-  "Drinks",
-  "Meals",
-];
+const categories = ["All", "Snacks", "Drinks", "Meals"];
 
-export default function Home() {
+function CustomerOrderPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  /*
+   * IMPORTANT:
+   * Do NOT use Screen 3 / F12 as defaults.
+   *
+   * The QR code should open a URL such as:
+   *
+   * /?screen=3&seat=F12
+   * /?screen=3&seat=F15
+   * /?screen=5&seat=F20
+   *
+   * Every seat therefore gets its own order location.
+   */
+
+  const screen = searchParams.get("screen");
+  const seat = searchParams.get("seat");
+
   const [cart, setCart] = useState<Record<number, number>>({});
-  const [selectedCategory, setSelectedCategory] =
-    useState<Category>("All");
-
-  const [currentScreen, setCurrentScreen] = useState("3");
-  const [cinemaScreen, setCinemaScreen] = useState("3");
-  const [seat, setSeat] = useState("F12");
-  const [orderCode, setOrderCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-
-    const screenNumber = params.get("screen");
-    const seatNumber = params.get("seat");
-
-    if (screenNumber) {
-      setCinemaScreen(screenNumber);
-    }
-
-    if (seatNumber) {
-      setSeat(seatNumber);
-    }
-  }, []);
+  const [orderCode, setOrderCode] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [orderPlaced, setOrderPlaced] = useState(false);
 
   function addToCart(id: number) {
-    setCart((prev) => ({
-      ...prev,
-      [id]: (prev[id] || 0) + 1,
+    setCart((previous) => ({
+      ...previous,
+      [id]: (previous[id] || 0) + 1,
     }));
   }
 
   function removeFromCart(id: number) {
-    setCart((prev) => {
-      const currentQuantity = prev[id] || 0;
+    setCart((previous) => {
+      const currentQuantity = previous[id] || 0;
 
       if (currentQuantity <= 1) {
-        const updated = { ...prev };
+        const updated = { ...previous };
         delete updated[id];
         return updated;
       }
 
       return {
-        ...prev,
+        ...previous,
         [id]: currentQuantity - 1,
       };
     });
   }
 
-  const filteredFoodItems = useMemo(() => {
-    if (selectedCategory === "All") {
-      return foodItems;
-    }
-
-    return foodItems.filter(
-      (item) => item.category === selectedCategory
-    );
-  }, [selectedCategory]);
+  const itemCount = Object.values(cart).reduce(
+    (sum, quantity) => sum + quantity,
+    0
+  );
 
   const total = Object.entries(cart).reduce(
     (sum, [id, quantity]) => {
@@ -122,12 +103,21 @@ export default function Home() {
     0
   );
 
-  const itemCount = Object.values(cart).reduce(
-    (sum, quantity) => sum + quantity,
-    0
-  );
+  const filteredFoodItems =
+    selectedCategory === "All"
+      ? foodItems
+      : foodItems.filter(
+          (item) => item.category === selectedCategory
+        );
 
   async function handleCheckout() {
+    if (!screen || !seat) {
+      alert(
+        "This QR code does not contain a valid screen and seat."
+      );
+      return;
+    }
+
     if (itemCount === 0) {
       alert("Please add at least one food item.");
       return;
@@ -150,27 +140,33 @@ export default function Home() {
           name: item?.name,
           price: item?.price,
           emoji: item?.emoji,
+          category: item?.category,
           quantity,
         };
       }
     );
 
-    const { error } = await supabase.from("orders").insert({
-      order_code: newOrderCode,
-      movie: null,
-      screen: cinemaScreen,
-      seat: seat,
-      food_items: orderedFoodItems,
-      total: total,
-      status: "NEW",
-    });
+    const { error } = await supabase
+      .from("orders")
+      .insert({
+        order_code: newOrderCode,
+        movie: null,
+
+        // These values come directly from the QR code.
+        screen: screen,
+        seat: seat,
+
+        food_items: orderedFoodItems,
+        total: total,
+        status: "NEW",
+      });
 
     if (error) {
       console.error("Order error:", error);
 
       alert(
         "Order could not be submitted.\n\n" +
-          error.message
+          "Please try again."
       );
 
       setIsSubmitting(false);
@@ -178,433 +174,94 @@ export default function Home() {
     }
 
     setOrderCode(newOrderCode);
-    setCurrentScreen("4");
+    setOrderPlaced(true);
     setIsSubmitting(false);
+  }
+
+  function trackOrder() {
+    if (!orderCode) {
+      return;
+    }
+
+    router.push(
+      `/order-status?order=${encodeURIComponent(orderCode)}`
+    );
   }
 
   function backToMenu() {
     setCart({});
     setOrderCode("");
-    setCurrentScreen("3");
+    setOrderPlaced(false);
     setSelectedCategory("All");
   }
 
-  return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#111",
-        color: "white",
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
-      {currentScreen === "3" && (
+  /*
+   * If somebody opens the website without a QR code,
+   * don't silently pretend they are sitting at F12.
+   */
+  if (!screen || !seat) {
+    return (
+      <main
+        style={{
+          minHeight: "100vh",
+          background: "#111",
+          color: "white",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "20px",
+          fontFamily: "Arial, sans-serif",
+        }}
+      >
         <div
           style={{
-            maxWidth: "700px",
-            margin: "0 auto",
+            maxWidth: "500px",
+            width: "100%",
+            background: "#222",
+            padding: "30px",
+            borderRadius: "16px",
+            textAlign: "center",
           }}
         >
-          {/* HEADER */}
           <div
             style={{
-              textAlign: "center",
-              marginBottom: "25px",
-            }}
-          >
-            <div style={{ fontSize: "48px" }}>
-              🎬
-            </div>
-
-            <h1
-              style={{
-                fontSize: "32px",
-                margin: "8px 0",
-              }}
-            >
-              Cinema Food
-            </h1>
-
-            <p
-              style={{
-                color: "#aaa",
-                margin: 0,
-              }}
-            >
-              Order food directly from your seat
-            </p>
-          </div>
-
-          {/* SEAT INFORMATION */}
-          <div
-            style={{
-              background: "#222",
-              padding: "18px",
-              borderRadius: "15px",
-              marginBottom: "25px",
-              display: "flex",
-              justifyContent: "space-around",
-              textAlign: "center",
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  color: "#999",
-                  fontSize: "13px",
-                }}
-              >
-                SCREEN
-              </div>
-
-              <strong
-                style={{
-                  fontSize: "20px",
-                }}
-              >
-                🎬 {cinemaScreen}
-              </strong>
-            </div>
-
-            <div
-              style={{
-                width: "1px",
-                background: "#444",
-              }}
-            />
-
-            <div>
-              <div
-                style={{
-                  color: "#999",
-                  fontSize: "13px",
-                }}
-              >
-                SEAT
-              </div>
-
-              <strong
-                style={{
-                  fontSize: "20px",
-                }}
-              >
-                💺 {seat}
-              </strong>
-            </div>
-          </div>
-
-          {/* CATEGORY BUTTONS */}
-          <div
-            style={{
-              display: "flex",
-              gap: "8px",
-              overflowX: "auto",
-              paddingBottom: "10px",
-              marginBottom: "20px",
-            }}
-          >
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() =>
-                  setSelectedCategory(category)
-                }
-                style={{
-                  flex: "0 0 auto",
-                  padding: "10px 16px",
-                  borderRadius: "20px",
-                  border: "none",
-                  background:
-                    selectedCategory === category
-                      ? "#e50914"
-                      : "#292929",
-                  color: "white",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
-              >
-                {category === "All" && "🍽️ "}
-                {category === "Snacks" && "🍿 "}
-                {category === "Drinks" && "🥤 "}
-                {category === "Meals" && "🍔 "}
-                {category}
-              </button>
-            ))}
-          </div>
-
-          <h2
-            style={{
+              fontSize: "55px",
               marginBottom: "15px",
             }}
           >
-            🍿 Food & Drinks
-          </h2>
-
-          {/* FOOD ITEMS */}
-          <div>
-            {filteredFoodItems.map((item) => {
-              const quantity = cart[item.id] || 0;
-
-              return (
-                <div
-                  key={item.id}
-                  style={{
-                    background: "#222",
-                    padding: "16px",
-                    borderRadius: "15px",
-                    marginBottom: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: "15px",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "14px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: "38px",
-                      }}
-                    >
-                      {item.emoji}
-                    </div>
-
-                    <div>
-                      <strong
-                        style={{
-                          fontSize: "17px",
-                        }}
-                      >
-                        {item.name}
-                      </strong>
-
-                      <div
-                        style={{
-                          color: "#aaa",
-                          marginTop: "5px",
-                        }}
-                      >
-                        ₹{item.price}
-                      </div>
-                    </div>
-                  </div>
-
-                  {quantity === 0 ? (
-                    <button
-                      onClick={() =>
-                        addToCart(item.id)
-                      }
-                      style={{
-                        background: "#e50914",
-                        color: "white",
-                        border: "none",
-                        padding: "10px 18px",
-                        borderRadius: "10px",
-                        cursor: "pointer",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      + Add
-                    </button>
-                  ) : (
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                        background: "#333",
-                        padding: "5px",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      <button
-                        onClick={() =>
-                          removeFromCart(item.id)
-                        }
-                        style={{
-                          width: "34px",
-                          height: "34px",
-                          border: "none",
-                          borderRadius: "8px",
-                          background: "#555",
-                          color: "white",
-                          fontSize: "20px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        −
-                      </button>
-
-                      <strong
-                        style={{
-                          minWidth: "20px",
-                          textAlign: "center",
-                        }}
-                      >
-                        {quantity}
-                      </strong>
-
-                      <button
-                        onClick={() =>
-                          addToCart(item.id)
-                        }
-                        style={{
-                          width: "34px",
-                          height: "34px",
-                          border: "none",
-                          borderRadius: "8px",
-                          background: "#e50914",
-                          color: "white",
-                          fontSize: "20px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        +
-                      </button>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            🎬
           </div>
 
-          {/* CART */}
-          <div
+          <h1>Invalid Seat QR Code</h1>
+
+          <p
             style={{
-              background: "#222",
-              padding: "20px",
-              borderRadius: "15px",
-              marginTop: "25px",
+              color: "#aaa",
+              lineHeight: 1.6,
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <h3
-                style={{
-                  margin: 0,
-                }}
-              >
-                🛒 Your Cart
-              </h3>
-
-              <strong>
-                {itemCount} item
-                {itemCount !== 1 ? "s" : ""}
-              </strong>
-            </div>
-
-            {itemCount === 0 ? (
-              <p
-                style={{
-                  color: "#888",
-                  textAlign: "center",
-                  margin: "20px 0 5px",
-                }}
-              >
-                Your cart is empty
-              </p>
-            ) : (
-              <div
-                style={{
-                  marginTop: "15px",
-                }}
-              >
-                {Object.entries(cart).map(
-                  ([id, quantity]) => {
-                    const item = foodItems.find(
-                      (food) =>
-                        food.id === Number(id)
-                    );
-
-                    if (!item) return null;
-
-                    return (
-                      <div
-                        key={id}
-                        style={{
-                          display: "flex",
-                          justifyContent:
-                            "space-between",
-                          padding: "10px 0",
-                          borderBottom:
-                            "1px solid #333",
-                        }}
-                      >
-                        <span>
-                          {item.emoji} {item.name} ×{" "}
-                          {quantity}
-                        </span>
-
-                        <strong>
-                          ₹{item.price * quantity}
-                        </strong>
-                      </div>
-                    );
-                  }
-                )}
-
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent:
-                      "space-between",
-                    marginTop: "15px",
-                    fontSize: "22px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  <span>Total</span>
-                  <span>₹{total}</span>
-                </div>
-              </div>
-            )}
-
-            <button
-              onClick={handleCheckout}
-              disabled={
-                isSubmitting || itemCount === 0
-              }
-              style={{
-                width: "100%",
-                marginTop: "18px",
-                padding: "15px",
-                borderRadius: "10px",
-                border: "none",
-                background:
-                  itemCount === 0
-                    ? "#444"
-                    : "#e50914",
-                color: "white",
-                fontWeight: "bold",
-                fontSize: "16px",
-                cursor:
-                  isSubmitting || itemCount === 0
-                    ? "not-allowed"
-                    : "pointer",
-                opacity: isSubmitting ? 0.6 : 1,
-              }}
-            >
-              {isSubmitting
-                ? "PLACING ORDER..."
-                : "CHECKOUT • ₹" + total}
-            </button>
-          </div>
+            Please scan the QR code placed at your
+            cinema seat to order food.
+          </p>
         </div>
-      )}
+      </main>
+    );
+  }
 
-      {/* CONFIRMATION */}
-      {currentScreen === "4" && (
+  /*
+   * ORDER CONFIRMATION
+   */
+  if (orderPlaced) {
+    return (
+      <main
+        style={{
+          minHeight: "100vh",
+          background: "#111",
+          color: "white",
+          padding: "20px",
+          fontFamily: "Arial, sans-serif",
+        }}
+      >
         <div
           style={{
             maxWidth: "600px",
@@ -616,7 +273,7 @@ export default function Home() {
         >
           <div
             style={{
-              fontSize: "60px",
+              fontSize: "65px",
               marginBottom: "10px",
             }}
           >
@@ -634,6 +291,7 @@ export default function Home() {
             Your order has been received.
           </p>
 
+          {/* SEAT INFORMATION */}
           <div
             style={{
               background: "#222",
@@ -643,8 +301,7 @@ export default function Home() {
             }}
           >
             <p>
-              <strong>🎬 Screen:</strong>{" "}
-              {cinemaScreen}
+              <strong>🎬 Screen:</strong> {screen}
             </p>
 
             <p>
@@ -660,6 +317,7 @@ export default function Home() {
             </h2>
           </div>
 
+          {/* ORDER CODE */}
           <div
             style={{
               marginTop: "20px",
@@ -691,57 +349,497 @@ export default function Home() {
           <p
             style={{
               marginTop: "20px",
+              color: "#bbb",
             }}
           >
             Thank you for ordering! 🍿
           </p>
 
-         <div
-  style={{
-    display: "flex",
-    flexDirection: "column",
-    gap: "12px",
-    marginTop: "30px",
-  }}
->
-  <button
-    onClick={() => {
-      window.location.href =
-        `/order-status?order=${encodeURIComponent(orderCode)}`;
-    }}
-    style={{
-      width: "100%",
-      padding: "15px",
-      borderRadius: "10px",
-      border: "none",
-      fontWeight: "bold",
-      cursor: "pointer",
-      background: "#16a34a",
-      color: "white",
-      fontSize: "16px",
-    }}
-  >
-    📍 TRACK MY ORDER
-  </button>
+          {/* TRACK ORDER */}
+          <button
+            onClick={trackOrder}
+            style={{
+              width: "100%",
+              marginTop: "25px",
+              padding: "16px",
+              borderRadius: "10px",
+              border: "none",
+              background: "#16a34a",
+              color: "white",
+              fontWeight: "bold",
+              fontSize: "16px",
+              cursor: "pointer",
+            }}
+          >
+            📍 TRACK MY ORDER
+          </button>
 
-  <button
-    onClick={backToMenu}
-    style={{
-      width: "100%",
-      padding: "14px",
-      borderRadius: "10px",
-      border: "none",
-      fontWeight: "bold",
-      cursor: "pointer",
-      background: "#333",
-      color: "white",
-    }}
-  >
-    🍿 BACK TO MENU
-  </button>
-</div>
+          {/* BACK TO MENU */}
+          <button
+            onClick={backToMenu}
+            style={{
+              width: "100%",
+              marginTop: "12px",
+              padding: "14px",
+              borderRadius: "10px",
+              border: "1px solid #444",
+              background: "#222",
+              color: "white",
+              fontWeight: "bold",
+              cursor: "pointer",
+            }}
+          >
+            BACK TO MENU
+          </button>
         </div>
-      )}
+      </main>
+    );
+  }
+
+  /*
+   * CUSTOMER FOOD MENU
+   */
+  return (
+    <main
+      style={{
+        minHeight: "100vh",
+        background: "#111",
+        color: "white",
+        padding: "20px",
+        fontFamily: "Arial, sans-serif",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "700px",
+          margin: "0 auto",
+        }}
+      >
+        {/* HEADER */}
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: "25px",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "48px",
+            }}
+          >
+            🎬
+          </div>
+
+          <h1
+            style={{
+              fontSize: "32px",
+              margin: "8px 0",
+            }}
+          >
+            Cinema Food
+          </h1>
+
+          <p
+            style={{
+              color: "#aaa",
+              margin: 0,
+            }}
+          >
+            Order food directly from your seat
+          </p>
+        </div>
+
+        {/* SEAT INFORMATION */}
+        <div
+          style={{
+            background: "#222",
+            padding: "18px",
+            borderRadius: "15px",
+            marginBottom: "25px",
+            display: "flex",
+            justifyContent: "space-around",
+            textAlign: "center",
+          }}
+        >
+          <div>
+            <div
+              style={{
+                color: "#999",
+                fontSize: "13px",
+              }}
+            >
+              SCREEN
+            </div>
+
+            <strong
+              style={{
+                fontSize: "20px",
+              }}
+            >
+              🎬 {screen}
+            </strong>
+          </div>
+
+          <div
+            style={{
+              width: "1px",
+              background: "#444",
+            }}
+          />
+
+          <div>
+            <div
+              style={{
+                color: "#999",
+                fontSize: "13px",
+              }}
+            >
+              SEAT
+            </div>
+
+            <strong
+              style={{
+                fontSize: "20px",
+              }}
+            >
+              💺 {seat}
+            </strong>
+          </div>
+        </div>
+
+        {/* CATEGORIES */}
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            overflowX: "auto",
+            paddingBottom: "10px",
+            marginBottom: "20px",
+          }}
+        >
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() =>
+                setSelectedCategory(category)
+              }
+              style={{
+                flex: "0 0 auto",
+                padding: "10px 16px",
+                borderRadius: "20px",
+                border: "none",
+                background:
+                  selectedCategory === category
+                    ? "#e50914"
+                    : "#292929",
+                color: "white",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              {category === "All" && "🍽️ "}
+              {category === "Snacks" && "🍿 "}
+              {category === "Drinks" && "🥤 "}
+              {category === "Meals" && "🍔 "}
+              {category}
+            </button>
+          ))}
+        </div>
+
+        <h2
+          style={{
+            marginBottom: "15px",
+          }}
+        >
+          🍿 Food & Drinks
+        </h2>
+
+        {/* FOOD ITEMS */}
+        <div>
+          {filteredFoodItems.map((item) => {
+            const quantity = cart[item.id] || 0;
+
+            return (
+              <div
+                key={item.id}
+                style={{
+                  background: "#222",
+                  padding: "16px",
+                  borderRadius: "15px",
+                  marginBottom: "12px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "15px",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "14px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "38px",
+                    }}
+                  >
+                    {item.emoji}
+                  </div>
+
+                  <div>
+                    <strong
+                      style={{
+                        fontSize: "17px",
+                      }}
+                    >
+                      {item.name}
+                    </strong>
+
+                    <div
+                      style={{
+                        color: "#aaa",
+                        marginTop: "5px",
+                      }}
+                    >
+                      ₹{item.price}
+                    </div>
+                  </div>
+                </div>
+
+                {quantity === 0 ? (
+                  <button
+                    onClick={() =>
+                      addToCart(item.id)
+                    }
+                    style={{
+                      background: "#e50914",
+                      color: "white",
+                      border: "none",
+                      padding: "10px 18px",
+                      borderRadius: "10px",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    + Add
+                  </button>
+                ) : (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      background: "#333",
+                      padding: "5px",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <button
+                      onClick={() =>
+                        removeFromCart(item.id)
+                      }
+                      style={{
+                        width: "34px",
+                        height: "34px",
+                        border: "none",
+                        borderRadius: "8px",
+                        background: "#555",
+                        color: "white",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      −
+                    </button>
+
+                    <strong
+                      style={{
+                        minWidth: "20px",
+                        textAlign: "center",
+                      }}
+                    >
+                      {quantity}
+                    </strong>
+
+                    <button
+                      onClick={() =>
+                        addToCart(item.id)
+                      }
+                      style={{
+                        width: "34px",
+                        height: "34px",
+                        border: "none",
+                        borderRadius: "8px",
+                        background: "#e50914",
+                        color: "white",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* CART */}
+        <div
+          style={{
+            background: "#222",
+            padding: "20px",
+            borderRadius: "15px",
+            marginTop: "25px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <h3
+              style={{
+                margin: 0,
+              }}
+            >
+              🛒 Your Cart
+            </h3>
+
+            <strong>
+              {itemCount} item
+              {itemCount !== 1 ? "s" : ""}
+            </strong>
+          </div>
+
+          {itemCount === 0 ? (
+            <p
+              style={{
+                color: "#888",
+                textAlign: "center",
+                margin: "20px 0 5px",
+              }}
+            >
+              Your cart is empty
+            </p>
+          ) : (
+            <div
+              style={{
+                marginTop: "15px",
+              }}
+            >
+              {Object.entries(cart).map(
+                ([id, quantity]) => {
+                  const item = foodItems.find(
+                    (food) =>
+                      food.id === Number(id)
+                  );
+
+                  if (!item) {
+                    return null;
+                  }
+
+                  return (
+                    <div
+                      key={id}
+                      style={{
+                        display: "flex",
+                        justifyContent:
+                          "space-between",
+                        padding: "10px 0",
+                        borderBottom:
+                          "1px solid #333",
+                      }}
+                    >
+                      <span>
+                        {item.emoji} {item.name} ×{" "}
+                        {quantity}
+                      </span>
+
+                      <strong>
+                        ₹{item.price * quantity}
+                      </strong>
+                    </div>
+                  );
+                }
+              )}
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: "15px",
+                  fontSize: "22px",
+                  fontWeight: "bold",
+                }}
+              >
+                <span>Total</span>
+                <span>₹{total}</span>
+              </div>
+            </div>
+          )}
+
+          {/* CHECKOUT */}
+          <button
+            onClick={handleCheckout}
+            disabled={
+              isSubmitting || itemCount === 0
+            }
+            style={{
+              width: "100%",
+              marginTop: "18px",
+              padding: "15px",
+              borderRadius: "10px",
+              border: "none",
+              background:
+                itemCount === 0
+                  ? "#444"
+                  : "#e50914",
+              color: "white",
+              fontWeight: "bold",
+              fontSize: "16px",
+              cursor:
+                isSubmitting || itemCount === 0
+                  ? "not-allowed"
+                  : "pointer",
+              opacity: isSubmitting ? 0.6 : 1,
+            }}
+          >
+            {isSubmitting
+              ? "PLACING ORDER..."
+              : "CHECKOUT • ₹" + total}
+          </button>
+        </div>
+      </div>
     </main>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense
+      fallback={
+        <main
+          style={{
+            minHeight: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "#111",
+            color: "white",
+            fontFamily: "Arial, sans-serif",
+          }}
+        >
+          <p>Loading cinema menu...</p>
+        </main>
+      }
+    >
+      <CustomerOrderPage />
+    </Suspense>
   );
 }

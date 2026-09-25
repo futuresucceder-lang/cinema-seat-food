@@ -1,136 +1,139 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { supabase } from "../../lib/supabase";
-
-type Seat = {
-  id: string;
-  seat_number: string;
-  is_active: boolean;
-};
+import { supabase } from "@/lib/supabase";
 
 type Screen = {
   id: string;
   name: string;
 };
 
+type Seat = {
+  id: string;
+  screen_id: string;
+  seat_number: string;
+  is_active: boolean;
+};
+
 export default function QRGeneratorPage() {
   const [screens, setScreens] = useState<Screen[]>([]);
-  const [selectedScreenId, setSelectedScreenId] = useState("");
   const [seats, setSeats] = useState<Seat[]>([]);
-
-  const [loadingScreens, setLoadingScreens] = useState(true);
-  const [loadingSeats, setLoadingSeats] = useState(false);
-
+  const [selectedScreenId, setSelectedScreenId] = useState("");
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const baseUrl = "https://cinema-seat-food.vercel.app/order";
-
-  // Load all screens
   useEffect(() => {
-    async function loadScreens() {
-      setLoadingScreens(true);
-      setError("");
-
-      const { data, error: screenError } = await supabase
-        .from("screens")
-        .select("id, name")
-        .order("name");
-
-      if (screenError) {
-        console.error("Screen error:", screenError);
-        setError("Failed to load screens.");
-        setLoadingScreens(false);
-        return;
-      }
-
-      const screenData = (data || []) as Screen[];
-
-      setScreens(screenData);
-
-      if (screenData.length > 0) {
-        setSelectedScreenId(screenData[0].id);
-      } else {
-        setError("No screens were found in the database.");
-      }
-
-      setLoadingScreens(false);
-    }
-
     loadScreens();
   }, []);
 
-  // Load seats whenever selected screen changes
+  async function loadScreens() {
+    setLoading(true);
+    setError("");
+
+    const { data, error: screenError } = await supabase
+      .from("screens")
+      .select("id, name")
+      .order("name");
+
+    if (screenError) {
+      console.error(screenError);
+      setError("Failed to load screens.");
+      setLoading(false);
+      return;
+    }
+
+    const loadedScreens = (data || []) as Screen[];
+
+    setScreens(loadedScreens);
+
+    if (loadedScreens.length > 0) {
+      setSelectedScreenId(loadedScreens[0].id);
+    }
+
+    setLoading(false);
+  }
+
   useEffect(() => {
     if (!selectedScreenId) {
       setSeats([]);
       return;
     }
 
-    async function loadSeats() {
-      setLoadingSeats(true);
-      setError("");
-
-      const { data, error: seatError } = await supabase
-        .from("seats")
-        .select("id, seat_number, is_active")
-        .eq("screen_id", selectedScreenId)
-        .eq("is_active", true)
-        .order("seat_number");
-
-      if (seatError) {
-        console.error("Seat error:", seatError);
-        setError("Failed to load seats.");
-        setSeats([]);
-        setLoadingSeats(false);
-        return;
-      }
-
-      setSeats((data || []) as Seat[]);
-      setLoadingSeats(false);
-    }
-
-    loadSeats();
+    loadSeats(selectedScreenId);
   }, [selectedScreenId]);
 
-  const selectedScreen =
-    screens.find((screen) => screen.id === selectedScreenId) || null;
+  async function loadSeats(screenId: string) {
+    setError("");
 
-  const screenNumber = selectedScreen?.name.replace("Screen ", "") || "";
+    const { data, error: seatError } = await supabase
+      .from("seats")
+      .select("id, screen_id, seat_number, is_active")
+      .eq("screen_id", screenId)
+      .eq("is_active", true)
+      .order("seat_number");
 
-  function getQrUrl(seat: Seat) {
-    return `${baseUrl}?screen=${screenNumber}&seat=${seat.seat_number}`;
-  }
-
-  function printQRCodes() {
-    window.print();
-  }
-
-  function downloadQR(seat: Seat) {
-    const container = document.getElementById(`qr-${seat.id}`);
-
-    if (!container) {
+    if (seatError) {
+      console.error(seatError);
+      setError("Failed to load seats.");
+      setSeats([]);
       return;
     }
 
-    const svg = container.querySelector("svg");
+    setSeats((data || []) as Seat[]);
+  }
+
+  const selectedScreen = useMemo(() => {
+    return screens.find((screen) => screen.id === selectedScreenId);
+  }, [screens, selectedScreenId]);
+
+  function getScreenNumber(screenName: string) {
+    const match = screenName.match(/\d+/);
+
+    if (match) {
+      return match[0];
+    }
+
+    return screenName.trim();
+  }
+
+  function getQrUrl(seatNumber: string) {
+    const screenNumber = getScreenNumber(
+      selectedScreen?.name || ""
+    );
+
+   const baseUrl = "https://cinema-seat-food.vercel.app";
+   
+    return `${baseUrl}/order?screen=${encodeURIComponent(
+      screenNumber
+    )}&seat=${encodeURIComponent(seatNumber)}`;
+  }
+
+  function downloadQr(seat: Seat) {
+    const svg = document.getElementById(
+      `qr-${seat.id}`
+    ) as SVGElement | null;
 
     if (!svg) {
       return;
     }
 
-    const svgData = new XMLSerializer().serializeToString(svg);
+    const serializer = new XMLSerializer();
 
-    const blob = new Blob([svgData], {
+    const svgString = serializer.serializeToString(svg);
+
+    const blob = new Blob([svgString], {
       type: "image/svg+xml;charset=utf-8",
     });
 
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement("a");
+
     link.href = url;
-    link.download = `${selectedScreen?.name || "Screen"}-Seat-${seat.seat_number}-QR.svg`;
+    link.download = `Screen-${getScreenNumber(
+      selectedScreen?.name || ""
+    )}-${seat.seat_number}.svg`;
 
     document.body.appendChild(link);
     link.click();
@@ -139,331 +142,191 @@ export default function QRGeneratorPage() {
     URL.revokeObjectURL(url);
   }
 
-  if (loadingScreens) {
+  function printAll() {
+    window.print();
+  }
+
+  if (loading) {
     return (
-      <main
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontFamily: "Arial, sans-serif",
-          fontSize: "20px",
-        }}
-      >
-        Loading screens...
+      <main className="min-h-screen bg-slate-950 text-white p-6">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl font-bold">
+            QR Generator
+          </h1>
+
+          <p className="mt-4 text-slate-400">
+            Loading screens...
+          </p>
+        </div>
       </main>
     );
   }
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#f5f5f5",
-        padding: "30px 20px 60px",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
-        {/* Header */}
-        <div
-          className="qr-controls"
-          style={{
-            background: "white",
-            borderRadius: "16px",
-            padding: "24px",
-            marginBottom: "25px",
-            boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-          }}
-        >
-          <h1
-            style={{
-              margin: "0 0 8px",
-              fontSize: "30px",
-            }}
+    <main className="min-h-screen bg-slate-950 text-white p-6">
+      <div className="max-w-7xl mx-auto">
+
+        {/* HEADER */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+          <div>
+            <h1 className="text-3xl font-bold">
+              QR Generator
+            </h1>
+
+            <p className="text-slate-400 mt-1">
+              Generate seat QR codes for customer food ordering.
+            </p>
+          </div>
+
+          <button
+            onClick={printAll}
+            disabled={seats.length === 0}
+            className="bg-white text-black px-5 py-3 rounded-xl font-semibold disabled:opacity-40"
           >
-            🎬 Cinema Seat QR Generator
-          </h1>
+            🖨️ Print All QR Codes
+          </button>
+        </div>
 
-          <p
-            style={{
-              margin: "0 0 22px",
-              color: "#666",
-            }}
+        {/* SCREEN SELECTOR */}
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-8">
+          <label className="block text-sm text-slate-400 mb-2">
+            Select Screen
+          </label>
+
+          <select
+            value={selectedScreenId}
+            onChange={(e) =>
+              setSelectedScreenId(e.target.value)
+            }
+            className="w-full md:w-96 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white"
           >
-            Generate QR codes for customers to order food directly from their
-            cinema seat.
-          </p>
+            {screens.map((screen) => (
+              <option key={screen.id} value={screen.id}>
+                {screen.name}
+              </option>
+            ))}
+          </select>
 
-          {/* Screen selector */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              flexWrap: "wrap",
-            }}
-          >
-            <label
-              htmlFor="screen"
-              style={{
-                fontWeight: "bold",
-              }}
-            >
-              Select Screen:
-            </label>
-
-            <select
-              id="screen"
-              value={selectedScreenId}
-              onChange={(e) => setSelectedScreenId(e.target.value)}
-              style={{
-                padding: "10px 14px",
-                borderRadius: "8px",
-                border: "1px solid #ccc",
-                fontSize: "16px",
-                minWidth: "180px",
-                background: "white",
-              }}
-            >
-              {screens.map((screen) => (
-                <option key={screen.id} value={screen.id}>
-                  {screen.name}
-                </option>
-              ))}
-            </select>
-
-            <button
-              onClick={printQRCodes}
-              disabled={loadingSeats || seats.length === 0}
-              style={{
-                padding: "10px 18px",
-                borderRadius: "8px",
-                border: "none",
-                background:
-                  loadingSeats || seats.length === 0 ? "#aaa" : "#111",
-                color: "white",
-                cursor:
-                  loadingSeats || seats.length === 0
-                    ? "not-allowed"
-                    : "pointer",
-                fontWeight: "bold",
-                fontSize: "15px",
-              }}
-            >
-              🖨️ Print All QR Codes
-            </button>
+          <div className="mt-3 text-sm text-slate-400">
+            {selectedScreen?.name || "No screen selected"}{" "}
+            • {seats.length} active seats
           </div>
         </div>
 
-        {/* Error */}
+        {/* ERROR */}
         {error && (
-          <div
-            className="qr-controls"
-            style={{
-              background: "#ffe5e5",
-              color: "#b00020",
-              padding: "15px",
-              borderRadius: "10px",
-              marginBottom: "20px",
-              fontWeight: "bold",
-            }}
-          >
+          <div className="bg-red-500/10 border border-red-500/30 text-red-300 rounded-xl p-4 mb-6">
             {error}
           </div>
         )}
 
-        {/* Screen information */}
-        {selectedScreen && (
-          <div
-            className="qr-controls"
-            style={{
-              marginBottom: "20px",
-            }}
-          >
-            <h2
-              style={{
-                margin: "0 0 5px",
-              }}
-            >
-              {selectedScreen.name}
+        {/* NO SCREENS */}
+        {screens.length === 0 && (
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center">
+            <h2 className="text-xl font-semibold">
+              No screens found
             </h2>
 
-            <p
-              style={{
-                margin: 0,
-                color: "#666",
-              }}
-            >
-              {loadingSeats
-                ? "Loading seats..."
-                : `${seats.length} active seat${
-                    seats.length === 1 ? "" : "s"
-                  }`}
+            <p className="text-slate-400 mt-2">
+              Add a screen first from Screens & Seats.
             </p>
           </div>
         )}
 
-        {/* Loading seats */}
-        {loadingSeats && (
-          <div
-            style={{
-              background: "white",
-              padding: "40px",
-              borderRadius: "16px",
-              textAlign: "center",
-              fontSize: "18px",
-            }}
-          >
-            Loading seats...
-          </div>
-        )}
+        {/* NO SEATS */}
+        {screens.length > 0 && seats.length === 0 && (
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center">
+            <h2 className="text-xl font-semibold">
+              No active seats
+            </h2>
 
-        {/* No seats */}
-        {!loadingSeats && seats.length === 0 && !error && (
-          <div
-            style={{
-              background: "white",
-              padding: "40px",
-              borderRadius: "16px",
-              textAlign: "center",
-            }}
-          >
-            <h2>No active seats found</h2>
-            <p style={{ color: "#666" }}>
-              This screen does not currently have any active seats.
+            <p className="text-slate-400 mt-2">
+              This screen does not have any active seats.
             </p>
           </div>
         )}
 
-        {/* QR codes */}
-        {!loadingSeats && seats.length > 0 && (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-              gap: "20px",
-            }}
-          >
+        {/* QR GRID */}
+        {seats.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 print:grid-cols-3">
             {seats.map((seat) => {
-              const qrUrl = getQrUrl(seat);
+              const qrUrl = getQrUrl(seat.seat_number);
 
               return (
                 <div
                   key={seat.id}
-                  className="qr-card"
-                  style={{
-                    background: "white",
-                    borderRadius: "16px",
-                    padding: "24px",
-                    textAlign: "center",
-                    boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
-                    breakInside: "avoid",
-                  }}
+                  className="qr-card bg-white text-black rounded-2xl p-6 shadow-xl"
                 >
-                  <h2
-                    style={{
-                      margin: "0 0 5px",
-                      fontSize: "20px",
-                    }}
-                  >
-                    {selectedScreen?.name}
-                  </h2>
+                  <div className="text-center">
 
-                  <h3
-                    style={{
-                      margin: "0 0 18px",
-                      fontSize: "26px",
-                    }}
-                  >
-                    Seat {seat.seat_number}
-                  </h3>
+                    <div className="text-sm font-medium text-gray-500">
+                      {selectedScreen?.name}
+                    </div>
 
-                  <div
-                    id={`qr-${seat.id}`}
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      marginBottom: "15px",
-                    }}
-                  >
-                    <QRCodeSVG
-                      value={qrUrl}
-                      size={180}
-                      level="H"
-                      includeMargin
-                    />
+                    <div className="text-3xl font-bold mt-1 mb-5">
+                      Seat {seat.seat_number}
+                    </div>
+
+                    <div className="flex justify-center mb-5">
+                      <QRCodeSVG
+                        id={`qr-${seat.id}`}
+                        value={qrUrl}
+                        size={220}
+                        level="H"
+                        includeMargin
+                      />
+                    </div>
+
+                    <div className="text-xs text-gray-500 break-all mb-4">
+                      {qrUrl}
+                    </div>
+
+                    <button
+                      onClick={() => downloadQr(seat)}
+                      className="w-full bg-black text-white rounded-xl py-3 font-semibold hover:bg-gray-800"
+                    >
+                      Download SVG
+                    </button>
+
                   </div>
-
-                  <p
-                    style={{
-                      margin: "0 0 12px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    📱 Scan to order food
-                  </p>
-
-                  <button
-                    className="qr-download-button"
-                    onClick={() => downloadQR(seat)}
-                    style={{
-                      padding: "9px 14px",
-                      borderRadius: "8px",
-                      border: "1px solid #ccc",
-                      background: "white",
-                      cursor: "pointer",
-                      fontWeight: "bold",
-                      marginBottom: "14px",
-                    }}
-                  >
-                    ⬇️ Download QR
-                  </button>
-
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: "11px",
-                      color: "#777",
-                      wordBreak: "break-all",
-                    }}
-                  >
-                    {qrUrl}
-                  </p>
                 </div>
               );
             })}
           </div>
         )}
+
       </div>
 
-      {/* Print styles */}
+      {/* PRINT STYLES */}
       <style jsx global>{`
         @media print {
           body {
             background: white !important;
           }
 
-          .qr-controls,
-          .qr-download-button {
+          main {
+            background: white !important;
+            padding: 0 !important;
+          }
+
+          main > div {
+            max-width: none !important;
+          }
+
+          main h1,
+          main p,
+          main select,
+          main button,
+          main label {
             display: none !important;
           }
 
           .qr-card {
+            break-inside: avoid;
+            page-break-inside: avoid;
             box-shadow: none !important;
             border: 1px solid #ddd;
-            page-break-inside: avoid;
-          }
-
-          main {
-            padding: 0 !important;
-            background: white !important;
+            margin-bottom: 20px;
           }
         }
       `}</style>

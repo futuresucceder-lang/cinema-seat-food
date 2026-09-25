@@ -1,106 +1,138 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 type Screen = {
   id: string;
   name: string;
+  cinema_id: string;
 };
 
 type Seat = {
   id: string;
   seat_number: string;
   is_active: boolean;
+  screen_id: string;
 };
 
 export default function ScreensSeatsPage() {
   const [screens, setScreens] = useState<Screen[]>([]);
   const [seats, setSeats] = useState<Seat[]>([]);
+
   const [selectedScreenId, setSelectedScreenId] = useState("");
 
   const [screenName, setScreenName] = useState("");
-  const [prefix, setPrefix] = useState("");
+
+  const [prefix, setPrefix] = useState("F");
   const [startNumber, setStartNumber] = useState("1");
   const [endNumber, setEndNumber] = useState("20");
 
-  const [loadingScreens, setLoadingScreens] = useState(true);
-  const [loadingSeats, setLoadingSeats] = useState(false);
-  const [addingScreen, setAddingScreen] = useState(false);
-  const [addingSeats, setAddingSeats] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
 
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  async function loadScreens() {
-    setLoadingScreens(true);
+  const selectedScreen = screens.find(
+    (screen) => screen.id === selectedScreenId
+  );
+
+  // --------------------------------------------------
+  // LOAD SCREENS
+  // --------------------------------------------------
+  async function loadScreens(selectFirst = false) {
     setError("");
 
-    const { data, error: screenError } = await supabase
+    const { data, error: screensError } = await supabase
       .from("screens")
-      .select("id, name")
+      .select("id, name, cinema_id")
       .order("name");
 
-    if (screenError) {
+    if (screensError) {
+      console.error("SCREEN LOAD ERROR:", screensError);
       setError("Failed to load screens.");
-      setLoadingScreens(false);
+      setLoading(false);
       return;
     }
 
-    const screenList = (data ?? []) as Screen[];
-    setScreens(screenList);
+    const loadedScreens = (data || []) as Screen[];
 
-    if (!selectedScreenId && screenList.length > 0) {
-      setSelectedScreenId(screenList[0].id);
+    setScreens(loadedScreens);
+
+    if (loadedScreens.length === 0) {
+      setSelectedScreenId("");
+      setSeats([]);
+      setLoading(false);
+      return;
     }
 
-    setLoadingScreens(false);
+    if (
+      selectFirst ||
+      !selectedScreenId ||
+      !loadedScreens.some((screen) => screen.id === selectedScreenId)
+    ) {
+      setSelectedScreenId(loadedScreens[0].id);
+    }
+
+    setLoading(false);
   }
 
+  // --------------------------------------------------
+  // LOAD SEATS
+  // --------------------------------------------------
   async function loadSeats(screenId: string) {
     if (!screenId) {
       setSeats([]);
       return;
     }
 
-    setLoadingSeats(true);
     setError("");
 
-    const { data, error: seatError } = await supabase
+    const { data, error: seatsError } = await supabase
       .from("seats")
-      .select("id, seat_number, is_active")
-      .eq("screen_id", screenId);
+      .select("id, seat_number, is_active, screen_id")
+      .eq("screen_id", screenId)
+      .order("seat_number");
 
-    if (seatError) {
+    if (seatsError) {
+      console.error("SEAT LOAD ERROR:", seatsError);
       setError("Failed to load seats.");
-      setLoadingSeats(false);
       return;
     }
 
-    const seatList = (data ?? []) as Seat[];
-
-    seatList.sort((a, b) =>
+    const loadedSeats = ((data || []) as Seat[]).sort((a, b) =>
       a.seat_number.localeCompare(b.seat_number, undefined, {
         numeric: true,
         sensitivity: "base",
       })
     );
 
-    setSeats(seatList);
-    setLoadingSeats(false);
+    setSeats(loadedSeats);
   }
 
+  // --------------------------------------------------
+  // INITIAL LOAD
+  // --------------------------------------------------
   useEffect(() => {
-    loadScreens();
+    loadScreens(true);
   }, []);
 
+  // --------------------------------------------------
+  // LOAD SEATS WHEN SCREEN CHANGES
+  // --------------------------------------------------
   useEffect(() => {
     if (selectedScreenId) {
       loadSeats(selectedScreenId);
+    } else {
+      setSeats([]);
     }
   }, [selectedScreenId]);
 
+  // --------------------------------------------------
+  // ADD NEW SCREEN
+  // --------------------------------------------------
   async function addScreen() {
     setMessage("");
     setError("");
@@ -108,137 +140,245 @@ export default function ScreensSeatsPage() {
     const name = screenName.trim();
 
     if (!name) {
-      setError("Enter a screen name.");
+      setError("Please enter a screen name.");
       return;
     }
 
-    const alreadyExists = screens.some(
+    const duplicate = screens.some(
       (screen) => screen.name.toLowerCase() === name.toLowerCase()
     );
 
-    if (alreadyExists) {
+    if (duplicate) {
       setError("A screen with this name already exists.");
       return;
     }
 
-    setAddingScreen(true);
+    /*
+     * Your screens table contains cinema_id.
+     * We reuse the cinema_id from an existing screen.
+     */
+    const cinemaId = screens[0]?.cinema_id;
 
-    const { error: insertError } = await supabase
+    if (!cinemaId) {
+      setError(
+        "No cinema_id was found. Please keep your existing Screen 1 first."
+      );
+      return;
+    }
+
+    setBusy(true);
+
+    const { data, error: insertError } = await supabase
       .from("screens")
       .insert({
         name,
-      });
+        cinema_id: cinemaId,
+      })
+      .select("id, name, cinema_id")
+      .single();
+
+    setBusy(false);
 
     if (insertError) {
+      console.error("SCREEN INSERT ERROR:", insertError);
       setError(
-        "Could not add the screen. Check your Supabase permissions."
-      );
-      setAddingScreen(false);
+  `Screen insert failed: ${insertError.message}${
+    insertError.details ? ` — ${insertError.details}` : ""
+  }`
+);
       return;
     }
 
     setScreenName("");
-    setMessage(`${name} added successfully.`);
 
-    await loadScreens();
+    setMessage(`${name} was added successfully.`);
 
-    setAddingScreen(false);
+    if (data) {
+      const newScreen = data as Screen;
+
+      setScreens((current) =>
+        [...current, newScreen].sort((a, b) =>
+          a.name.localeCompare(b.name, undefined, { numeric: true })
+        )
+      );
+
+      setSelectedScreenId(newScreen.id);
+      setSeats([]);
+    } else {
+      await loadScreens();
+    }
   }
 
+  // --------------------------------------------------
+  // DELETE SCREEN
+  // --------------------------------------------------
+  async function deleteScreen() {
+    setMessage("");
+    setError("");
+
+    if (!selectedScreen) {
+      setError("Please select a screen first.");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Delete ${selectedScreen.name}?\n\nThis will also delete all seats belonging to this screen.\n\nOnly continue if this screen is permanently removed from the cinema.`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setBusy(true);
+
+    /*
+     * Delete seats first.
+     * This avoids foreign-key problems if seats belong to the screen.
+     */
+    const { error: seatsDeleteError } = await supabase
+      .from("seats")
+      .delete()
+      .eq("screen_id", selectedScreen.id);
+
+    if (seatsDeleteError) {
+      console.error("SEAT DELETE ERROR:", seatsDeleteError);
+      setBusy(false);
+      setError(
+        "Could not delete the seats. Check your Supabase DELETE policy."
+      );
+      return;
+    }
+
+    const { error: screenDeleteError } = await supabase
+      .from("screens")
+      .delete()
+      .eq("id", selectedScreen.id);
+
+    setBusy(false);
+
+    if (screenDeleteError) {
+      console.error("SCREEN DELETE ERROR:", screenDeleteError);
+      setError(
+        "Could not delete the screen. Check your Supabase DELETE policy."
+      );
+      return;
+    }
+
+    const deletedName = selectedScreen.name;
+
+    const remainingScreens = screens.filter(
+      (screen) => screen.id !== selectedScreen.id
+    );
+
+    setScreens(remainingScreens);
+    setSeats([]);
+
+    if (remainingScreens.length > 0) {
+      setSelectedScreenId(remainingScreens[0].id);
+    } else {
+      setSelectedScreenId("");
+    }
+
+    setMessage(`${deletedName} was deleted.`);
+  }
+
+  // --------------------------------------------------
+  // ADD SEATS
+  // --------------------------------------------------
   async function addSeats() {
     setMessage("");
     setError("");
 
-    if (!selectedScreenId) {
-      setError("Select a screen first.");
-      return;
-    }
-
-    const start = Number(startNumber);
-    const end = Number(endNumber);
-
-    if (
-      !Number.isInteger(start) ||
-      !Number.isInteger(end) ||
-      start < 1 ||
-      end < start
-    ) {
-      setError("Enter a valid seat number range.");
-      return;
-    }
-
-    if (end - start + 1 > 500) {
-      setError("You can add a maximum of 500 seats at once.");
-      return;
-    }
-
-    setAddingSeats(true);
-
-    const selectedScreen = screens.find(
-      (screen) => screen.id === selectedScreenId
-    );
-
     if (!selectedScreen) {
-      setError("Selected screen was not found.");
-      setAddingSeats(false);
+      setError("Please select a screen first.");
       return;
     }
 
     const cleanPrefix = prefix.trim().toUpperCase();
 
-    const requestedSeats: string[] = [];
+    const start = Number(startNumber);
+    const end = Number(endNumber);
 
-    for (let number = start; number <= end; number++) {
-      requestedSeats.push(`${cleanPrefix}${number}`);
+    if (!Number.isInteger(start) || !Number.isInteger(end)) {
+      setError("Start and End must be whole numbers.");
+      return;
+    }
+
+    if (start < 1 || end < 1) {
+      setError("Seat numbers must be 1 or greater.");
+      return;
+    }
+
+    if (end < start) {
+      setError("End number must be greater than or equal to Start number.");
+      return;
+    }
+
+    const count = end - start + 1;
+
+    if (count > 200) {
+      setError("You can add a maximum of 200 seats at one time.");
+      return;
     }
 
     const existingSeatNumbers = new Set(
       seats.map((seat) => seat.seat_number.toUpperCase())
     );
 
-    const newSeatNumbers = requestedSeats.filter(
-      (seatNumber) => !existingSeatNumbers.has(seatNumber.toUpperCase())
-    );
+    const newSeatNumbers: string[] = [];
+
+    for (let number = start; number <= end; number++) {
+      const seatNumber = `${cleanPrefix}${number}`;
+
+      if (!existingSeatNumbers.has(seatNumber.toUpperCase())) {
+        newSeatNumbers.push(seatNumber);
+      }
+    }
 
     if (newSeatNumbers.length === 0) {
-      setError("All of those seats already exist on this screen.");
-      setAddingSeats(false);
+      setError("All of those seats already exist.");
       return;
     }
 
     const rows = newSeatNumbers.map((seatNumber) => ({
-      screen_id: selectedScreenId,
+      screen_id: selectedScreen.id,
       seat_number: seatNumber,
       is_active: true,
     }));
+
+    setBusy(true);
 
     const { error: insertError } = await supabase
       .from("seats")
       .insert(rows);
 
+    setBusy(false);
+
     if (insertError) {
-      setError(
-        "Could not add seats. Check your Supabase permissions and table structure."
-      );
-      setAddingSeats(false);
+      console.error("SEAT INSERT ERROR:", insertError);
+      setError("Failed to add seats. Check your Supabase INSERT policy.");
       return;
     }
 
-    setPrefix("");
     setMessage(
-      `${newSeatNumbers.length} seat(s) added to ${selectedScreen.name}.`
+      `${newSeatNumbers.length} seat${
+        newSeatNumbers.length === 1 ? "" : "s"
+      } added successfully.`
     );
 
-    await loadSeats(selectedScreenId);
-
-    setAddingSeats(false);
+    await loadSeats(selectedScreen.id);
   }
 
+  // --------------------------------------------------
+  // ACTIVATE / DEACTIVATE SEAT
+  // --------------------------------------------------
   async function toggleSeat(seat: Seat) {
     setMessage("");
     setError("");
 
     const newStatus = !seat.is_active;
+
+    setBusy(true);
 
     const { error: updateError } = await supabase
       .from("seats")
@@ -247,47 +387,59 @@ export default function ScreensSeatsPage() {
       })
       .eq("id", seat.id);
 
+    setBusy(false);
+
     if (updateError) {
-      setError("Could not update this seat.");
+      console.error("SEAT UPDATE ERROR:", updateError);
+
+      setError(
+        "Seat update failed. Make sure the Supabase UPDATE policy allows this operation."
+      );
+
       return;
     }
 
-    setSeats((current) =>
-      current.map((item) =>
-        item.id === seat.id
-          ? { ...item, is_active: newStatus }
-          : item
-      )
-    );
-
     setMessage(
       `${seat.seat_number} is now ${
-        newStatus ? "active" : "inactive"
+        newStatus ? "active" : "deactivated"
       }.`
+    );
+
+    await loadSeats(seat.screen_id);
+  }
+
+  // --------------------------------------------------
+  // LOADING
+  // --------------------------------------------------
+  if (loading) {
+    return (
+      <main
+        style={{
+          minHeight: "100vh",
+          background: "#111",
+          color: "#fff",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "Arial, sans-serif",
+        }}
+      >
+        Loading screens...
+      </main>
     );
   }
 
-  const selectedScreen = screens.find(
-    (screen) => screen.id === selectedScreenId
-  );
-
-  const activeSeats = useMemo(
-    () => seats.filter((seat) => seat.is_active),
-    [seats]
-  );
-
-  const inactiveSeats = useMemo(
-    () => seats.filter((seat) => !seat.is_active),
-    [seats]
-  );
-
+  // --------------------------------------------------
+  // PAGE
+  // --------------------------------------------------
   return (
     <main
       style={{
         minHeight: "100vh",
         background: "#111",
         color: "#fff",
-        padding: "30px 20px 60px",
+        padding: "40px 20px 80px",
+        fontFamily: "Arial, sans-serif",
       }}
     >
       <div
@@ -296,48 +448,60 @@ export default function ScreensSeatsPage() {
           margin: "0 auto",
         }}
       >
-        {/* Header */}
+        {/* HEADER */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             gap: 20,
-            marginBottom: 30,
             flexWrap: "wrap",
+            marginBottom: 30,
           }}
         >
           <div>
-            <h1 style={{ margin: 0, fontSize: 32 }}>
+            <h1
+              style={{
+                fontSize: 36,
+                margin: 0,
+              }}
+            >
               🎬 Screens & Seats
             </h1>
 
-            <p style={{ color: "#aaa", marginTop: 8 }}>
-              Add cinema screens and manage their seats.
+            <p
+              style={{
+                color: "#aaa",
+                marginTop: 8,
+                marginBottom: 0,
+              }}
+            >
+              Add screens and manage cinema seats.
             </p>
           </div>
 
           <Link
             href="/admin"
             style={{
-              background: "#222",
               color: "#fff",
-              padding: "10px 16px",
-              borderRadius: 8,
               textDecoration: "none",
+              background: "#222",
               border: "1px solid #444",
+              padding: "12px 18px",
+              borderRadius: 8,
             }}
           >
             ← Admin Dashboard
           </Link>
         </div>
 
-        {/* Messages */}
+        {/* MESSAGE */}
         {message && (
           <div
             style={{
-              background: "#143d24",
-              border: "1px solid #267342",
+              background: "#064e26",
+              border: "1px solid #16803c",
+              color: "#b7ffd0",
               padding: 14,
               borderRadius: 8,
               marginBottom: 20,
@@ -347,11 +511,13 @@ export default function ScreensSeatsPage() {
           </div>
         )}
 
+        {/* ERROR */}
         {error && (
           <div
             style={{
-              background: "#421919",
-              border: "1px solid #813333",
+              background: "#4a1111",
+              border: "1px solid #a52a2a",
+              color: "#ffbaba",
               padding: 14,
               borderRadius: 8,
               marginBottom: 20,
@@ -361,7 +527,7 @@ export default function ScreensSeatsPage() {
           </div>
         )}
 
-        {/* Add Screen */}
+        {/* ADD SCREEN */}
         <section
           style={{
             background: "#1b1b1b",
@@ -371,10 +537,24 @@ export default function ScreensSeatsPage() {
             marginBottom: 24,
           }}
         >
-          <h2 style={{ marginTop: 0 }}>➕ Add New Screen</h2>
+          <h2
+            style={{
+              fontSize: 20,
+              marginTop: 0,
+              marginBottom: 8,
+            }}
+          >
+            ＋ Add New Screen
+          </h2>
 
-          <p style={{ color: "#aaa" }}>
-            Example: Screen 4, Screen 5, Screen 6.
+          <p
+            style={{
+              color: "#aaa",
+              marginTop: 0,
+              marginBottom: 15,
+            }}
+          >
+            Example: Screen 2, Screen 3, Screen 4
           </p>
 
           <div
@@ -387,37 +567,38 @@ export default function ScreensSeatsPage() {
             <input
               value={screenName}
               onChange={(e) => setScreenName(e.target.value)}
-              placeholder="Screen 4"
+              placeholder="Screen 2"
               style={{
                 flex: 1,
-                minWidth: 220,
-                padding: 12,
-                borderRadius: 8,
-                border: "1px solid #444",
+                minWidth: 250,
                 background: "#111",
                 color: "#fff",
+                border: "1px solid #444",
+                borderRadius: 8,
+                padding: 14,
+                fontSize: 16,
               }}
             />
 
             <button
               onClick={addScreen}
-              disabled={addingScreen}
+              disabled={busy}
               style={{
-                padding: "12px 20px",
-                borderRadius: 8,
-                border: "none",
                 background: "#fff",
                 color: "#111",
-                fontWeight: 700,
-                cursor: "pointer",
+                border: "none",
+                borderRadius: 8,
+                padding: "14px 25px",
+                fontWeight: "bold",
+                cursor: busy ? "not-allowed" : "pointer",
               }}
             >
-              {addingScreen ? "Adding..." : "Add Screen"}
+              {busy ? "Please wait..." : "Add Screen"}
             </button>
           </div>
         </section>
 
-        {/* Screen Selector */}
+        {/* SCREEN SELECTOR */}
         <section
           style={{
             background: "#1b1b1b",
@@ -427,38 +608,76 @@ export default function ScreensSeatsPage() {
             marginBottom: 24,
           }}
         >
-          <h2 style={{ marginTop: 0 }}>🎥 Select Screen</h2>
+          <h2
+            style={{
+              fontSize: 20,
+              marginTop: 0,
+              marginBottom: 12,
+            }}
+          >
+            🎥 Select Screen
+          </h2>
 
-          {loadingScreens ? (
-            <p style={{ color: "#aaa" }}>Loading screens...</p>
-          ) : screens.length === 0 ? (
+          {screens.length === 0 ? (
             <p style={{ color: "#aaa" }}>
-              No screens exist yet. Add your first screen above.
+              No screens available. Add a screen above.
             </p>
           ) : (
-            <select
-              value={selectedScreenId}
-              onChange={(e) => setSelectedScreenId(e.target.value)}
-              style={{
-                width: "100%",
-                maxWidth: 400,
-                padding: 12,
-                borderRadius: 8,
-                border: "1px solid #444",
-                background: "#111",
-                color: "#fff",
-              }}
-            >
-              {screens.map((screen) => (
-                <option key={screen.id} value={screen.id}>
-                  {screen.name}
-                </option>
-              ))}
-            </select>
+            <>
+              <select
+                value={selectedScreenId}
+                onChange={(e) => setSelectedScreenId(e.target.value)}
+                style={{
+                  width: "100%",
+                  maxWidth: 450,
+                  background: "#111",
+                  color: "#fff",
+                  border: "1px solid #444",
+                  borderRadius: 8,
+                  padding: 14,
+                  fontSize: 16,
+                }}
+              >
+                {screens.map((screen) => (
+                  <option key={screen.id} value={screen.id}>
+                    {screen.name}
+                  </option>
+                ))}
+              </select>
+
+              <div style={{ marginTop: 16 }}>
+                <button
+                  onClick={deleteScreen}
+                  disabled={busy}
+                  style={{
+                    background: "#3a1010",
+                    color: "#ff7777",
+                    border: "1px solid #a52a2a",
+                    borderRadius: 8,
+                    padding: "12px 18px",
+                    fontWeight: "bold",
+                    cursor: busy ? "not-allowed" : "pointer",
+                  }}
+                >
+                  🗑 Delete Selected Screen
+                </button>
+
+                <p
+                  style={{
+                    color: "#777",
+                    fontSize: 13,
+                    marginTop: 10,
+                  }}
+                >
+                  Deleting a screen also deletes its seats. Use this only when
+                  the screen is permanently removed.
+                </p>
+              </div>
+            </>
           )}
         </section>
 
-        {/* Add Seats */}
+        {/* ADD SEATS */}
         {selectedScreen && (
           <section
             style={{
@@ -469,21 +688,31 @@ export default function ScreensSeatsPage() {
               marginBottom: 24,
             }}
           >
-            <h2 style={{ marginTop: 0 }}>
-              ➕ Add Seats to {selectedScreen.name}
+            <h2
+              style={{
+                fontSize: 20,
+                marginTop: 0,
+                marginBottom: 8,
+              }}
+            >
+              ＋ Add Seats to {selectedScreen.name}
             </h2>
 
-            <p style={{ color: "#aaa" }}>
-              For example, prefix <strong>F</strong>, start{" "}
-              <strong>1</strong>, end <strong>20</strong> creates:
-              F1, F2, F3 ... F20.
+            <p
+              style={{
+                color: "#aaa",
+                marginTop: 0,
+                marginBottom: 15,
+              }}
+            >
+              Example: prefix F, start 1, end 20 creates F1, F2, F3 ... F20.
             </p>
 
             <div
               style={{
                 display: "grid",
                 gridTemplateColumns:
-                  "repeat(auto-fit, minmax(150px, 1fr))",
+                  "repeat(auto-fit, minmax(180px, 1fr))",
                 gap: 12,
               }}
             >
@@ -491,8 +720,8 @@ export default function ScreensSeatsPage() {
                 <label
                   style={{
                     display: "block",
-                    marginBottom: 6,
                     color: "#aaa",
+                    marginBottom: 6,
                   }}
                 >
                   Prefix
@@ -505,11 +734,12 @@ export default function ScreensSeatsPage() {
                   style={{
                     width: "100%",
                     boxSizing: "border-box",
-                    padding: 12,
-                    borderRadius: 8,
-                    border: "1px solid #444",
                     background: "#111",
                     color: "#fff",
+                    border: "1px solid #444",
+                    borderRadius: 8,
+                    padding: 14,
+                    fontSize: 16,
                   }}
                 />
               </div>
@@ -518,8 +748,8 @@ export default function ScreensSeatsPage() {
                 <label
                   style={{
                     display: "block",
-                    marginBottom: 6,
                     color: "#aaa",
+                    marginBottom: 6,
                   }}
                 >
                   Start
@@ -533,11 +763,12 @@ export default function ScreensSeatsPage() {
                   style={{
                     width: "100%",
                     boxSizing: "border-box",
-                    padding: 12,
-                    borderRadius: 8,
-                    border: "1px solid #444",
                     background: "#111",
                     color: "#fff",
+                    border: "1px solid #444",
+                    borderRadius: 8,
+                    padding: 14,
+                    fontSize: 16,
                   }}
                 />
               </div>
@@ -546,8 +777,8 @@ export default function ScreensSeatsPage() {
                 <label
                   style={{
                     display: "block",
-                    marginBottom: 6,
                     color: "#aaa",
+                    marginBottom: 6,
                   }}
                 >
                   End
@@ -561,11 +792,12 @@ export default function ScreensSeatsPage() {
                   style={{
                     width: "100%",
                     boxSizing: "border-box",
-                    padding: 12,
-                    borderRadius: 8,
-                    border: "1px solid #444",
                     background: "#111",
                     color: "#fff",
+                    border: "1px solid #444",
+                    borderRadius: 8,
+                    padding: 14,
+                    fontSize: 16,
                   }}
                 />
               </div>
@@ -578,26 +810,26 @@ export default function ScreensSeatsPage() {
               >
                 <button
                   onClick={addSeats}
-                  disabled={addingSeats}
+                  disabled={busy}
                   style={{
                     width: "100%",
-                    padding: 12,
-                    borderRadius: 8,
-                    border: "none",
                     background: "#fff",
                     color: "#111",
-                    fontWeight: 700,
-                    cursor: "pointer",
+                    border: "none",
+                    borderRadius: 8,
+                    padding: 14,
+                    fontWeight: "bold",
+                    cursor: busy ? "not-allowed" : "pointer",
                   }}
                 >
-                  {addingSeats ? "Adding..." : "Add Seats"}
+                  {busy ? "Please wait..." : "Add Seats"}
                 </button>
               </div>
             </div>
           </section>
         )}
 
-        {/* Seat List */}
+        {/* SEATS */}
         {selectedScreen && (
           <section
             style={{
@@ -607,61 +839,57 @@ export default function ScreensSeatsPage() {
               padding: 22,
             }}
           >
-            <div
+            <h2
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                gap: 15,
-                alignItems: "center",
-                flexWrap: "wrap",
+                fontSize: 20,
+                marginTop: 0,
+                marginBottom: 8,
               }}
             >
-              <div>
-                <h2 style={{ margin: 0 }}>
-                  💺 {selectedScreen.name} Seats
-                </h2>
+              💺 {selectedScreen.name} Seats
+            </h2>
 
-                <p style={{ color: "#aaa" }}>
-                  {activeSeats.length} active ·{" "}
-                  {inactiveSeats.length} inactive ·{" "}
-                  {seats.length} total
-                </p>
-              </div>
-            </div>
+            <p
+              style={{
+                color: "#aaa",
+                marginTop: 0,
+                marginBottom: 20,
+              }}
+            >
+              {seats.filter((seat) => seat.is_active).length} active
+              {" • "}
+              {seats.filter((seat) => !seat.is_active).length} inactive
+              {" • "}
+              {seats.length} total
+            </p>
 
-            {loadingSeats ? (
-              <p style={{ color: "#aaa" }}>Loading seats...</p>
-            ) : seats.length === 0 ? (
+            {seats.length === 0 ? (
               <p style={{ color: "#aaa" }}>
-                No seats have been added to this screen yet.
+                No seats added yet.
               </p>
             ) : (
               <div
                 style={{
                   display: "grid",
                   gridTemplateColumns:
-                    "repeat(auto-fill, minmax(130px, 1fr))",
+                    "repeat(auto-fill, minmax(145px, 1fr))",
                   gap: 10,
-                  marginTop: 20,
                 }}
               >
                 {seats.map((seat) => (
                   <div
                     key={seat.id}
                     style={{
-                      background: seat.is_active ? "#222" : "#171717",
-                      border: `1px solid ${
-                        seat.is_active ? "#444" : "#333"
-                      }`,
+                      background: "#222",
+                      border: "1px solid #444",
                       borderRadius: 8,
-                      padding: 12,
-                      opacity: seat.is_active ? 1 : 0.55,
+                      padding: 14,
                     }}
                   >
                     <div
                       style={{
-                        fontWeight: 700,
-                        fontSize: 18,
+                        fontSize: 17,
+                        fontWeight: "bold",
                         marginBottom: 8,
                       }}
                     >
@@ -670,8 +898,9 @@ export default function ScreensSeatsPage() {
 
                     <div
                       style={{
-                        fontSize: 12,
-                        color: seat.is_active ? "#7ee787" : "#aaa",
+                        color: seat.is_active ? "#39ff88" : "#ff7777",
+                        fontSize: 13,
+                        fontWeight: "bold",
                         marginBottom: 10,
                       }}
                     >
@@ -680,15 +909,17 @@ export default function ScreensSeatsPage() {
 
                     <button
                       onClick={() => toggleSeat(seat)}
+                      disabled={busy}
                       style={{
                         width: "100%",
-                        padding: "7px 8px",
+                        background: "transparent",
+                        color: seat.is_active ? "#fff" : "#39ff88",
+                        border: `1px solid ${
+                          seat.is_active ? "#555" : "#16803c"
+                        }`,
                         borderRadius: 6,
-                        border: "1px solid #555",
-                        background: "#111",
-                        color: "#fff",
-                        cursor: "pointer",
-                        fontSize: 12,
+                        padding: "8px 5px",
+                        cursor: busy ? "not-allowed" : "pointer",
                       }}
                     >
                       {seat.is_active ? "Deactivate" : "Activate"}

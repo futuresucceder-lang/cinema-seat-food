@@ -70,18 +70,28 @@ export default function FoodCourtPage() {
   }, []);
 
   async function updateStatus(id: number, status: string) {
-  const { error } = await supabase
-    .from("orders")
-    .update({ status })
-    .eq("id", id);
+  alert("UPDATE STARTED");
 
-  if (error) {
-    console.error("Error updating order:", error);
-    alert("Status update failed: " + error.message);
-    return;
+  try {
+    const { data, error } = await supabase
+      .from("orders")
+      .update({ status })
+      .eq("id", id)
+      .select();
+
+    if (error) {
+      alert("SUPABASE ERROR: " + error.message);
+      console.error(error);
+      return;
+    }
+
+    alert("UPDATE SUCCESS: " + JSON.stringify(data));
+
+    await loadOrders();
+  } catch (err) {
+    alert("JAVASCRIPT ERROR: " + String(err));
+    console.error(err);
   }
-
-  await loadOrders();
 }
 
   const newOrders = orders.filter(

@@ -141,7 +141,7 @@ router.refresh();
             type="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            placeholder="manager@cinema.com"
+            placeholder="Enter your Gmail"
             required
             autoComplete="email"
             style={{

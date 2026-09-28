@@ -2,48 +2,19 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "../../lib/supabase";
+import { createClient } from "../../lib/supabase/client";
 
 type Category = "All" | "Snacks" | "Drinks" | "Meals";
 
 type FoodItem = {
-  id: number;
+  id: string;
   name: string;
+  description: string | null;
   price: number;
+  image_url: string | null;
   emoji: string;
   category: Exclude<Category, "All">;
 };
-
-const foodItems: FoodItem[] = [
-  {
-    id: 1,
-    name: "Classic Popcorn",
-    price: 180,
-    emoji: "🍿",
-    category: "Snacks",
-  },
-  {
-    id: 2,
-    name: "Cheese Nachos",
-    price: 220,
-    emoji: "🧀",
-    category: "Snacks",
-  },
-  {
-    id: 3,
-    name: "Cold Drink",
-    price: 120,
-    emoji: "🥤",
-    category: "Drinks",
-  },
-  {
-    id: 4,
-    name: "Veg Burger",
-    price: 200,
-    emoji: "🍔",
-    category: "Meals",
-  },
-];
 
 const categories: Category[] = [
   "All",
@@ -54,8 +25,12 @@ const categories: Category[] = [
 
 export default function OrderPage() {
   const router = useRouter();
+  const supabase = createClient();
 
-  const [cart, setCart] = useState<Record<number, number>>({});
+  const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
+  const [menuLoading, setMenuLoading] = useState(true);
+
+  const [cart, setCart] = useState<Record<string, number>>({});
   const [selectedCategory, setSelectedCategory] =
     useState<Category>("All");
 
@@ -65,23 +40,13 @@ export default function OrderPage() {
   const [orderCode, setOrderCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [page, setPage] = useState<"menu" | "confirmation">(
-    "menu"
-  );
+  const [page, setPage] = useState<
+    "menu" | "confirmation"
+  >("menu");
 
   const [invalidQr, setInvalidQr] = useState(false);
 
-  /*
-   * Read screen and seat directly from the QR URL.
-   *
-   * Examples:
-   *
-   * /order?screen=3&seat=F12
-   * /order?screen=3&seat=F15
-   * /order?screen=5&seat=F20
-   *
-   * There is NO Screen 3 / F12 fallback.
-   */
+  // Read screen and seat from the QR URL
   useEffect(() => {
     const params = new URLSearchParams(
       window.location.search
@@ -99,14 +64,66 @@ export default function OrderPage() {
     setSeat(seatNumber);
   }, []);
 
-  function addToCart(id: number) {
+  // Load available food items from Supabase
+  useEffect(() => {
+    async function loadFoodItems() {
+      setMenuLoading(true);
+
+      const { data, error } = await supabase
+        .from("food_items")
+        .select("*")
+        .eq("is_available", true)
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.error(
+          "Error loading food items:",
+          error
+        );
+
+        alert("Could not load food menu.");
+
+        setMenuLoading(false);
+        return;
+      }
+
+      const mappedItems: FoodItem[] = (data || []).map(
+        (item) => ({
+          id: String(item.id),
+          name: item.name,
+          description: item.description,
+          price: Number(item.price),
+          image_url: item.image_url,
+          emoji:
+            item.category === "Snacks"
+              ? "🍿"
+              : item.category === "Beverages"
+              ? "🥤"
+              : "🍔",
+          category:
+            item.category === "Beverages"
+              ? "Drinks"
+              : item.category === "Food"
+              ? "Meals"
+              : "Snacks",
+        })
+      );
+
+      setFoodItems(mappedItems);
+      setMenuLoading(false);
+    }
+
+    loadFoodItems();
+  }, []);
+
+  function addToCart(id: string) {
     setCart((previous) => ({
       ...previous,
       [id]: (previous[id] || 0) + 1,
     }));
   }
 
-  function removeFromCart(id: number) {
+  function removeFromCart(id: string) {
     setCart((previous) => {
       const currentQuantity = previous[id] || 0;
 
@@ -129,17 +146,21 @@ export default function OrderPage() {
     }
 
     return foodItems.filter(
-      (item) => item.category === selectedCategory
+      (item) =>
+        item.category === selectedCategory
     );
-  }, [selectedCategory]);
+  }, [selectedCategory, foodItems]);
 
   const total = Object.entries(cart).reduce(
     (sum, [id, quantity]) => {
       const item = foodItems.find(
-        (food) => food.id === Number(id)
+        (food) => food.id === id
       );
 
-      return sum + (item?.price || 0) * quantity;
+      return (
+        sum +
+        (item?.price || 0) * quantity
+      );
     },
     0
   );
@@ -171,7 +192,7 @@ export default function OrderPage() {
     const orderedFoodItems = Object.entries(cart).map(
       ([id, quantity]) => {
         const item = foodItems.find(
-          (food) => food.id === Number(id)
+          (food) => food.id === id
         );
 
         return {
@@ -190,18 +211,23 @@ export default function OrderPage() {
       .insert({
         order_code: newOrderCode,
         movie: null,
-
-        // These come from THIS QR code.
         screen: cinemaScreen,
         seat: seat,
-
         food_items: orderedFoodItems,
         total: total,
         status: "NEW",
       });
 
     if (error) {
-      console.error("Order error:", error);
+      console.error(
+  "Order error:",
+  JSON.stringify(error, null, 2)
+);
+
+alert(
+  "Order error:\n" +
+  JSON.stringify(error, null, 2)
+);
 
       alert(
         "Order could not be submitted.\n\nPlease try again."
@@ -222,7 +248,9 @@ export default function OrderPage() {
     }
 
     router.push(
-      `/order-status?order=${encodeURIComponent(orderCode)}`
+      `/order-status?order=${encodeURIComponent(
+        orderCode
+      )}`
     );
   }
 
@@ -233,9 +261,7 @@ export default function OrderPage() {
     setSelectedCategory("All");
   }
 
-  /*
-   * Invalid QR
-   */
+  // INVALID QR
   if (invalidQr) {
     return (
       <main
@@ -277,8 +303,8 @@ export default function OrderPage() {
               lineHeight: 1.6,
             }}
           >
-            Please scan the QR code placed at your
-            cinema seat to order food.
+            Please scan the QR code placed at
+            your cinema seat to order food.
           </p>
 
           <button
@@ -301,9 +327,7 @@ export default function OrderPage() {
     );
   }
 
-  /*
-   * ORDER CONFIRMATION
-   */
+  // ORDER CONFIRMATION
   if (page === "confirmation") {
     return (
       <main
@@ -344,7 +368,6 @@ export default function OrderPage() {
             Your order has been received.
           </p>
 
-          {/* SEAT INFORMATION */}
           <div
             style={{
               background: "#222",
@@ -359,7 +382,8 @@ export default function OrderPage() {
             </p>
 
             <p>
-              <strong>💺 Seat:</strong> {seat}
+              <strong>💺 Seat:</strong>{" "}
+              {seat}
             </p>
 
             <h2
@@ -371,7 +395,6 @@ export default function OrderPage() {
             </h2>
           </div>
 
-          {/* ORDER CODE */}
           <div
             style={{
               marginTop: "20px",
@@ -409,7 +432,6 @@ export default function OrderPage() {
             Thank you for ordering! 🍿
           </p>
 
-          {/* TRACK ORDER */}
           <button
             onClick={trackOrder}
             style={{
@@ -428,7 +450,6 @@ export default function OrderPage() {
             📍 TRACK MY ORDER
           </button>
 
-          {/* BACK TO MENU */}
           <button
             onClick={backToMenu}
             style={{
@@ -450,9 +471,7 @@ export default function OrderPage() {
     );
   }
 
-  /*
-   * CUSTOMER MENU
-   */
+  // CUSTOMER MENU
   return (
     <main
       style={{
@@ -610,135 +629,190 @@ export default function OrderPage() {
 
         {/* FOOD ITEMS */}
         <div>
-          {filteredFoodItems.map((item) => {
-            const quantity = cart[item.id] || 0;
+          {menuLoading ? (
+            <p
+              style={{
+                color: "#aaa",
+                textAlign: "center",
+                padding: "30px 0",
+              }}
+            >
+              Loading food menu...
+            </p>
+          ) : filteredFoodItems.length === 0 ? (
+            <p
+              style={{
+                color: "#aaa",
+                textAlign: "center",
+                padding: "30px 0",
+              }}
+            >
+              No food items available.
+            </p>
+          ) : (
+            filteredFoodItems.map((item) => {
+              const quantity =
+                cart[item.id] || 0;
 
-            return (
-              <div
-                key={item.id}
-                style={{
-                  background: "#222",
-                  padding: "16px",
-                  borderRadius: "15px",
-                  marginBottom: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "15px",
-                }}
-              >
+              return (
                 <div
+                  key={item.id}
                   style={{
+                    background: "#222",
+                    padding: "16px",
+                    borderRadius: "15px",
+                    marginBottom: "12px",
                     display: "flex",
                     alignItems: "center",
-                    gap: "14px",
+                    justifyContent: "space-between",
+                    gap: "15px",
                   }}
                 >
                   <div
                     style={{
-                      fontSize: "38px",
-                    }}
-                  >
-                    {item.emoji}
-                  </div>
-
-                  <div>
-                    <strong
-                      style={{
-                        fontSize: "17px",
-                      }}
-                    >
-                      {item.name}
-                    </strong>
-
-                    <div
-                      style={{
-                        color: "#aaa",
-                        marginTop: "5px",
-                      }}
-                    >
-                      ₹{item.price}
-                    </div>
-                  </div>
-                </div>
-
-                {quantity === 0 ? (
-                  <button
-                    onClick={() =>
-                      addToCart(item.id)
-                    }
-                    style={{
-                      background: "#e50914",
-                      color: "white",
-                      border: "none",
-                      padding: "10px 18px",
-                      borderRadius: "10px",
-                      cursor: "pointer",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    + Add
-                  </button>
-                ) : (
-                  <div
-                    style={{
                       display: "flex",
                       alignItems: "center",
-                      gap: "10px",
-                      background: "#333",
-                      padding: "5px",
-                      borderRadius: "10px",
+                      gap: "14px",
+                      minWidth: 0,
                     }}
                   >
-                    <button
-                      onClick={() =>
-                        removeFromCart(item.id)
-                      }
-                      style={{
-                        width: "34px",
-                        height: "34px",
-                        border: "none",
-                        borderRadius: "8px",
-                        background: "#555",
-                        color: "white",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      −
-                    </button>
+                    {item.image_url ? (
+                      <img
+                        src={item.image_url}
+                        alt={item.name}
+                        style={{
+                          width: "70px",
+                          height: "70px",
+                          objectFit: "cover",
+                          borderRadius: "12px",
+                          flexShrink: 0,
+                        }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          fontSize: "38px",
+                          width: "70px",
+                          textAlign: "center",
+                          flexShrink: 0,
+                        }}
+                      >
+                        {item.emoji}
+                      </div>
+                    )}
 
-                    <strong
-                      style={{
-                        minWidth: "20px",
-                        textAlign: "center",
-                      }}
-                    >
-                      {quantity}
-                    </strong>
+                    <div>
+                      <strong
+                        style={{
+                          fontSize: "17px",
+                        }}
+                      >
+                        {item.name}
+                      </strong>
 
+                      {item.description && (
+                        <div
+                          style={{
+                            color: "#aaa",
+                            marginTop: "5px",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {item.description}
+                        </div>
+                      )}
+
+                      <div
+                        style={{
+                          color: "#aaa",
+                          marginTop: "5px",
+                        }}
+                      >
+                        ₹{item.price}
+                      </div>
+                    </div>
+                  </div>
+
+                  {quantity === 0 ? (
                     <button
                       onClick={() =>
                         addToCart(item.id)
                       }
                       style={{
-                        width: "34px",
-                        height: "34px",
-                        border: "none",
-                        borderRadius: "8px",
                         background: "#e50914",
                         color: "white",
-                        fontSize: "20px",
+                        border: "none",
+                        padding: "10px 18px",
+                        borderRadius: "10px",
                         cursor: "pointer",
+                        fontWeight: "bold",
+                        flexShrink: 0,
                       }}
                     >
-                      +
+                      + Add
                     </button>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        background: "#333",
+                        padding: "5px",
+                        borderRadius: "10px",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <button
+                        onClick={() =>
+                          removeFromCart(item.id)
+                        }
+                        style={{
+                          width: "34px",
+                          height: "34px",
+                          border: "none",
+                          borderRadius: "8px",
+                          background: "#555",
+                          color: "white",
+                          fontSize: "20px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        −
+                      </button>
+
+                      <strong
+                        style={{
+                          minWidth: "20px",
+                          textAlign: "center",
+                        }}
+                      >
+                        {quantity}
+                      </strong>
+
+                      <button
+                        onClick={() =>
+                          addToCart(item.id)
+                        }
+                        style={{
+                          width: "34px",
+                          height: "34px",
+                          border: "none",
+                          borderRadius: "8px",
+                          background: "#e50914",
+                          color: "white",
+                          fontSize: "20px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          )}
         </div>
 
         {/* CART */}
@@ -790,8 +864,7 @@ export default function OrderPage() {
               {Object.entries(cart).map(
                 ([id, quantity]) => {
                   const item = foodItems.find(
-                    (food) =>
-                      food.id === Number(id)
+                    (food) => food.id === id
                   );
 
                   if (!item) {
@@ -811,7 +884,8 @@ export default function OrderPage() {
                       }}
                     >
                       <span>
-                        {item.emoji} {item.name} ×{" "}
+                        {item.emoji}{" "}
+                        {item.name} ×{" "}
                         {quantity}
                       </span>
 
@@ -826,7 +900,8 @@ export default function OrderPage() {
               <div
                 style={{
                   display: "flex",
-                  justifyContent: "space-between",
+                  justifyContent:
+                    "space-between",
                   marginTop: "15px",
                   fontSize: "22px",
                   fontWeight: "bold",
@@ -842,7 +917,8 @@ export default function OrderPage() {
           <button
             onClick={handleCheckout}
             disabled={
-              isSubmitting || itemCount === 0
+              isSubmitting ||
+              itemCount === 0
             }
             style={{
               width: "100%",
@@ -858,10 +934,13 @@ export default function OrderPage() {
               fontWeight: "bold",
               fontSize: "16px",
               cursor:
-                isSubmitting || itemCount === 0
+                isSubmitting ||
+                itemCount === 0
                   ? "not-allowed"
                   : "pointer",
-              opacity: isSubmitting ? 0.6 : 1,
+              opacity: isSubmitting
+                ? 0.6
+                : 1,
             }}
           >
             {isSubmitting

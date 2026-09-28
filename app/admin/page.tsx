@@ -165,60 +165,76 @@ export default function AdminDashboard() {
         </section>
 
         {/* Main navigation */}
-        <h2
-          style={{
-            textAlign: "center",
-            marginBottom: "20px",
-          }}
-        >
-          Admin Tools
-        </h2>
+<h2
+  style={{
+    textAlign: "center",
+    marginBottom: "20px",
+  }}
+>
+  Admin Tools
+</h2>
 
-        <section
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: "20px",
-            marginBottom: "40px",
-          }}
-        >
-          <AdminCard
-            href="/food-court"
-            icon="🍿"
-            title="Food Court"
-            description="View incoming orders and update preparation status."
-            badge={
-              activeOrders > 0
-                ? `${activeOrders} active`
-                : "No active orders"
-            }
-          />
+<section
+  style={{
+    display: "grid",
+    gridTemplateColumns:
+      "repeat(auto-fit, minmax(260px, 1fr))",
+    gap: "20px",
+    marginBottom: "40px",
+  }}
+>
+  <AdminCard
+    href="/food-court"
+    icon="🍿"
+    title="Food Court"
+    description="View incoming orders and update preparation status."
+    badge={
+      activeOrders > 0
+        ? `${activeOrders} active`
+        : "No active orders"
+    }
+  />
 
-          <AdminCard
-            href="/order-history"
-            icon="📋"
-            title="Order History"
-            description="Search and review all previous customer orders."
-            badge={`${orders.length} orders`}
-          />
+  <AdminCard
+    href="/order-history"
+    icon="📋"
+    title="Order History"
+    description="Search and review all previous customer orders."
+    badge={`${orders.length} orders`}
+  />
 
-          <AdminCard
-            href="/qr-generator"
-            icon="📱"
-            title="QR Generator"
-            description="Generate and print QR codes for cinema seats."
-            badge="Manage QR codes"
-          />
+  <AdminCard
+    href="/qr-generator"
+    icon="📱"
+    title="QR Generator"
+    description="Generate and print QR codes for cinema seats."
+    badge="Manage QR codes"
+  />
 
-          <AdminCard
-  href="/screens-seats"
-  icon="🎟️"
-  title="Screens & Seats"
-  description="Add screens and manage cinema seats"
-  badge="Manage Seats"
+  <AdminCard
+    href="/screens-seats"
+    icon="🎟️"
+    title="Screens & Seats"
+    description="Add screens and manage cinema seats."
+    badge="Manage Seats"
+  />
+
+  <AdminCard
+  href="/admin/revenue"
+  icon="💰"
+  title="Revenue Dashboard"
+  description="View revenue, sales, and top-selling food items."
+  badge="View Revenue"
 />
-        </section>
+
+  <AdminCard
+    href="/admin/food-menu"
+    icon="🍔"
+    title="Food Menu"
+    description="Manage food items, prices, categories, availability, and photos."
+    badge="Manage Menu"
+  />
+</section>
 
         {/* Quick action */}
         <section

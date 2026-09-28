@@ -1,0 +1,701 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+const supabase = createClient();
+
+type FoodItem = {
+  id: string;
+  cinema_id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  image_url: string | null;
+  category: string;
+  is_available: boolean;
+  created_at: string;
+};
+
+export default function FoodMenuPage() {
+  const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("Snacks");
+  const [isAvailable, setIsAvailable] = useState(true);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(
+    null
+  );
+
+  async function loadFoodItems() {
+    setLoading(true);
+
+    const { data, error } = await supabase
+      .from("food_items")
+      .select("*")
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      console.error("Error loading food items:", error);
+      alert("Could not load food items: " + error.message);
+      setLoading(false);
+      return;
+    }
+
+    setFoodItems((data || []) as FoodItem[]);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    loadFoodItems();
+  }, []);
+
+  function resetForm() {
+    setEditingId(null);
+    setName("");
+    setDescription("");
+    setPrice("");
+    setCategory("Snacks");
+    setIsAvailable(true);
+    setImageFile(null);
+    setCurrentImageUrl(null);
+  }
+
+  function startEdit(item: FoodItem) {
+    setEditingId(item.id);
+    setName(item.name);
+    setDescription(item.description || "");
+    setPrice(String(item.price));
+    setCategory(item.category);
+    setIsAvailable(item.is_available);
+    setImageFile(null);
+    setCurrentImageUrl(item.image_url);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  async function uploadImage(file: File) {
+    const extension = file.name.split(".").pop() || "jpg";
+
+    const filePath = `food/${crypto.randomUUID()}.${extension}`;
+
+    const { error } = await supabase.storage
+      .from("food-images")
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    const { data } = supabase.storage
+      .from("food-images")
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  }
+
+  function getStoragePath(imageUrl: string | null) {
+    if (!imageUrl) return null;
+
+    const marker = "/storage/v1/object/public/food-images/";
+
+    const index = imageUrl.indexOf(marker);
+
+    if (index === -1) return null;
+
+    return decodeURIComponent(
+      imageUrl.substring(index + marker.length)
+    );
+  }
+
+  async function deleteImage(imageUrl: string | null) {
+    const path = getStoragePath(imageUrl);
+
+    if (!path) return;
+
+    const { error } = await supabase.storage
+      .from("food-images")
+      .remove([path]);
+
+    if (error) {
+      console.error("Could not delete image:", error);
+    }
+  }
+
+  async function saveFoodItem(e: React.FormEvent) {
+    e.preventDefault();
+
+    if (!name.trim()) {
+      alert("Please enter a food name.");
+      return;
+    }
+
+    if (!price || Number(price) <= 0) {
+      alert("Please enter a valid price.");
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+      let imageUrl = currentImageUrl;
+
+      // Upload new image if selected
+      if (imageFile) {
+        imageUrl = await uploadImage(imageFile);
+      }
+
+      if (editingId) {
+        const { error } = await supabase
+          .from("food_items")
+          .update({
+            name: name.trim(),
+            description: description.trim() || null,
+            price: Number(price),
+            category,
+            image_url: imageUrl,
+            is_available: isAvailable,
+          })
+          .eq("id", editingId);
+
+        if (error) {
+          throw error;
+        }
+
+        // Remove old image after successful replacement
+        if (
+          imageFile &&
+          currentImageUrl &&
+          currentImageUrl !== imageUrl
+        ) {
+          await deleteImage(currentImageUrl);
+        }
+
+        alert("Food item updated successfully.");
+      } else {
+        // Use cinema_id from an existing food item
+        const cinemaId = foodItems[0]?.cinema_id;
+
+        if (!cinemaId) {
+          throw new Error(
+            "No cinema found. Please make sure at least one food item exists."
+          );
+        }
+
+        const { error } = await supabase
+          .from("food_items")
+          .insert({
+            cinema_id: cinemaId,
+            name: name.trim(),
+            description: description.trim() || null,
+            price: Number(price),
+            image_url: imageUrl,
+            category,
+            is_available: isAvailable,
+          });
+
+        if (error) {
+          throw error;
+        }
+
+        alert("Food item added successfully.");
+      }
+
+      resetForm();
+      await loadFoodItems();
+    } catch (error) {
+      console.error("Food item save error:", error);
+
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unknown error";
+
+      alert("Could not save food item: " + message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function deleteFoodItem(item: FoodItem) {
+    const confirmed = window.confirm(
+      `Delete "${item.name}"? This cannot be undone.`
+    );
+
+    if (!confirmed) return;
+
+    const { error } = await supabase
+      .from("food_items")
+      .delete()
+      .eq("id", item.id);
+
+    if (error) {
+      alert("Could not delete food item: " + error.message);
+      return;
+    }
+
+    await deleteImage(item.image_url);
+
+    if (editingId === item.id) {
+      resetForm();
+    }
+
+    await loadFoodItems();
+  }
+
+  async function toggleAvailability(item: FoodItem) {
+    const { error } = await supabase
+      .from("food_items")
+      .update({
+        is_available: !item.is_available,
+      })
+      .eq("id", item.id);
+
+    if (error) {
+      alert(
+        "Could not change availability: " + error.message
+      );
+      return;
+    }
+
+    await loadFoodItems();
+  }
+
+  return (
+    <main
+      style={{
+        minHeight: "100vh",
+        background: "#111",
+        color: "white",
+        padding: "30px 20px 60px",
+        fontFamily: "Arial, sans-serif",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+        }}
+      >
+        <Link
+          href="/admin"
+          style={{
+            color: "#aaa",
+            textDecoration: "none",
+          }}
+        >
+          ← Back to Admin Dashboard
+        </Link>
+
+        <header
+          style={{
+            textAlign: "center",
+            margin: "30px 0 40px",
+          }}
+        >
+          <div style={{ fontSize: "55px" }}>🍔</div>
+
+          <h1
+            style={{
+              fontSize: "36px",
+              margin: "5px 0",
+            }}
+          >
+            Food Menu Management
+          </h1>
+
+          <p style={{ color: "#aaa" }}>
+            Add and manage your cinema food menu.
+          </p>
+        </header>
+
+        {/* ADD / EDIT FORM */}
+        <section
+          style={{
+            background: "#222",
+            borderRadius: "18px",
+            padding: "25px",
+            marginBottom: "35px",
+          }}
+        >
+          <h2 style={{ marginTop: 0 }}>
+            {editingId
+              ? "✏️ Edit Food Item"
+              : "➕ Add Food Item"}
+          </h2>
+
+          <form onSubmit={saveFoodItem}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "repeat(auto-fit, minmax(250px, 1fr))",
+                gap: "18px",
+              }}
+            >
+              <div>
+                <label>Food Name</label>
+
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Example: Chicken Burger"
+                  style={inputStyle}
+                />
+              </div>
+
+              <div>
+                <label>Price</label>
+
+                <input
+                  type="number"
+                  min="1"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder="200"
+                  style={inputStyle}
+                />
+              </div>
+
+              <div>
+                <label>Category</label>
+
+                <select
+                  value={category}
+                  onChange={(e) =>
+                    setCategory(e.target.value)
+                  }
+                  style={inputStyle}
+                >
+                  <option value="Snacks">Snacks</option>
+                  <option value="Meals">Meals</option>
+<option value="Drinks">Drinks</option>
+                </select>
+              </div>
+
+              <div>
+                <label>Food Photo</label>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) =>
+                    setImageFile(
+                      e.target.files?.[0] || null
+                    )
+                  }
+                  style={{
+                    display: "block",
+                    marginTop: "8px",
+                    color: "white",
+                  }}
+                />
+              </div>
+            </div>
+
+            <div style={{ marginTop: "18px" }}>
+              <label>Description</label>
+
+              <textarea
+                value={description}
+                onChange={(e) =>
+                  setDescription(e.target.value)
+                }
+                placeholder="Describe the food item..."
+                rows={3}
+                style={{
+                  ...inputStyle,
+                  resize: "vertical",
+                }}
+              />
+            </div>
+
+            {currentImageUrl && (
+              <div style={{ marginTop: "18px" }}>
+                <p style={{ color: "#aaa" }}>
+                  Current photo:
+                </p>
+
+                <img
+                  src={currentImageUrl}
+                  alt="Current food"
+                  style={{
+                    width: "180px",
+                    height: "120px",
+                    objectFit: "cover",
+                    borderRadius: "10px",
+                  }}
+                />
+              </div>
+            )}
+
+            <label
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                marginTop: "20px",
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={isAvailable}
+                onChange={(e) =>
+                  setIsAvailable(e.target.checked)
+                }
+              />
+
+              Available to customers
+            </label>
+
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                marginTop: "25px",
+                flexWrap: "wrap",
+              }}
+            >
+              <button
+                type="submit"
+                disabled={saving}
+                style={{
+                  padding: "12px 22px",
+                  border: "none",
+                  borderRadius: "10px",
+                  background: "white",
+                  color: "#111",
+                  fontWeight: "bold",
+                  cursor: saving
+                    ? "not-allowed"
+                    : "pointer",
+                }}
+              >
+                {saving
+                  ? "Saving..."
+                  : editingId
+                  ? "💾 Update Food Item"
+                  : "➕ Add Food Item"}
+              </button>
+
+              {editingId && (
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  style={{
+                    padding: "12px 22px",
+                    border: "none",
+                    borderRadius: "10px",
+                    background: "#444",
+                    color: "white",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel Edit
+                </button>
+              )}
+            </div>
+          </form>
+        </section>
+
+        {/* FOOD ITEMS */}
+        <section>
+          <h2>🍿 Current Food Items</h2>
+
+          {loading ? (
+            <p style={{ color: "#aaa" }}>
+              Loading food items...
+            </p>
+          ) : foodItems.length === 0 ? (
+            <p style={{ color: "#aaa" }}>
+              No food items found.
+            </p>
+          ) : (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "repeat(auto-fit, minmax(260px, 1fr))",
+                gap: "20px",
+              }}
+            >
+              {foodItems.map((item) => (
+                <div
+                  key={item.id}
+                  style={{
+                    background: "#222",
+                    borderRadius: "15px",
+                    overflow: "hidden",
+                  }}
+                >
+                  {item.image_url ? (
+                    <img
+                      src={item.image_url}
+                      alt={item.name}
+                      style={{
+                        width: "100%",
+                        height: "190px",
+                        objectFit: "cover",
+                        display: "block",
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        height: "190px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        background: "#333",
+                        fontSize: "65px",
+                      }}
+                    >
+                      🍔
+                    </div>
+                  )}
+
+                  <div style={{ padding: "18px" }}>
+                    <h3
+                      style={{
+                        margin: "0 0 8px",
+                        fontSize: "21px",
+                      }}
+                    >
+                      {item.name}
+                    </h3>
+
+                    <p
+                      style={{
+                        color: "#aaa",
+                        minHeight: "42px",
+                      }}
+                    >
+                      {item.description ||
+                        "No description"}
+                    </p>
+
+                    <div
+                      style={{
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        marginBottom: "8px",
+                      }}
+                    >
+                      ₹{item.price}
+                    </div>
+
+                    <div
+                      style={{
+                        color: "#bbb",
+                        marginBottom: "12px",
+                      }}
+                    >
+                      {item.category}
+                    </div>
+
+                    <span
+                      style={{
+                        display: "inline-block",
+                        padding: "6px 10px",
+                        borderRadius: "20px",
+                        background: item.is_available
+                          ? "#164b2a"
+                          : "#4b1616",
+                        color: item.is_available
+                          ? "#7cff9b"
+                          : "#ff8585",
+                        fontSize: "13px",
+                        fontWeight: "bold",
+                        marginBottom: "15px",
+                      }}
+                    >
+                      {item.is_available
+                        ? "Available"
+                        : "Unavailable"}
+                    </span>
+
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "8px",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <button
+                        onClick={() =>
+                          startEdit(item)
+                        }
+                        style={actionButtonStyle}
+                      >
+                        ✏️ Edit
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          toggleAvailability(item)
+                        }
+                        style={actionButtonStyle}
+                      >
+                        {item.is_available
+                          ? "🔴 Disable"
+                          : "🟢 Enable"}
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          deleteFoodItem(item)
+                        }
+                        style={{
+                          ...actionButtonStyle,
+                          background: "#5a1b1b",
+                        }}
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
+    </main>
+  );
+}
+
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  boxSizing: "border-box",
+  marginTop: "8px",
+  padding: "12px",
+  borderRadius: "8px",
+  border: "1px solid #555",
+  background: "#333",
+  color: "white",
+  fontSize: "15px",
+};
+
+const actionButtonStyle: React.CSSProperties = {
+  padding: "9px 12px",
+  border: "none",
+  borderRadius: "8px",
+  background: "#444",
+  color: "white",
+  fontWeight: "bold",
+  cursor: "pointer",
+};

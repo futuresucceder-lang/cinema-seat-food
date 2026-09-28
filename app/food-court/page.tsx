@@ -70,18 +70,21 @@ export default function FoodCourtPage() {
   }, []);
 
   async function updateStatus(id: number, status: string) {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("orders")
     .update({ status })
-    .eq("id", id);
+    .eq("id", id)
+    .select()
+    .single();
 
   if (error) {
+    console.error("Error updating order:", error);
     alert("Status update failed: " + error.message);
-    console.error(error);
     return;
   }
 
-  // Update the screen immediately
+  console.log("Order status updated:", data);
+
   setOrders((currentOrders) =>
     currentOrders.map((order) =>
       order.id === id

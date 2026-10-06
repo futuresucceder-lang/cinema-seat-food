@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "../../lib/supabase/client";
 
 type Category = "All" | "Snacks" | "Drinks" | "Meals";
@@ -16,6 +16,7 @@ type FoodItem = {
   category: Exclude<Category, "All">;
 };
 
+
 const categories: Category[] = [
   "All",
   "Snacks",
@@ -24,7 +25,7 @@ const categories: Category[] = [
 ];
 
 export default function OrderPage() {
-  const router = useRouter();
+ const router = useRouter();
   const supabase = createClient();
 
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
@@ -34,8 +35,9 @@ export default function OrderPage() {
   const [selectedCategory, setSelectedCategory] =
     useState<Category>("All");
 
-  const [cinemaScreen, setCinemaScreen] = useState("");
-  const [seat, setSeat] = useState("");
+  const [cinemaId, setCinemaId] = useState("");
+const [cinemaScreen, setCinemaScreen] = useState("");
+const [seat, setSeat] = useState("");
 
   const [orderCode, setOrderCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -52,16 +54,18 @@ export default function OrderPage() {
       window.location.search
     );
 
-    const screenNumber = params.get("screen");
-    const seatNumber = params.get("seat");
+    const cinemaIdFromQr = params.get("cinema");
+const screenNumber = params.get("screen");
+const seatNumber = params.get("seat");
 
-    if (!screenNumber || !seatNumber) {
-      setInvalidQr(true);
-      return;
-    }
+if (!cinemaIdFromQr || !screenNumber || !seatNumber) {
+  setInvalidQr(true);
+  return;
+}
 
-    setCinemaScreen(screenNumber);
-    setSeat(seatNumber);
+setCinemaId(cinemaIdFromQr);
+setCinemaScreen(screenNumber);
+setSeat(seatNumber);
   }, []);
 
   // Load available food items from Supabase
@@ -207,16 +211,22 @@ export default function OrderPage() {
     );
 
     const { error } = await supabase
-      .from("orders")
-      .insert({
-        order_code: newOrderCode,
-        movie: null,
-        screen: cinemaScreen,
-        seat: seat,
-        food_items: orderedFoodItems,
-        total: total,
-        status: "NEW",
-      });
+  .from("orders")
+  .insert({
+    order_code: newOrderCode,
+    movie: null,
+
+    // This comes from the cinema-specific QR code.
+    cinema_id: cinemaId,
+
+    // These come from THIS QR code.
+    screen: cinemaScreen,
+    seat: seat,
+
+    food_items: orderedFoodItems,
+    total: total,
+    status: "NEW",
+  });
 
     if (error) {
       console.error(
@@ -237,8 +247,13 @@ alert(
       return;
     }
 
-    setOrderCode(newOrderCode);
-    setPage("confirmation");
+   localStorage.setItem("cinema_order_codes", JSON.stringify([
+  ...JSON.parse(localStorage.getItem("cinema_order_codes") || "[]"),
+  newOrderCode,
+]));
+
+setOrderCode(newOrderCode);
+setPage("confirmation");
     setIsSubmitting(false);
   }
 
@@ -449,6 +464,11 @@ alert(
           >
             📍 TRACK MY ORDER
           </button>
+          <button
+  onClick={() => router.push("/my-orders")}
+>
+  📋 MY ORDERS
+</button>
 
           <button
             onClick={backToMenu}
@@ -581,6 +601,22 @@ alert(
         </div>
 
         {/* CATEGORIES */}
+        <button
+  onClick={() => router.push("/my-orders")}
+  style={{
+    width: "100%",
+    padding: "12px",
+    marginBottom: "12px",
+    borderRadius: "10px",
+    border: "1px solid #444",
+    background: "#222",
+    color: "white",
+    fontWeight: "bold",
+    cursor: "pointer",
+  }}
+>
+  📋 MY ORDERS
+</button>
         <div
           style={{
             display: "flex",

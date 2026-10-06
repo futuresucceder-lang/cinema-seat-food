@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 
 type Order = {
   id: number;
@@ -13,17 +13,127 @@ type Order = {
 };
 
 export default function AdminDashboard() {
+  const supabase = createClient();
+
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [cinemaName, setCinemaName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function loadOrders() {
-    const { data, error } = await supabase
+    setLoading(true);
+    setErrorMessage("");
+
+    // --------------------------------------------------
+    // 1. Get currently logged-in Manager
+    // --------------------------------------------------
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      console.error("Could not get logged-in user:", userError);
+
+      setOrders([]);
+      setErrorMessage("You are not logged in.");
+      setLoading(false);
+      return;
+    }
+
+    const role =
+      user.app_metadata?.role ??
+      user.user_metadata?.role;
+
+    const managerCinemaId =
+      user.app_metadata?.cinema_id ??
+      user.user_metadata?.cinema_id;
+
+    // --------------------------------------------------
+    // 2. Make sure this is a Manager account
+    // --------------------------------------------------
+
+    if (role !== "manager") {
+      console.error(
+        "This account is not a Manager account.",
+        role
+      );
+
+      setOrders([]);
+      setErrorMessage(
+        "This account does not have Manager access."
+      );
+      setLoading(false);
+      return;
+    }
+
+    // --------------------------------------------------
+    // 3. Make sure Manager has a cinema
+    // --------------------------------------------------
+
+    if (!managerCinemaId) {
+      console.error(
+        "Manager does not have a cinema_id in Auth metadata."
+      );
+
+      setOrders([]);
+      setErrorMessage(
+        "Your Manager account is not assigned to a cinema."
+      );
+      setLoading(false);
+      return;
+    }
+
+    // --------------------------------------------------
+    // 4. Get cinema name
+    // --------------------------------------------------
+
+    const {
+      data: cinema,
+      error: cinemaError,
+    } = await supabase
+      .from("cinemas")
+      .select("id, name")
+      .eq("id", managerCinemaId)
+      .single();
+
+    if (!cinemaError && cinema) {
+      setCinemaName(cinema.name);
+    } else {
+      console.error(
+        "Could not load cinema:",
+        cinemaError
+      );
+    }
+
+    // --------------------------------------------------
+    // 5. Load ONLY this Manager's cinema orders
+    // --------------------------------------------------
+
+    const {
+      data,
+      error,
+    } = await supabase
       .from("orders")
-      .select("id, order_code, total, status, created_at")
-      .order("created_at", { ascending: false });
+      .select(
+        "id, order_code, total, status, created_at"
+      )
+      .eq("cinema_id", managerCinemaId)
+      .order("created_at", {
+        ascending: false,
+      });
 
     if (error) {
-      console.error("Error loading dashboard:", error);
+      console.error(
+        "Error loading cinema orders:",
+        error
+      );
+
+      setOrders([]);
+      setErrorMessage(
+        "Could not load orders for this cinema."
+      );
       setLoading(false);
       return;
     }
@@ -31,6 +141,10 @@ export default function AdminDashboard() {
     setOrders((data || []) as Order[]);
     setLoading(false);
   }
+
+  // --------------------------------------------------
+  // Initial load + realtime updates
+  // --------------------------------------------------
 
   useEffect(() => {
     loadOrders();
@@ -55,6 +169,10 @@ export default function AdminDashboard() {
     };
   }, []);
 
+  // --------------------------------------------------
+  // Dashboard statistics
+  // --------------------------------------------------
+
   const newOrders = orders.filter(
     (order) => order.status === "NEW"
   ).length;
@@ -72,12 +190,15 @@ export default function AdminDashboard() {
   ).length;
 
   const totalSales = orders.reduce(
-    (sum, order) => sum + (Number(order.total) || 0),
+    (sum, order) =>
+      sum + (Number(order.total) || 0),
     0
   );
 
   const activeOrders =
-    newOrders + preparingOrders + readyOrders;
+    newOrders +
+    preparingOrders +
+    readyOrders;
 
   return (
     <main
@@ -102,7 +223,9 @@ export default function AdminDashboard() {
             marginBottom: "40px",
           }}
         >
-          <div style={{ fontSize: "55px" }}>🎬</div>
+          <div style={{ fontSize: "55px" }}>
+            🎬
+          </div>
 
           <h1
             style={{
@@ -121,7 +244,38 @@ export default function AdminDashboard() {
           >
             Manage cinema seat food orders
           </p>
+
+          {/* Cinema name */}
+          {cinemaName && (
+            <p
+              style={{
+                color: "#4ade80",
+                marginTop: "10px",
+                fontSize: "18px",
+                fontWeight: "bold",
+              }}
+            >
+              🎬 {cinemaName}
+            </p>
+          )}
         </header>
+
+        {/* Error message */}
+        {errorMessage && (
+          <div
+            style={{
+              background: "#3b1111",
+              border: "1px solid #7f1d1d",
+              color: "#fca5a5",
+              padding: "15px",
+              borderRadius: "12px",
+              marginBottom: "25px",
+              textAlign: "center",
+            }}
+          >
+            {errorMessage}
+          </div>
+        )}
 
         {/* Live statistics */}
         <section
@@ -165,76 +319,60 @@ export default function AdminDashboard() {
         </section>
 
         {/* Main navigation */}
-<h2
-  style={{
-    textAlign: "center",
-    marginBottom: "20px",
-  }}
->
-  Admin Tools
-</h2>
+        <h2
+          style={{
+            textAlign: "center",
+            marginBottom: "20px",
+          }}
+        >
+          Admin Tools
+        </h2>
 
-<section
-  style={{
-    display: "grid",
-    gridTemplateColumns:
-      "repeat(auto-fit, minmax(260px, 1fr))",
-    gap: "20px",
-    marginBottom: "40px",
-  }}
->
-  <AdminCard
-    href="/food-court"
-    icon="🍿"
-    title="Food Court"
-    description="View incoming orders and update preparation status."
-    badge={
-      activeOrders > 0
-        ? `${activeOrders} active`
-        : "No active orders"
-    }
-  />
+        <section
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: "20px",
+            marginBottom: "40px",
+          }}
+        >
+          <AdminCard
+            href="/food-court"
+            icon="🍿"
+            title="Food Court"
+            description="View incoming orders and update preparation status."
+            badge={
+              activeOrders > 0
+                ? `${activeOrders} active`
+                : "No active orders"
+            }
+          />
 
-  <AdminCard
-    href="/order-history"
-    icon="📋"
-    title="Order History"
-    description="Search and review all previous customer orders."
-    badge={`${orders.length} orders`}
-  />
+          <AdminCard
+            href="/order-history"
+            icon="📋"
+            title="Order History"
+            description="Search and review all previous customer orders."
+            badge={`${orders.length} orders`}
+          />
 
-  <AdminCard
-    href="/qr-generator"
-    icon="📱"
-    title="QR Generator"
-    description="Generate and print QR codes for cinema seats."
-    badge="Manage QR codes"
-  />
+          <AdminCard
+            href="/qr-generator"
+            icon="📱"
+            title="QR Generator"
+            description="Generate and print QR codes for cinema seats."
+            badge="Manage QR codes"
+          />
 
-  <AdminCard
-    href="/screens-seats"
-    icon="🎟️"
-    title="Screens & Seats"
-    description="Add screens and manage cinema seats."
-    badge="Manage Seats"
-  />
-
-  <AdminCard
-  href="/admin/revenue"
-  icon="💰"
-  title="Revenue Dashboard"
-  description="View revenue, sales, and top-selling food items."
-  badge="View Revenue"
-/>
-
-  <AdminCard
-    href="/admin/food-menu"
-    icon="🍔"
-    title="Food Menu"
-    description="Manage food items, prices, categories, availability, and photos."
-    badge="Manage Menu"
-  />
-</section>
+          <AdminCard
+            href="/screens-seats"
+            icon="🎟️"
+            title="Screens & Seats"
+            description="Add screens and manage cinema seats."
+            badge="Manage Seats"
+          />
+        </section>
 
         {/* Quick action */}
         <section
@@ -259,7 +397,9 @@ export default function AdminDashboard() {
               ? "Loading live order data..."
               : activeOrders > 0
               ? `There are ${activeOrders} active customer order${
-                  activeOrders === 1 ? "" : "s"
+                  activeOrders === 1
+                    ? ""
+                    : "s"
                 } waiting for attention.`
               : "There are currently no active orders."}
           </p>
@@ -302,7 +442,9 @@ function StatCard({
         textAlign: "center",
       }}
     >
-      <div style={{ fontSize: "30px" }}>{icon}</div>
+      <div style={{ fontSize: "30px" }}>
+        {icon}
+      </div>
 
       <div
         style={{
@@ -314,7 +456,9 @@ function StatCard({
         {value}
       </div>
 
-      <div style={{ color: "#aaa" }}>{label}</div>
+      <div style={{ color: "#aaa" }}>
+        {label}
+      </div>
     </div>
   );
 }
@@ -350,7 +494,9 @@ function AdminCard({
           transition: "transform 0.15s",
         }}
       >
-        <div style={{ fontSize: "45px" }}>{icon}</div>
+        <div style={{ fontSize: "45px" }}>
+          {icon}
+        </div>
 
         <h3
           style={{

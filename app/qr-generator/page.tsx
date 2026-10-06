@@ -2,10 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 
 type Screen = {
   id: string;
+  cinema_id: string;
   name: string;
 };
 
@@ -17,33 +18,141 @@ type Seat = {
 };
 
 export default function QRGeneratorPage() {
+  const supabase = createClient();
+
   const [screens, setScreens] = useState<Screen[]>([]);
   const [seats, setSeats] = useState<Seat[]>([]);
-  const [selectedScreenId, setSelectedScreenId] = useState("");
+  const [selectedScreenId, setSelectedScreenId] =
+    useState("");
+
+  const [cinemaId, setCinemaId] = useState("");
+  const [cinemaName, setCinemaName] = useState("");
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // --------------------------------------------------
+  // Load Manager's cinema and its screens
+  // --------------------------------------------------
+
   useEffect(() => {
-    loadScreens();
+    loadCinemaAndScreens();
   }, []);
 
-  async function loadScreens() {
+  async function loadCinemaAndScreens() {
     setLoading(true);
     setError("");
 
-    const { data, error: screenError } = await supabase
-      .from("screens")
+    // ----------------------------------------------
+    // 1. Get logged-in Manager
+    // ----------------------------------------------
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      console.error(
+        "Could not get logged-in user:",
+        userError
+      );
+
+      setError("You are not logged in.");
+      setLoading(false);
+      return;
+    }
+
+    // ----------------------------------------------
+    // 2. Get role and cinema from Auth metadata
+    // ----------------------------------------------
+
+    const role =
+      user.app_metadata?.role ||
+      user.user_metadata?.role;
+
+    const managerCinemaId =
+      user.app_metadata?.cinema_id ||
+      user.user_metadata?.cinema_id;
+
+    if (role !== "manager") {
+      console.error(
+        "This account is not a Manager account."
+      );
+
+      setError(
+        "Only a cinema Manager can access QR Generator."
+      );
+      setLoading(false);
+      return;
+    }
+
+    if (!managerCinemaId) {
+      console.error(
+        "Manager has no cinema_id in Auth metadata."
+      );
+
+      setError(
+        "Could not find your cinema assignment."
+      );
+      setLoading(false);
+      return;
+    }
+
+    setCinemaId(managerCinemaId);
+
+    // ----------------------------------------------
+    // 3. Load cinema name
+    // ----------------------------------------------
+
+    const {
+      data: cinema,
+      error: cinemaError,
+    } = await supabase
+      .from("cinemas")
       .select("id, name")
+      .eq("id", managerCinemaId)
+      .single();
+
+    if (cinemaError || !cinema) {
+      console.error(
+        "Could not load cinema:",
+        cinemaError
+      );
+
+      setError("Could not load your cinema.");
+      setLoading(false);
+      return;
+    }
+
+    setCinemaName(cinema.name);
+
+    // ----------------------------------------------
+    // 4. Load ONLY this cinema's screens
+    // ----------------------------------------------
+
+    const {
+      data: screenData,
+      error: screenError,
+    } = await supabase
+      .from("screens")
+      .select("id, cinema_id, name")
+      .eq("cinema_id", managerCinemaId)
       .order("name");
 
     if (screenError) {
-      console.error(screenError);
+      console.error(
+        "Could not load screens:",
+        screenError
+      );
+
       setError("Failed to load screens.");
       setLoading(false);
       return;
     }
 
-    const loadedScreens = (data || []) as Screen[];
+    const loadedScreens =
+      (screenData || []) as Screen[];
 
     setScreens(loadedScreens);
 
@@ -53,6 +162,10 @@ export default function QRGeneratorPage() {
 
     setLoading(false);
   }
+
+  // --------------------------------------------------
+  // Load seats for selected screen
+  // --------------------------------------------------
 
   useEffect(() => {
     if (!selectedScreenId) {
@@ -66,26 +179,43 @@ export default function QRGeneratorPage() {
   async function loadSeats(screenId: string) {
     setError("");
 
-    const { data, error: seatError } = await supabase
+    const {
+      data,
+      error: seatError,
+    } = await supabase
       .from("seats")
-      .select("id, screen_id, seat_number, is_active")
+      .select(
+        "id, screen_id, seat_number, is_active"
+      )
       .eq("screen_id", screenId)
       .eq("is_active", true)
       .order("seat_number");
 
     if (seatError) {
       console.error(seatError);
+
       setError("Failed to load seats.");
       setSeats([]);
+
       return;
     }
 
     setSeats((data || []) as Seat[]);
   }
 
+  // --------------------------------------------------
+  // Selected screen
+  // --------------------------------------------------
+
   const selectedScreen = useMemo(() => {
-    return screens.find((screen) => screen.id === selectedScreenId);
+    return screens.find(
+      (screen) => screen.id === selectedScreenId
+    );
   }, [screens, selectedScreenId]);
+
+  // --------------------------------------------------
+  // Convert "Screen 4" → "4"
+  // --------------------------------------------------
 
   function getScreenNumber(screenName: string) {
     const match = screenName.match(/\d+/);
@@ -97,17 +227,28 @@ export default function QRGeneratorPage() {
     return screenName.trim();
   }
 
+  // --------------------------------------------------
+  // Create cinema-specific QR URL
+  // --------------------------------------------------
+
   function getQrUrl(seatNumber: string) {
     const screenNumber = getScreenNumber(
       selectedScreen?.name || ""
     );
 
-   const baseUrl = "https://cinema-seat-food.vercel.app";
-   
-    return `${baseUrl}/order?screen=${encodeURIComponent(
+    const baseUrl =
+      "https://cinema-seat-food.vercel.app";
+
+    return `${baseUrl}/order?cinema=${encodeURIComponent(
+      cinemaId
+    )}&screen=${encodeURIComponent(
       screenNumber
     )}&seat=${encodeURIComponent(seatNumber)}`;
   }
+
+  // --------------------------------------------------
+  // Download individual QR
+  // --------------------------------------------------
 
   function downloadQr(seat: Seat) {
     const svg = document.getElementById(
@@ -120,7 +261,8 @@ export default function QRGeneratorPage() {
 
     const serializer = new XMLSerializer();
 
-    const svgString = serializer.serializeToString(svg);
+    const svgString =
+      serializer.serializeToString(svg);
 
     const blob = new Blob([svgString], {
       type: "image/svg+xml;charset=utf-8",
@@ -131,20 +273,33 @@ export default function QRGeneratorPage() {
     const link = document.createElement("a");
 
     link.href = url;
-    link.download = `Screen-${getScreenNumber(
+
+    link.download = `${
+      cinemaName || "Cinema"
+    }-Screen-${getScreenNumber(
       selectedScreen?.name || ""
     )}-${seat.seat_number}.svg`;
 
     document.body.appendChild(link);
+
     link.click();
+
     document.body.removeChild(link);
 
     URL.revokeObjectURL(url);
   }
 
+  // --------------------------------------------------
+  // Print all QR codes
+  // --------------------------------------------------
+
   function printAll() {
     window.print();
   }
+
+  // --------------------------------------------------
+  // Loading
+  // --------------------------------------------------
 
   if (loading) {
     return (
@@ -155,12 +310,16 @@ export default function QRGeneratorPage() {
           </h1>
 
           <p className="mt-4 text-slate-400">
-            Loading screens...
+            Loading your cinema...
           </p>
         </div>
       </main>
     );
   }
+
+  // --------------------------------------------------
+  // Page
+  // --------------------------------------------------
 
   return (
     <main className="min-h-screen bg-slate-950 text-white p-6">
@@ -174,8 +333,15 @@ export default function QRGeneratorPage() {
             </h1>
 
             <p className="text-slate-400 mt-1">
-              Generate seat QR codes for customer food ordering.
+              Generate seat QR codes for customer
+              food ordering.
             </p>
+
+            {cinemaName && (
+              <p className="text-green-400 mt-2 font-semibold">
+                🎬 {cinemaName}
+              </p>
+            )}
           </div>
 
           <button
@@ -186,6 +352,13 @@ export default function QRGeneratorPage() {
             🖨️ Print All QR Codes
           </button>
         </div>
+
+        {/* ERROR */}
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/30 text-red-300 rounded-xl p-4 mb-6">
+            {error}
+          </div>
+        )}
 
         {/* SCREEN SELECTOR */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-8">
@@ -201,28 +374,29 @@ export default function QRGeneratorPage() {
             className="w-full md:w-96 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white"
           >
             {screens.map((screen) => (
-              <option key={screen.id} value={screen.id}>
+              <option
+                key={screen.id}
+                value={screen.id}
+              >
                 {screen.name}
               </option>
             ))}
           </select>
 
           <div className="mt-3 text-sm text-slate-400">
-            {selectedScreen?.name || "No screen selected"}{" "}
+            {selectedScreen?.name ||
+              "No screen selected"}{" "}
             • {seats.length} active seats
           </div>
         </div>
 
-        {/* ERROR */}
-        {error && (
-          <div className="bg-red-500/10 border border-red-500/30 text-red-300 rounded-xl p-4 mb-6">
-            {error}
-          </div>
-        )}
-
         {/* NO SCREENS */}
         {screens.length === 0 && (
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center">
+            <div className="text-5xl mb-4">
+              🎬
+            </div>
+
             <h2 className="text-xl font-semibold">
               No screens found
             </h2>
@@ -234,23 +408,35 @@ export default function QRGeneratorPage() {
         )}
 
         {/* NO SEATS */}
-        {screens.length > 0 && seats.length === 0 && (
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center">
-            <h2 className="text-xl font-semibold">
-              No active seats
-            </h2>
+        {screens.length > 0 &&
+          seats.length === 0 && (
+            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center">
+              <div className="text-5xl mb-4">
+                💺
+              </div>
 
-            <p className="text-slate-400 mt-2">
-              This screen does not have any active seats.
-            </p>
-          </div>
-        )}
+              <h2 className="text-xl font-semibold">
+                No active seats
+              </h2>
+
+              <p className="text-slate-400 mt-2">
+                This screen does not have any active
+                seats.
+              </p>
+
+              <p className="text-slate-500 mt-1">
+                Add seats from Screens & Seats.
+              </p>
+            </div>
+          )}
 
         {/* QR GRID */}
         {seats.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 print:grid-cols-3">
             {seats.map((seat) => {
-              const qrUrl = getQrUrl(seat.seat_number);
+              const qrUrl = getQrUrl(
+                seat.seat_number
+              );
 
               return (
                 <div
@@ -260,6 +446,10 @@ export default function QRGeneratorPage() {
                   <div className="text-center">
 
                     <div className="text-sm font-medium text-gray-500">
+                      {cinemaName}
+                    </div>
+
+                    <div className="text-sm font-medium text-gray-500 mt-1">
                       {selectedScreen?.name}
                     </div>
 
@@ -282,7 +472,9 @@ export default function QRGeneratorPage() {
                     </div>
 
                     <button
-                      onClick={() => downloadQr(seat)}
+                      onClick={() =>
+                        downloadQr(seat)
+                      }
                       className="w-full bg-black text-white rounded-xl py-3 font-semibold hover:bg-gray-800"
                     >
                       Download SVG
@@ -294,7 +486,6 @@ export default function QRGeneratorPage() {
             })}
           </div>
         )}
-
       </div>
 
       {/* PRINT STYLES */}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+
 const supabase = createClient();
 
 type FoodItem = {
@@ -30,32 +31,109 @@ export default function FoodMenuPage() {
   const [category, setCategory] = useState("Snacks");
   const [isAvailable, setIsAvailable] = useState(true);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(
-    null
-  );
+  const [currentImageUrl, setCurrentImageUrl] =
+    useState<string | null>(null);
+
+  // --------------------------------------------------
+  // Get logged-in Manager's cinema ID
+  // --------------------------------------------------
+
+  async function getManagerCinemaId() {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      throw new Error(
+        "Could not get the logged-in Manager account."
+      );
+    }
+
+    const role =
+      user.app_metadata?.role ??
+      user.user_metadata?.role;
+
+    const cinemaId =
+      user.app_metadata?.cinema_id ??
+      user.user_metadata?.cinema_id;
+
+    if (role !== "manager") {
+      throw new Error(
+        "Only Manager accounts can manage food items."
+      );
+    }
+
+    if (!cinemaId) {
+      throw new Error(
+        "This Manager account is not assigned to a cinema."
+      );
+    }
+
+    return cinemaId as string;
+  }
+
+  // --------------------------------------------------
+  // Load only this cinema's food items
+  // --------------------------------------------------
 
   async function loadFoodItems() {
     setLoading(true);
 
-    const { data, error } = await supabase
-      .from("food_items")
-      .select("*")
-      .order("created_at", { ascending: true });
+    try {
+      const cinemaId = await getManagerCinemaId();
 
-    if (error) {
-      console.error("Error loading food items:", error);
-      alert("Could not load food items: " + error.message);
-      setLoading(false);
-      return;
+      const { data, error } = await supabase
+        .from("food_items")
+        .select("*")
+        .eq("cinema_id", cinemaId)
+        .order("created_at", {
+          ascending: true,
+        });
+
+      if (error) {
+        console.error(
+          "Error loading food items:",
+          error
+        );
+
+        alert(
+          "Could not load food items: " +
+            error.message
+        );
+
+        setFoodItems([]);
+        setLoading(false);
+        return;
+      }
+
+      setFoodItems((data || []) as FoodItem[]);
+    } catch (error) {
+      console.error(
+        "Food menu loading error:",
+        error
+      );
+
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unknown error";
+
+      alert("Could not load food menu: " + message);
+
+      setFoodItems([]);
     }
 
-    setFoodItems((data || []) as FoodItem[]);
     setLoading(false);
   }
 
   useEffect(() => {
     loadFoodItems();
   }, []);
+
+  // --------------------------------------------------
+  // Reset form
+  // --------------------------------------------------
 
   function resetForm() {
     setEditingId(null);
@@ -67,6 +145,10 @@ export default function FoodMenuPage() {
     setImageFile(null);
     setCurrentImageUrl(null);
   }
+
+  // --------------------------------------------------
+  // Start editing
+  // --------------------------------------------------
 
   function startEdit(item: FoodItem) {
     setEditingId(item.id);
@@ -84,8 +166,13 @@ export default function FoodMenuPage() {
     });
   }
 
+  // --------------------------------------------------
+  // Upload food image
+  // --------------------------------------------------
+
   async function uploadImage(file: File) {
-    const extension = file.name.split(".").pop() || "jpg";
+    const extension =
+      file.name.split(".").pop() || "jpg";
 
     const filePath = `food/${crypto.randomUUID()}.${extension}`;
 
@@ -107,21 +194,34 @@ export default function FoodMenuPage() {
     return data.publicUrl;
   }
 
+  // --------------------------------------------------
+  // Get storage path from image URL
+  // --------------------------------------------------
+
   function getStoragePath(imageUrl: string | null) {
     if (!imageUrl) return null;
 
-    const marker = "/storage/v1/object/public/food-images/";
+    const marker =
+      "/storage/v1/object/public/food-images/";
 
     const index = imageUrl.indexOf(marker);
 
     if (index === -1) return null;
 
     return decodeURIComponent(
-      imageUrl.substring(index + marker.length)
+      imageUrl.substring(
+        index + marker.length
+      )
     );
   }
 
-  async function deleteImage(imageUrl: string | null) {
+  // --------------------------------------------------
+  // Delete image
+  // --------------------------------------------------
+
+  async function deleteImage(
+    imageUrl: string | null
+  ) {
     const path = getStoragePath(imageUrl);
 
     if (!path) return;
@@ -131,11 +231,20 @@ export default function FoodMenuPage() {
       .remove([path]);
 
     if (error) {
-      console.error("Could not delete image:", error);
+      console.error(
+        "Could not delete image:",
+        error
+      );
     }
   }
 
-  async function saveFoodItem(e: React.FormEvent) {
+  // --------------------------------------------------
+  // Add / Update food item
+  // --------------------------------------------------
+
+  async function saveFoodItem(
+    e: React.FormEvent
+  ) {
     e.preventDefault();
 
     if (!name.trim()) {
@@ -151,25 +260,36 @@ export default function FoodMenuPage() {
     setSaving(true);
 
     try {
+      // Get the cinema from the logged-in Manager
+      const cinemaId =
+        await getManagerCinemaId();
+
       let imageUrl = currentImageUrl;
 
       // Upload new image if selected
       if (imageFile) {
-        imageUrl = await uploadImage(imageFile);
+        imageUrl =
+          await uploadImage(imageFile);
       }
+
+      // --------------------------------------------------
+      // UPDATE EXISTING FOOD ITEM
+      // --------------------------------------------------
 
       if (editingId) {
         const { error } = await supabase
           .from("food_items")
           .update({
             name: name.trim(),
-            description: description.trim() || null,
+            description:
+              description.trim() || null,
             price: Number(price),
             category,
             image_url: imageUrl,
             is_available: isAvailable,
           })
-          .eq("id", editingId);
+          .eq("id", editingId)
+          .eq("cinema_id", cinemaId);
 
         if (error) {
           throw error;
@@ -181,26 +301,28 @@ export default function FoodMenuPage() {
           currentImageUrl &&
           currentImageUrl !== imageUrl
         ) {
-          await deleteImage(currentImageUrl);
-        }
-
-        alert("Food item updated successfully.");
-      } else {
-        // Use cinema_id from an existing food item
-        const cinemaId = foodItems[0]?.cinema_id;
-
-        if (!cinemaId) {
-          throw new Error(
-            "No cinema found. Please make sure at least one food item exists."
+          await deleteImage(
+            currentImageUrl
           );
         }
 
+        alert(
+          "Food item updated successfully."
+        );
+      }
+
+      // --------------------------------------------------
+      // ADD NEW FOOD ITEM
+      // --------------------------------------------------
+
+      else {
         const { error } = await supabase
           .from("food_items")
           .insert({
             cinema_id: cinemaId,
             name: name.trim(),
-            description: description.trim() || null,
+            description:
+              description.trim() || null,
             price: Number(price),
             image_url: imageUrl,
             category,
@@ -211,68 +333,142 @@ export default function FoodMenuPage() {
           throw error;
         }
 
-        alert("Food item added successfully.");
+        alert(
+          "Food item added successfully."
+        );
       }
 
       resetForm();
+
       await loadFoodItems();
     } catch (error) {
-      console.error("Food item save error:", error);
+      console.error(
+        "Food item save error:",
+        error
+      );
 
       const message =
         error instanceof Error
           ? error.message
           : "Unknown error";
 
-      alert("Could not save food item: " + message);
+      alert(
+        "Could not save food item: " +
+          message
+      );
     } finally {
       setSaving(false);
     }
   }
 
-  async function deleteFoodItem(item: FoodItem) {
+  // --------------------------------------------------
+  // Delete food item
+  // --------------------------------------------------
+
+  async function deleteFoodItem(
+    item: FoodItem
+  ) {
     const confirmed = window.confirm(
       `Delete "${item.name}"? This cannot be undone.`
     );
 
     if (!confirmed) return;
 
-    const { error } = await supabase
-      .from("food_items")
-      .delete()
-      .eq("id", item.id);
+    try {
+      const cinemaId =
+        await getManagerCinemaId();
 
-    if (error) {
-      alert("Could not delete food item: " + error.message);
-      return;
-    }
+      const { error } = await supabase
+        .from("food_items")
+        .delete()
+        .eq("id", item.id)
+        .eq("cinema_id", cinemaId);
 
-    await deleteImage(item.image_url);
+      if (error) {
+        alert(
+          "Could not delete food item: " +
+            error.message
+        );
+        return;
+      }
 
-    if (editingId === item.id) {
-      resetForm();
-    }
-
-    await loadFoodItems();
-  }
-
-  async function toggleAvailability(item: FoodItem) {
-    const { error } = await supabase
-      .from("food_items")
-      .update({
-        is_available: !item.is_available,
-      })
-      .eq("id", item.id);
-
-    if (error) {
-      alert(
-        "Could not change availability: " + error.message
+      await deleteImage(
+        item.image_url
       );
-      return;
-    }
 
-    await loadFoodItems();
+      if (editingId === item.id) {
+        resetForm();
+      }
+
+      await loadFoodItems();
+    } catch (error) {
+      console.error(
+        "Delete food item error:",
+        error
+      );
+
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unknown error";
+
+      alert(
+        "Could not delete food item: " +
+          message
+      );
+    }
   }
+
+  // --------------------------------------------------
+  // Toggle availability
+  // --------------------------------------------------
+
+  async function toggleAvailability(
+    item: FoodItem
+  ) {
+    try {
+      const cinemaId =
+        await getManagerCinemaId();
+
+      const { error } = await supabase
+        .from("food_items")
+        .update({
+          is_available:
+            !item.is_available,
+        })
+        .eq("id", item.id)
+        .eq("cinema_id", cinemaId);
+
+      if (error) {
+        alert(
+          "Could not change availability: " +
+            error.message
+        );
+        return;
+      }
+
+      await loadFoodItems();
+    } catch (error) {
+      console.error(
+        "Availability update error:",
+        error
+      );
+
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unknown error";
+
+      alert(
+        "Could not change availability: " +
+          message
+      );
+    }
+  }
+
+  // --------------------------------------------------
+  // PAGE
+  // --------------------------------------------------
 
   return (
     <main
@@ -306,7 +502,9 @@ export default function FoodMenuPage() {
             margin: "30px 0 40px",
           }}
         >
-          <div style={{ fontSize: "55px" }}>🍔</div>
+          <div style={{ fontSize: "55px" }}>
+            🍔
+          </div>
 
           <h1
             style={{
@@ -323,6 +521,7 @@ export default function FoodMenuPage() {
         </header>
 
         {/* ADD / EDIT FORM */}
+
         <section
           style={{
             background: "#222",
@@ -351,7 +550,9 @@ export default function FoodMenuPage() {
 
                 <input
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) =>
+                    setName(e.target.value)
+                  }
                   placeholder="Example: Chicken Burger"
                   style={inputStyle}
                 />
@@ -364,7 +565,9 @@ export default function FoodMenuPage() {
                   type="number"
                   min="1"
                   value={price}
-                  onChange={(e) => setPrice(e.target.value)}
+                  onChange={(e) =>
+                    setPrice(e.target.value)
+                  }
                   placeholder="200"
                   style={inputStyle}
                 />
@@ -380,9 +583,17 @@ export default function FoodMenuPage() {
                   }
                   style={inputStyle}
                 >
-                  <option value="Snacks">Snacks</option>
-                  <option value="Meals">Meals</option>
-<option value="Drinks">Drinks</option>
+                  <option value="Snacks">
+                    Snacks
+                  </option>
+
+                  <option value="Meals">
+                    Meals
+                  </option>
+
+                  <option value="Drinks">
+                    Drinks
+                  </option>
                 </select>
               </div>
 
@@ -394,7 +605,8 @@ export default function FoodMenuPage() {
                   accept="image/*"
                   onChange={(e) =>
                     setImageFile(
-                      e.target.files?.[0] || null
+                      e.target.files?.[0] ||
+                        null
                     )
                   }
                   style={{
@@ -406,13 +618,19 @@ export default function FoodMenuPage() {
               </div>
             </div>
 
-            <div style={{ marginTop: "18px" }}>
+            <div
+              style={{
+                marginTop: "18px",
+              }}
+            >
               <label>Description</label>
 
               <textarea
                 value={description}
                 onChange={(e) =>
-                  setDescription(e.target.value)
+                  setDescription(
+                    e.target.value
+                  )
                 }
                 placeholder="Describe the food item..."
                 rows={3}
@@ -424,8 +642,16 @@ export default function FoodMenuPage() {
             </div>
 
             {currentImageUrl && (
-              <div style={{ marginTop: "18px" }}>
-                <p style={{ color: "#aaa" }}>
+              <div
+                style={{
+                  marginTop: "18px",
+                }}
+              >
+                <p
+                  style={{
+                    color: "#aaa",
+                  }}
+                >
                   Current photo:
                 </p>
 
@@ -454,7 +680,9 @@ export default function FoodMenuPage() {
                 type="checkbox"
                 checked={isAvailable}
                 onChange={(e) =>
-                  setIsAvailable(e.target.checked)
+                  setIsAvailable(
+                    e.target.checked
+                  )
                 }
               />
 
@@ -513,6 +741,7 @@ export default function FoodMenuPage() {
         </section>
 
         {/* FOOD ITEMS */}
+
         <section>
           <h2>🍿 Current Food Items</h2>
 
@@ -568,7 +797,11 @@ export default function FoodMenuPage() {
                     </div>
                   )}
 
-                  <div style={{ padding: "18px" }}>
+                  <div
+                    style={{
+                      padding: "18px",
+                    }}
+                  >
                     <h3
                       style={{
                         margin: "0 0 8px",
@@ -612,12 +845,14 @@ export default function FoodMenuPage() {
                         display: "inline-block",
                         padding: "6px 10px",
                         borderRadius: "20px",
-                        background: item.is_available
-                          ? "#164b2a"
-                          : "#4b1616",
-                        color: item.is_available
-                          ? "#7cff9b"
-                          : "#ff8585",
+                        background:
+                          item.is_available
+                            ? "#164b2a"
+                            : "#4b1616",
+                        color:
+                          item.is_available
+                            ? "#7cff9b"
+                            : "#ff8585",
                         fontSize: "13px",
                         fontWeight: "bold",
                         marginBottom: "15px",
@@ -639,16 +874,22 @@ export default function FoodMenuPage() {
                         onClick={() =>
                           startEdit(item)
                         }
-                        style={actionButtonStyle}
+                        style={
+                          actionButtonStyle
+                        }
                       >
                         ✏️ Edit
                       </button>
 
                       <button
                         onClick={() =>
-                          toggleAvailability(item)
+                          toggleAvailability(
+                            item
+                          )
                         }
-                        style={actionButtonStyle}
+                        style={
+                          actionButtonStyle
+                        }
                       >
                         {item.is_available
                           ? "🔴 Disable"
@@ -661,7 +902,8 @@ export default function FoodMenuPage() {
                         }
                         style={{
                           ...actionButtonStyle,
-                          background: "#5a1b1b",
+                          background:
+                            "#5a1b1b",
                         }}
                       >
                         🗑️ Delete

@@ -23,6 +23,7 @@ type Order = {
   total: number | null;
   status: string | null;
   created_at: string;
+  cinema_id: string | null;
 };
 
 type FilterStatus = "ALL" | "NEW" | "PREPARING" | "READY";
@@ -31,11 +32,64 @@ export default function FoodCourtPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterStatus>("ALL");
+  const [cinemaId, setCinemaId] = useState<string | null>(null);
+  const [authError, setAuthError] = useState("");
 
-  async function loadOrders() {
+  async function getFoodCourtCinemaId() {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+
+    if (error || !user) {
+      console.error("Food Court auth error:", error);
+      setAuthError("You are not logged in.");
+      setLoading(false);
+      return null;
+    }
+
+    const role =
+      user.app_metadata?.role ??
+      user.user_metadata?.role;
+
+    const userCinemaId =
+      user.app_metadata?.cinema_id ??
+      user.user_metadata?.cinema_id;
+
+    console.log("Food Court user:", user.email);
+    console.log("Food Court role:", role);
+    console.log("Food Court cinema ID:", userCinemaId);
+
+    if (role !== "food_court") {
+      console.error("This account is not a Food Court account.");
+      setAuthError("This account is not a Food Court account.");
+      setLoading(false);
+      return null;
+    }
+
+    if (!userCinemaId) {
+      console.error("No cinema assigned to this Food Court account.");
+      setAuthError("No cinema is assigned to this Food Court account.");
+      setLoading(false);
+      return null;
+    }
+
+    setCinemaId(userCinemaId);
+    return userCinemaId;
+  }
+
+  async function loadOrders(targetCinemaId?: string) {
+    const currentCinemaId =
+      targetCinemaId ?? cinemaId;
+
+    if (!currentCinemaId) {
+      return;
+    }
+
     const { data, error } = await supabase
       .from("orders")
       .select("*")
+      .eq("cinema_id", currentCinemaId)
       .order("created_at", { ascending: true });
 
     if (error) {
@@ -44,55 +98,105 @@ export default function FoodCourtPage() {
       return;
     }
 
+    console.log(
+      "Loaded orders for cinema:",
+      currentCinemaId,
+      data
+    );
+
     setOrders((data || []) as Order[]);
     setLoading(false);
   }
 
   useEffect(() => {
-    loadOrders();
+    let channel: ReturnType<typeof supabase.channel> | null = null;
 
-    const channel = supabase
-      .channel("food-court-orders")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "orders",
-        },
-        () => {
-          loadOrders();
-        }
-      )
-      .subscribe();
+    async function setupFoodCourt() {
+      const currentCinemaId =
+        await getFoodCourtCinemaId();
+
+      if (!currentCinemaId) {
+        return;
+      }
+
+      await loadOrders(currentCinemaId);
+
+      channel = supabase
+        .channel(
+          `food-court-orders-${currentCinemaId}`
+        )
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "orders",
+            filter: `cinema_id=eq.${currentCinemaId}`,
+          },
+          () => {
+            loadOrders(currentCinemaId);
+          }
+        )
+        .subscribe((status) => {
+          console.log(
+            "Food Court realtime status:",
+            status
+          );
+        });
+    }
+
+    setupFoodCourt();
 
     return () => {
-      supabase.removeChannel(channel);
+      if (channel) {
+        supabase.removeChannel(channel);
+      }
     };
   }, []);
 
- async function updateStatus(id: number, status: string) {
-  const { error } = await supabase
-    .from("orders")
-    .update({ status })
-    .eq("id", id);
+  async function updateStatus(
+    id: number,
+    status: string
+  ) {
+    if (!cinemaId) {
+      alert("Cinema information is missing.");
+      return;
+    }
 
-  if (error) {
-    console.error("Error updating order:", error);
-    alert("Status update failed: " + error.message);
-    return;
+    const { error } = await supabase
+      .from("orders")
+      .update({ status })
+      .eq("id", id)
+      .eq("cinema_id", cinemaId);
+
+    if (error) {
+      console.error(
+        "Error updating order:",
+        error
+      );
+      alert(
+        "Status update failed: " +
+          error.message
+      );
+      return;
+    }
+
+    console.log(
+      "Order status updated successfully:",
+      id,
+      status,
+      "Cinema:",
+      cinemaId
+    );
+
+    setOrders((currentOrders) =>
+      currentOrders.map((order) =>
+        order.id === id
+          ? { ...order, status }
+          : order
+      )
+    );
   }
-
-  console.log("Order status updated successfully:", id, status);
-
-  setOrders((currentOrders) =>
-    currentOrders.map((order) =>
-      order.id === id
-        ? { ...order, status }
-        : order
-    )
-  );
-}
 
   const newOrders = orders.filter(
     (order) => order.status === "NEW"
@@ -182,6 +286,21 @@ export default function FoodCourtPage() {
         Live orders from cinema seats
       </p>
 
+      {authError && (
+        <div
+          style={{
+            maxWidth: "600px",
+            margin: "0 auto 30px",
+            background: "#7f1d1d",
+            padding: "15px",
+            borderRadius: "10px",
+            textAlign: "center",
+          }}
+        >
+          {authError}
+        </div>
+      )}
+
       {/* Dashboard Stats */}
       <div
         style={{
@@ -202,7 +321,9 @@ export default function FoodCourtPage() {
             textAlign: "center",
           }}
         >
-          <div style={{ fontSize: "30px" }}>📥</div>
+          <div style={{ fontSize: "30px" }}>
+            📥
+          </div>
           <div
             style={{
               fontSize: "32px",
@@ -223,7 +344,9 @@ export default function FoodCourtPage() {
             textAlign: "center",
           }}
         >
-          <div style={{ fontSize: "30px" }}>👨‍🍳</div>
+          <div style={{ fontSize: "30px" }}>
+            👨‍🍳
+          </div>
           <div
             style={{
               fontSize: "32px",
@@ -244,7 +367,9 @@ export default function FoodCourtPage() {
             textAlign: "center",
           }}
         >
-          <div style={{ fontSize: "30px" }}>✅</div>
+          <div style={{ fontSize: "30px" }}>
+            ✅
+          </div>
           <div
             style={{
               fontSize: "32px",
@@ -265,7 +390,9 @@ export default function FoodCourtPage() {
             textAlign: "center",
           }}
         >
-          <div style={{ fontSize: "30px" }}>🎉</div>
+          <div style={{ fontSize: "30px" }}>
+            🎉
+          </div>
           <div
             style={{
               fontSize: "32px",
@@ -296,9 +423,13 @@ export default function FoodCourtPage() {
             borderRadius: "10px",
             cursor: "pointer",
             background:
-              filter === "ALL" ? "#fff" : "#333",
+              filter === "ALL"
+                ? "#fff"
+                : "#333",
             color:
-              filter === "ALL" ? "#111" : "#fff",
+              filter === "ALL"
+                ? "#111"
+                : "#fff",
             fontWeight: "bold",
           }}
         >
@@ -313,7 +444,9 @@ export default function FoodCourtPage() {
             borderRadius: "10px",
             cursor: "pointer",
             background:
-              filter === "NEW" ? "#dc2626" : "#333",
+              filter === "NEW"
+                ? "#dc2626"
+                : "#333",
             color: "#fff",
             fontWeight: "bold",
           }}
@@ -347,7 +480,9 @@ export default function FoodCourtPage() {
             borderRadius: "10px",
             cursor: "pointer",
             background:
-              filter === "READY" ? "#16a34a" : "#333",
+              filter === "READY"
+                ? "#16a34a"
+                : "#333",
             color: "#fff",
             fontWeight: "bold",
           }}
@@ -364,24 +499,26 @@ export default function FoodCourtPage() {
       )}
 
       {/* No Orders */}
-      {!loading && filteredOrders.length === 0 && (
-        <div
-          style={{
-            textAlign: "center",
-            background: "#222",
-            padding: "30px",
-            borderRadius: "15px",
-            maxWidth: "600px",
-            margin: "0 auto",
-          }}
-        >
-          <h2>No orders here</h2>
-          <p style={{ color: "#aaa" }}>
-            New customer orders will appear here
-            automatically.
-          </p>
-        </div>
-      )}
+      {!loading &&
+        !authError &&
+        filteredOrders.length === 0 && (
+          <div
+            style={{
+              textAlign: "center",
+              background: "#222",
+              padding: "30px",
+              borderRadius: "15px",
+              maxWidth: "600px",
+              margin: "0 auto",
+            }}
+          >
+            <h2>No orders here</h2>
+            <p style={{ color: "#aaa" }}>
+              New customer orders will appear here
+              automatically.
+            </p>
+          </div>
+        )}
 
       {/* Orders */}
       <div
@@ -395,9 +532,8 @@ export default function FoodCourtPage() {
         }}
       >
         {filteredOrders.map((order) => {
-          const statusStyle = getStatusStyle(
-            order.status
-          );
+          const statusStyle =
+            getStatusStyle(order.status);
 
           return (
             <div
@@ -545,7 +681,12 @@ export default function FoodCourtPage() {
                 </button>
 
                 <button
-                 onClick={() => updateStatus(order.id, "READY")}
+                  onClick={() =>
+                    updateStatus(
+                      order.id,
+                      "READY"
+                    )
+                  }
                   style={{
                     flex: 1,
                     padding: "12px",

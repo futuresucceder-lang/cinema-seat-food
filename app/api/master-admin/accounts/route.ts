@@ -103,6 +103,12 @@ export async function POST(request: Request) {
       );
     }
 
+    // IMPORTANT:
+    // Store the confirmed cinema in a new constant.
+    // This prevents TypeScript from treating it as possibly null
+    // inside the nested saveAccount() function.
+    const cinemaRecord = cinema;
+
     // --------------------------------------------------
     // 5. Load Auth users
     // --------------------------------------------------
@@ -146,7 +152,7 @@ export async function POST(request: Request) {
       } = await adminSupabase
         .from("profiles")
         .select("id, role, cinema_id")
-        .eq("cinema_id", cinemaId)
+        .eq("cinema_id", cinemaRecord.id)
         .eq("role", role)
         .maybeSingle();
 
@@ -179,7 +185,10 @@ export async function POST(request: Request) {
         }
 
         // Update existing Auth account.
-        const { data: updatedUser, error: updateError } =
+        const {
+          data: updatedUser,
+          error: updateError,
+        } =
           await adminSupabase.auth.admin.updateUserById(
             accountUserId,
             {
@@ -189,12 +198,12 @@ export async function POST(request: Request) {
 
               user_metadata: {
                 role,
-                cinema_id: cinemaId,
+                cinema_id: cinemaRecord.id,
               },
 
               app_metadata: {
                 role,
-                cinema_id: cinemaId,
+                cinema_id: cinemaRecord.id,
               },
             }
           );
@@ -215,10 +224,10 @@ export async function POST(request: Request) {
             .update({
               full_name:
                 role === "manager"
-                  ? `${cinema.name} Manager`
-                  : `${cinema.name} Food Court`,
+                  ? `${cinemaRecord.name} Manager`
+                  : `${cinemaRecord.name} Food Court`,
               role,
-              cinema_id: cinemaId,
+              cinema_id: cinemaRecord.id,
             })
             .eq("id", accountUserId);
 
@@ -241,8 +250,8 @@ export async function POST(request: Request) {
 
       let userId: string;
 
-      // If email already belongs to somebody else, don't
-      // take over that account.
+      // If email already belongs to somebody else,
+      // don't take over that account.
       if (emailUser) {
         throw new Error(
           `The email "${cleanEmail}" is already used by another account. Please choose a different Login ID / Email.`
@@ -253,26 +262,28 @@ export async function POST(request: Request) {
       const {
         data: createdUser,
         error: createUserError,
-      } = await adminSupabase.auth.admin.createUser({
-        email: cleanEmail,
-        password,
-        email_confirm: true,
+      } =
+        await adminSupabase.auth.admin.createUser({
+          email: cleanEmail,
+          password,
+          email_confirm: true,
 
-        user_metadata: {
-          role,
-          cinema_id: cinemaId,
-        },
+          user_metadata: {
+            role,
+            cinema_id: cinemaRecord.id,
+          },
 
-        app_metadata: {
-          role,
-          cinema_id: cinemaId,
-        },
-      });
+          app_metadata: {
+            role,
+            cinema_id: cinemaRecord.id,
+          },
+        });
 
       if (createUserError || !createdUser.user) {
         throw new Error(
           `Could not create ${role} account: ${
-            createUserError?.message || "Unknown Auth error"
+            createUserError?.message ||
+            "Unknown Auth error"
           }`
         );
       }
@@ -287,10 +298,10 @@ export async function POST(request: Request) {
             id: userId,
             full_name:
               role === "manager"
-                ? `${cinema.name} Manager`
-                : `${cinema.name} Food Court`,
+                ? `${cinemaRecord.name} Manager`
+                : `${cinemaRecord.name} Food Court`,
             role,
-            cinema_id: cinemaId,
+            cinema_id: cinemaRecord.id,
           });
 
       if (profileInsertError) {
@@ -338,8 +349,8 @@ export async function POST(request: Request) {
       success: true,
 
       cinema: {
-        id: cinema.id,
-        name: cinema.name,
+        id: cinemaRecord.id,
+        name: cinemaRecord.name,
       },
 
       manager,

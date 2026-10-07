@@ -25,7 +25,7 @@ export default function AdminDashboard() {
     setErrorMessage("");
 
     // --------------------------------------------------
-    // 1. Get currently logged-in Manager
+    // 1. Get currently logged-in user
     // --------------------------------------------------
 
     const {
@@ -42,6 +42,10 @@ export default function AdminDashboard() {
       return;
     }
 
+    // --------------------------------------------------
+    // 2. Get Manager role + cinema from Auth metadata
+    // --------------------------------------------------
+
     const role =
       user.app_metadata?.role ??
       user.user_metadata?.role;
@@ -50,14 +54,24 @@ export default function AdminDashboard() {
       user.app_metadata?.cinema_id ??
       user.user_metadata?.cinema_id;
 
+    console.log("Manager auth check:", {
+      userId: user.id,
+      email: user.email,
+      role,
+      managerCinemaId,
+    });
+
     // --------------------------------------------------
-    // 2. Make sure this is a Manager account
+    // 3. Make sure this is a Manager account
     // --------------------------------------------------
 
     if (role !== "manager") {
       console.error(
-        "This account is not a Manager account.",
-        role
+        "This account does not have Manager access.",
+        {
+          email: user.email,
+          role,
+        }
       );
 
       setOrders([]);
@@ -69,7 +83,7 @@ export default function AdminDashboard() {
     }
 
     // --------------------------------------------------
-    // 3. Make sure Manager has a cinema
+    // 4. Make sure Manager has a cinema
     // --------------------------------------------------
 
     if (!managerCinemaId) {
@@ -86,7 +100,7 @@ export default function AdminDashboard() {
     }
 
     // --------------------------------------------------
-    // 4. Get cinema name
+    // 5. Get cinema name
     // --------------------------------------------------
 
     const {
@@ -98,17 +112,19 @@ export default function AdminDashboard() {
       .eq("id", managerCinemaId)
       .single();
 
-    if (!cinemaError && cinema) {
-      setCinemaName(cinema.name);
-    } else {
+    if (cinemaError) {
       console.error(
         "Could not load cinema:",
         cinemaError
       );
+
+      setCinemaName("");
+    } else if (cinema) {
+      setCinemaName(cinema.name);
     }
 
     // --------------------------------------------------
-    // 5. Load ONLY this Manager's cinema orders
+    // 6. Load ONLY this Manager's cinema orders
     // --------------------------------------------------
 
     const {
@@ -245,7 +261,6 @@ export default function AdminDashboard() {
             Manage cinema seat food orders
           </p>
 
-          {/* Cinema name */}
           {cinemaName && (
             <p
               style={{
@@ -318,7 +333,7 @@ export default function AdminDashboard() {
           />
         </section>
 
-        {/* Main navigation */}
+        {/* Admin Tools */}
         <h2
           style={{
             textAlign: "center",
@@ -337,6 +352,7 @@ export default function AdminDashboard() {
             marginBottom: "40px",
           }}
         >
+          {/* Food Court */}
           <AdminCard
             href="/food-court"
             icon="🍿"
@@ -349,6 +365,16 @@ export default function AdminDashboard() {
             }
           />
 
+          {/* Food Menu */}
+          <AdminCard
+            href="/admin/food-menu"
+            icon="🍔"
+            title="Food Menu"
+            description="Add, edit, delete and manage food items for this cinema."
+            badge="Manage Food Menu"
+          />
+
+          {/* Order History */}
           <AdminCard
             href="/order-history"
             icon="📋"
@@ -357,6 +383,7 @@ export default function AdminDashboard() {
             badge={`${orders.length} orders`}
           />
 
+          {/* QR Generator */}
           <AdminCard
             href="/qr-generator"
             icon="📱"
@@ -365,6 +392,7 @@ export default function AdminDashboard() {
             badge="Manage QR codes"
           />
 
+          {/* Screens & Seats */}
           <AdminCard
             href="/screens-seats"
             icon="🎟️"
@@ -374,7 +402,7 @@ export default function AdminDashboard() {
           />
         </section>
 
-        {/* Quick action */}
+        {/* Quick Action */}
         <section
           style={{
             background: "#222",
@@ -424,6 +452,10 @@ export default function AdminDashboard() {
   );
 }
 
+// --------------------------------------------------
+// Statistics Card
+// --------------------------------------------------
+
 function StatCard({
   icon,
   value,
@@ -462,6 +494,10 @@ function StatCard({
     </div>
   );
 }
+
+// --------------------------------------------------
+// Admin Tool Card
+// --------------------------------------------------
 
 function AdminCard({
   href,

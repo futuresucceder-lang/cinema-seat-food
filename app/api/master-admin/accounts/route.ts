@@ -1,43 +1,84 @@
+
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 
-const adminSupabase = createAdminClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+const adminSupabase =
+  supabaseUrl && serviceRoleKey
+    ? createAdminClient(supabaseUrl, serviceRoleKey, {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
+      })
+    : null;
 
 type AccountRole = "manager" | "food_court";
 
+type CinemaAccount = {
+  id: string;
+  role: AccountRole;
+  cinema_id: string;
+};
+
+function getAccountRole(user: {
+  app_metadata?: Record<string, unknown>;
+  user_metadata?: Record<string, unknown>;
+}): AccountRole | null {
+  const role =
+    user.app_metadata?.role ?? user.user_metadata?.role;
+
+  return role === "manager" || role === "food_court"
+    ? role
+    : null;
+}
+
+function getCinemaId(user: {
+  app_metadata?: Record<string, unknown>;
+  user_metadata?: Record<string, unknown>;
+}): string | null {
+  const cinemaId =
+    user.app_metadata?.cinema_id ??
+    user.user_metadata?.cinema_id;
+
+  return typeof cinemaId === "string" ? cinemaId : null;
+}
+
 export async function POST(request: Request) {
   try {
-    // --------------------------------------------------
-    // 1. Check logged-in user
-    // --------------------------------------------------
+    if (!adminSupabase) {
+      console.error("Supabase admin environment variables are missing.");
 
+      return NextResponse.json(
+        { error: "Server configuration is incomplete." },
+        { status: 500 }
+      );
+    }
+
+    // 1. Verify the signed-in user.
     const supabase = await createClient();
-
     const {
       data: { user },
+      error: authError,
     } = await supabase.auth.getUser();
 
-    if (!user) {
+    if (authError || !user) {
       return NextResponse.json(
         { error: "Not authenticated." },
         { status: 401 }
       );
     }
 
-    // --------------------------------------------------
-    // 2. Verify Master Admin
-    // --------------------------------------------------
-
+    // 2. Verify Master Admin using the trusted database profile.
     const { data: masterProfile, error: masterProfileError } =
       await adminSupabase
         .from("profiles")
         .select("role")
         .eq("id", user.id)
-        .single();
+        .maybeSingle();
 
     if (
       masterProfileError ||
@@ -49,10 +90,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // --------------------------------------------------
-    // 3. Read request
-    // --------------------------------------------------
-
+    // 3. Validate the request.
     const body = await request.json();
 
     const {
@@ -63,7 +101,10 @@ export async function POST(request: Request) {
       foodCourtPassword,
     } = body;
 
-    if (!cinemaId) {
+    if (
+      typeof cinemaId !== "string" ||
+      !cinemaId.trim()
+    ) {
       return NextResponse.json(
         { error: "Cinema ID is required." },
         { status: 400 }
@@ -71,30 +112,45 @@ export async function POST(request: Request) {
     }
 
     if (
-      !managerEmail?.trim() ||
+      typeof managerEmail !== "string" ||
+      !managerEmail.trim() ||
+      typeof managerPassword !== "string" ||
       !managerPassword ||
-      !foodCourtEmail?.trim() ||
+      typeof foodCourtEmail !== "string" ||
+      !foodCourtEmail.trim() ||
+      typeof foodCourtPassword !== "string" ||
       !foodCourtPassword
     ) {
       return NextResponse.json(
         {
           error:
-            "Manager and food court email/password are required.",
+            "Manager and Food Court email/password are required.",
         },
         { status: 400 }
       );
     }
 
-    // --------------------------------------------------
-    // 4. Find cinema
-    // --------------------------------------------------
+    const cleanCinemaId = cinemaId.trim();
+    const cleanManagerEmail = managerEmail.trim().toLowerCase();
+    const cleanFoodCourtEmail = foodCourtEmail.trim().toLowerCase();
 
+    if (cleanManagerEmail === cleanFoodCourtEmail) {
+      return NextResponse.json(
+        {
+          error:
+            "Manager and Food Court accounts must use different email addresses.",
+        },
+        { status: 400 }
+      );
+    }
+
+    // 4. Confirm the cinema exists.
     const { data: cinema, error: cinemaError } =
       await adminSupabase
         .from("cinemas")
         .select("id, name")
-        .eq("id", cinemaId)
-        .single();
+        .eq("id", cleanCinemaId)
+        .maybeSingle();
 
     if (cinemaError || !cinema) {
       return NextResponse.json(
@@ -103,16 +159,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // IMPORTANT:
-    // Store the confirmed cinema in a new constant.
-    // This prevents TypeScript from treating it as possibly null
-    // inside the nested saveAccount() function.
-    const cinemaRecord = cinema;
-
-    // --------------------------------------------------
-    // 5. Load Auth users
-    // --------------------------------------------------
-
+    // 5. Load Auth users. Do not create a replacement until
+    // we have checked both profiles and account metadata.
     const {
       data: usersData,
       error: usersError,
@@ -134,10 +182,6 @@ export async function POST(request: Request) {
 
     const authUsers = usersData.users;
 
-    // --------------------------------------------------
-    // 6. Create or update one cinema account
-    // --------------------------------------------------
-
     async function saveAccount(
       email: string,
       password: string,
@@ -145,169 +189,186 @@ export async function POST(request: Request) {
     ) {
       const cleanEmail = email.trim().toLowerCase();
 
-      // Find profile belonging to this cinema + role.
+      const fullName =
+        role === "manager"
+          ? `${cinema.name} Manager`
+          : `${cinema.name} Food Court`;
+
+      // Find existing profile records for this cinema and role.
       const {
-        data: existingProfile,
-        error: existingProfileError,
+        data: profiles,
+        error: profilesError,
       } = await adminSupabase
         .from("profiles")
         .select("id, role, cinema_id")
-        .eq("cinema_id", cinemaRecord.id)
+        .eq("cinema_id", cinema.id)
         .eq("role", role)
-        .maybeSingle();
+        .limit(10);
 
-      if (existingProfileError) {
-        throw new Error(existingProfileError.message);
+      if (profilesError) {
+        throw new Error(
+          `Could not find the ${role} profile: ${profilesError.message}`
+        );
       }
 
-      // Find requested email in Auth.
+      // Prefer the existing profile's Auth user when available.
+      const profileUsers = (profiles ?? [])
+        .map((profile) =>
+          authUsers.find((authUser) => authUser.id === profile.id)
+        )
+        .filter((authUser) => authUser !== undefined);
+
+      const uniqueProfileUsers = Array.from(
+        new Map(
+          profileUsers.map((authUser) => [
+            authUser.id,
+            authUser,
+          ])
+        ).values()
+      );
+
+      // Also look for Auth accounts assigned to this cinema and role.
+      // This recovers accounts whose profiles are missing.
+      const metadataUsers = authUsers.filter(
+        (authUser) =>
+          getAccountRole(authUser) === role &&
+          getCinemaId(authUser) === cinema.id
+      );
+
+      const candidateMap = new Map<
+        string,
+        (typeof authUsers)[number]
+      >();
+
+      for (const authUser of uniqueProfileUsers) {
+        candidateMap.set(authUser.id, authUser);
+      }
+
+      for (const authUser of metadataUsers) {
+        candidateMap.set(authUser.id, authUser);
+      }
+
+      // A duplicate or ambiguous assignment must not cause another
+      // account to be created or a different account to be overwritten.
+      if (candidateMap.size > 1) {
+        throw new Error(
+          `Multiple ${role} accounts are assigned to ${cinema.name}. ` +
+            "No account was changed. Please resolve the duplicate accounts first."
+        );
+      }
+
+      const existingUser = candidateMap.values().next().value;
+
+      // Reject an email already owned by an unrelated account.
       const emailUser = authUsers.find(
         (authUser) =>
           authUser.email?.toLowerCase() === cleanEmail
       );
 
-      // ==================================================
-      // EXISTING CINEMA ACCOUNT
-      // ==================================================
+      if (emailUser && emailUser.id !== existingUser?.id) {
+        throw new Error(
+          `The email "${cleanEmail}" is already used by another account. ` +
+            "Choose a different Login ID / Email."
+        );
+      }
 
-      if (existingProfile) {
-        const accountUserId = existingProfile.id;
-
-        // If requested email belongs to a DIFFERENT user,
-        // don't overwrite that user's account.
-        if (
-          emailUser &&
-          emailUser.id !== accountUserId
-        ) {
-          throw new Error(
-            `The email "${cleanEmail}" is already used by another account. Please choose a different Login ID / Email.`
-          );
-        }
-
-        // Update existing Auth account.
-        const {
-          data: updatedUser,
-          error: updateError,
-        } =
+      if (existingUser) {
+        // Update the SAME Auth user ID. This changes credentials without
+        // replacing the account or changing its cinema assignment.
+        const { data: updated, error: updateError } =
           await adminSupabase.auth.admin.updateUserById(
-            accountUserId,
+            existingUser.id,
             {
-              password,
               email: cleanEmail,
+              password,
               email_confirm: true,
-
               user_metadata: {
+                ...existingUser.user_metadata,
                 role,
-                cinema_id: cinemaRecord.id,
+                cinema_id: cinema.id,
               },
-
               app_metadata: {
+                ...existingUser.app_metadata,
                 role,
-                cinema_id: cinemaRecord.id,
+                cinema_id: cinema.id,
               },
             }
           );
 
-        if (updateError || !updatedUser.user) {
+        if (updateError || !updated.user) {
           throw new Error(
             `Could not update ${role} account: ${
-              updateError?.message || "Unknown Auth error"
+              updateError?.message ?? "Unknown Auth error"
             }`
           );
         }
 
-        // Make absolutely sure profile remains attached
-        // to the correct cinema.
-        const { error: profileUpdateError } =
+        // Restore a missing profile or update the existing one.
+        const { error: profileError } =
           await adminSupabase
             .from("profiles")
-            .update({
-              full_name:
-                role === "manager"
-                  ? `${cinemaRecord.name} Manager`
-                  : `${cinemaRecord.name} Food Court`,
-              role,
-              cinema_id: cinemaRecord.id,
-            })
-            .eq("id", accountUserId);
+            .upsert(
+              {
+                id: existingUser.id,
+                full_name: fullName,
+                role,
+                cinema_id: cinema.id,
+              },
+              { onConflict: "id" }
+            );
 
-        if (profileUpdateError) {
+        if (profileError) {
           throw new Error(
-            `Could not update ${role} profile: ${profileUpdateError.message}`
+            `The ${role} Auth account was updated, but its profile could not be saved: ${profileError.message}`
           );
         }
 
         return {
-          userId: accountUserId,
+          userId: existingUser.id,
           email: cleanEmail,
           action: "updated",
         };
       }
 
-      // ==================================================
-      // NO EXISTING CINEMA ACCOUNT
-      // ==================================================
-
-      let userId: string;
-
-      // If email already belongs to somebody else,
-      // don't take over that account.
-      if (emailUser) {
-        throw new Error(
-          `The email "${cleanEmail}" is already used by another account. Please choose a different Login ID / Email.`
-        );
-      }
-
-      // Create new Auth user.
-      const {
-        data: createdUser,
-        error: createUserError,
-      } =
+      // No account is assigned to this cinema and role.
+      // Create one only when no existing account can be reused.
+      const { data: created, error: createError } =
         await adminSupabase.auth.admin.createUser({
           email: cleanEmail,
           password,
           email_confirm: true,
-
           user_metadata: {
             role,
-            cinema_id: cinemaRecord.id,
+            cinema_id: cinema.id,
           },
-
           app_metadata: {
             role,
-            cinema_id: cinemaRecord.id,
+            cinema_id: cinema.id,
           },
         });
 
-      if (createUserError || !createdUser.user) {
+      if (createError || !created.user) {
         throw new Error(
           `Could not create ${role} account: ${
-            createUserError?.message ||
-            "Unknown Auth error"
+            createError?.message ?? "Unknown Auth error"
           }`
         );
       }
 
-      userId = createdUser.user.id;
+      const newUserId = created.user.id;
 
-      // Create profile.
       const { error: profileInsertError } =
         await adminSupabase
           .from("profiles")
           .insert({
-            id: userId,
-            full_name:
-              role === "manager"
-                ? `${cinemaRecord.name} Manager`
-                : `${cinemaRecord.name} Food Court`,
+            id: newUserId,
+            full_name: fullName,
             role,
-            cinema_id: cinemaRecord.id,
+            cinema_id: cinema.id,
           });
 
       if (profileInsertError) {
-        // If profile creation fails, remove the Auth user
-        // so we don't leave an incomplete account behind.
-        await adminSupabase.auth.admin.deleteUser(userId);
+        await adminSupabase.auth.admin.deleteUser(newUserId);
 
         throw new Error(
           `Could not create ${role} profile: ${profileInsertError.message}`
@@ -315,52 +376,36 @@ export async function POST(request: Request) {
       }
 
       return {
-        userId,
+        userId: newUserId,
         email: cleanEmail,
         action: "created",
       };
     }
 
-    // --------------------------------------------------
-    // 7. Save Manager
-    // --------------------------------------------------
-
+    // 6. Save Manager, then Food Court.
     const manager = await saveAccount(
-      managerEmail,
+      cleanManagerEmail,
       managerPassword,
       "manager"
     );
 
-    // --------------------------------------------------
-    // 8. Save Food Court
-    // --------------------------------------------------
-
     const foodCourt = await saveAccount(
-      foodCourtEmail,
+      cleanFoodCourtEmail,
       foodCourtPassword,
       "food_court"
     );
 
-    // --------------------------------------------------
-    // 9. Success
-    // --------------------------------------------------
-
     return NextResponse.json({
       success: true,
-
       cinema: {
-        id: cinemaRecord.id,
-        name: cinemaRecord.name,
+        id: cinema.id,
+        name: cinema.name,
       },
-
       manager,
       foodCourt,
     });
   } catch (error) {
-    console.error(
-      "Master Admin account error:",
-      error
-    );
+    console.error("Master Admin account error:", error);
 
     return NextResponse.json(
       {

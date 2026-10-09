@@ -121,16 +121,16 @@ export async function POST(request: Request) {
       perPage: 1000,
     });
 
-    if (usersError) {
-      return NextResponse.json(
-        {
-          error:
-            "Could not read authentication users: " +
-            usersError.message,
-        },
-        { status: 500 }
-      );
-    }
+                if (usersError) {
+        return NextResponse.json(
+          {
+            error:
+              "Could not read authentication users: " +
+              usersError.message,
+          },
+          { status: 500 }
+        );
+      }
 
     const authUsers = usersData.users;
 

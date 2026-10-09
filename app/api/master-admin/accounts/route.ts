@@ -6,15 +6,20 @@ import { createClient as createAdminClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-const adminSupabase =
-  supabaseUrl && serviceRoleKey
-    ? createAdminClient(supabaseUrl, serviceRoleKey, {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false,
-        },
-      })
-    : null;
+if (!supabaseUrl || !serviceRoleKey) {
+  throw new Error("Missing Supabase server environment variables.");
+}
+
+const adminSupabase = createAdminClient(
+  supabaseUrl,
+  serviceRoleKey,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  }
+);
 
 type AccountRole = "manager" | "food_court";
 
@@ -158,7 +163,7 @@ export async function POST(request: Request) {
         { status: 404 }
       );
     }
-
+const cinemaRecord = cinema;
     // 5. Load Auth users. Do not create a replacement until
     // we have checked both profiles and account metadata.
     const {

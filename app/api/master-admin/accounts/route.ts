@@ -150,20 +150,29 @@ export async function POST(request: Request) {
     }
 
     // 4. Confirm the cinema exists.
-    const { data: cinema, error: cinemaError } =
-      await adminSupabase
-        .from("cinemas")
-        .select("id, name")
-        .eq("id", cleanCinemaId)
-        .maybeSingle();
+   
+const { data: cinema, error: cinemaError } =
+  await adminSupabase
+    .from("cinemas")
+    .select("id, name")
+    .eq("id", cleanCinemaId)
+    .maybeSingle();
 
-    if (cinemaError || !cinema) {
-      return NextResponse.json(
-        { error: "Cinema not found." },
-        { status: 404 }
-      );
-    }
-const cinemaRecord = cinema;
+if (cinemaError) {
+  return NextResponse.json(
+    { error: "Could not load cinema: " + cinemaError.message },
+    { status: 500 }
+  );
+}
+
+if (!cinema) {
+  return NextResponse.json(
+    { error: "Cinema not found." },
+    { status: 404 }
+  );
+}
+
+const cinemaRecord: { id: string; name: string } = cinema;
     // 5. Load Auth users. Do not create a replacement until
     // we have checked both profiles and account metadata.
     const {

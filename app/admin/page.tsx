@@ -217,7 +217,7 @@ export default function AdminDashboard() {
     readyOrders;
 
   return (
-    <main
+    <main className="seatbite-manager-page"
       style={{
         minHeight: "100vh",
         background: "#111",

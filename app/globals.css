@@ -287,3 +287,38 @@ main:not(.seatbite-page) tr:last-child td { border-bottom: 0; }
   main:not(.seatbite-page) { overflow-wrap: anywhere; }
   main:not(.seatbite-page) table { display:block; overflow-x:auto; white-space:nowrap; }
 }
+
+
+/* Shared Seat Bite dashboard brand */
+.seatbite-dashboard-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.seatbite-dashboard-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff704f, #e83d2b);
+  color: #fff;
+  font-size: 25px;
+  box-shadow: 0 5px 14px rgba(244,81,53,.22);
+}
+.seatbite-dashboard-wordmark {
+  color: #202124;
+  font-size: 25px;
+  font-weight: 850;
+  letter-spacing: -.06em;
+}
+.seatbite-dashboard-brand-dark .seatbite-dashboard-wordmark { color: #fff; }
+.seatbite-dashboard-header { text-align: center; margin: 0 auto 24px; }
+@media (max-width: 640px) {
+  .seatbite-dashboard-brand { gap: 8px; }
+  .seatbite-dashboard-logo { width: 40px; height: 40px; font-size: 22px; }
+  .seatbite-dashboard-wordmark { font-size: 23px; }
+}

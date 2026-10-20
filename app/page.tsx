@@ -241,7 +241,7 @@ function CustomerOrderPage() {
             🎬
           </div>
 
-          <h1>Welcome to Seat Bite</h1>
+          <h1>Welcome to Seat Bite 🍿</h1>
 
           <p
             style={{
@@ -289,7 +289,7 @@ function CustomerOrderPage() {
             🎉
           </div>
 
-          <h1>Order Confirmation</h1>
+          <h1 className="seatbite-confirmation-title">Order Confirmed!</h1>
 
           <p
             style={{
@@ -358,7 +358,7 @@ function CustomerOrderPage() {
           <p
             style={{
               marginTop: "20px",
-              color: "#bbb",
+              color: "#756b66",
             }}
           >
             Thank you for ordering! 🍿
@@ -373,7 +373,7 @@ function CustomerOrderPage() {
               padding: "16px",
               borderRadius: "10px",
               border: "none",
-              background: "#16803d",
+              background: "#f45135",
               color: "white",
               fontWeight: "bold",
               fontSize: "16px",
@@ -391,7 +391,7 @@ function CustomerOrderPage() {
               marginTop: "12px",
               padding: "14px",
               borderRadius: "10px",
-              border: "1px solid #444",
+              border: "1px solid #f0e5df",
               background: "#ffffff",
               color: "#202124",
               fontWeight: "bold",
@@ -763,7 +763,7 @@ function CustomerOrderPage() {
                 itemCount === 0
                   ? "#e7d8d0"
                   : "#f45135",
-              color: "#202124",
+              color: "#ffffff",
               fontWeight: "bold",
               fontSize: "16px",
               cursor:

@@ -7,7 +7,7 @@ import { createClient } from "../../lib/supabase/client";
 const supabase = createClient();
 
 type FoodItem = { id?: string; name: string; price?: number; emoji?: string; quantity?: number };
-type Order = { order_code: string; movie: string | null; screen: string; seat: string; food_items: FoodItem[]; total: number; status: string; created_at: string };
+type Order = { order_code: string; movie: string | null; cinema_id?: string | null; screen: string; seat: string; food_items: FoodItem[]; total: number; status: string; created_at: string };
 
 function OrderStatusContent() {
   const searchParams = useSearchParams();
@@ -57,7 +57,7 @@ function OrderStatusContent() {
           <div className="seatbite-status-message"><span className="seatbite-status-message-icon">{status === "COMPLETED" ? "🎉" : status === "READY" ? "🔔" : status === "PREPARING" ? "👨‍🍳" : "🍿"}</span><div><strong>{statusCopy[status] || "Your order status has been updated"}</strong><p>Keep enjoying the show. This page updates when the team changes your order status.</p></div></div>
         </section>
         <section className="seatbite-status-card"><p className="seatbite-eyebrow">IN YOUR SNACK BOX</p><h2 className="seatbite-section-title">Your order</h2><div className="seatbite-status-food-list">{order.food_items?.map((item, index) => <div className="seatbite-status-food" key={item.id ?? index}><span className="seatbite-status-food-icon">{item.emoji ?? "🍿"}</span><span className="seatbite-status-food-name">{item.name}<small>Quantity: {item.quantity ?? 1}</small></span><strong>₹{(item.price ?? 0) * (item.quantity ?? 1)}</strong></div>)}</div><div className="seatbite-status-total"><span>Total</span><strong>₹{order.total}</strong></div></section>
-        <a href={`/?screen=${encodeURIComponent(order.screen)}&seat=${encodeURIComponent(order.seat)}`} className="seatbite-secondary-button seatbite-status-back">← Back to menu</a>
+        <a href={order.cinema_id ? `/?cinema=${encodeURIComponent(order.cinema_id)}&screen=${encodeURIComponent(order.screen)}&seat=${encodeURIComponent(order.seat)}` : "/"} className="seatbite-secondary-button seatbite-status-back">← Back to menu</a>
         <footer className="seatbite-footer"><span>🍿 seatbite</span><span>Good food. Great movies.</span></footer>
       </div>
     </main>

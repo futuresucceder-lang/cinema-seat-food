@@ -2,12 +2,60 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 
-const adminSupabase = createAdminClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getAdminSupabase() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error(
+      "Missing Supabase environment variables. Check Vercel Environment Variables."
+    );
+  }
+
+  return createAdminClient(supabaseUrl, serviceRoleKey);
+}
 type AccountRole = "manager" | "food_court";
+
+export async function GET(request: Request) {
+  try {
+    const supabase = await createClient();
+    const adminSupabase = getAdminSupabase();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+
+    const { data: profile, error: profileError } = await adminSupabase
+      .from("profiles").select("role").eq("id", user.id).maybeSingle();
+    if (profileError || profile?.role !== "master_admin") {
+      return NextResponse.json({ error: "Master Admin access required." }, { status: 403 });
+    }
+
+    const cinemaId = new URL(request.url).searchParams.get("cinemaId");
+    if (!cinemaId) return NextResponse.json({ error: "Cinema ID is required." }, { status: 400 });
+
+    const { data: cinema, error: cinemaError } = await adminSupabase
+      .from("cinemas").select("id, name").eq("id", cinemaId).maybeSingle();
+    if (cinemaError || !cinema) return NextResponse.json({ error: "Cinema not found." }, { status: 404 });
+
+    const { data: profiles, error: profilesError } = await adminSupabase
+      .from("profiles").select("id, role").eq("cinema_id", cinemaId).in("role", ["manager", "food_court"]);
+    if (profilesError) return NextResponse.json({ error: profilesError.message }, { status: 500 });
+
+    const accounts: Record<string, { email: string; exists: boolean }> = {
+      manager: { email: "", exists: false },
+      food_court: { email: "", exists: false },
+    };
+    for (const accountProfile of profiles || []) {
+      if (accountProfile.role !== "manager" && accountProfile.role !== "food_court") continue;
+      const { data, error } = await adminSupabase.auth.admin.getUserById(accountProfile.id);
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+      accounts[accountProfile.role] = { email: data.user?.email || "", exists: Boolean(data.user) };
+    }
+    return NextResponse.json({ cinema, accounts });
+  } catch (error) {
+    console.error("Master Admin account lookup error:", error);
+    return NextResponse.json({ error: error instanceof Error ? error.message : "Could not load accounts." }, { status: 500 });
+  }
+}
 
 export async function POST(request: Request) {
   try {
@@ -16,6 +64,7 @@ export async function POST(request: Request) {
     // --------------------------------------------------
 
     const supabase = await createClient();
+    const adminSupabase = getAdminSupabase();
 
     const {
       data: { user },
@@ -72,9 +121,7 @@ export async function POST(request: Request) {
 
     if (
       !managerEmail?.trim() ||
-      !managerPassword ||
-      !foodCourtEmail?.trim() ||
-      !foodCourtPassword
+      !foodCourtEmail?.trim()
     ) {
       return NextResponse.json(
         {
@@ -192,7 +239,7 @@ export async function POST(request: Request) {
           await adminSupabase.auth.admin.updateUserById(
             accountUserId,
             {
-              password,
+              ...(password ? { password } : {}),
               email: cleanEmail,
               email_confirm: true,
 
@@ -257,6 +304,8 @@ export async function POST(request: Request) {
           `The email "${cleanEmail}" is already used by another account. Please choose a different Login ID / Email.`
         );
       }
+
+      if (!password) throw new Error(`Enter a password to create the ${role} account.`);
 
       // Create new Auth user.
       const {

@@ -819,3 +819,109 @@ main[style*="background: #fff8f4"] {
   .seatbite-food-card:hover { transform: none !important; }
   .seatbite-status-card, .seatbite-food-card { box-shadow: 3px 3px 0 rgba(17,17,20,.1) !important; }
 }
+
+
+/* Reference-matched Seat Bite art direction: black cinema canvas, vivid red, paper white,
+   chunky comic typography, sticker edges and film-strip details. */
+:root {
+  --background: #f4f1ee;
+  --foreground: #111114;
+  --brand: #f20d2f;
+  --brand-hover: #ce0927;
+  --surface: #fff;
+  --muted: #68656b;
+  --border: #111114;
+  --seatbite-red: #f20d2f;
+  --seatbite-ink: #08080a;
+  --seatbite-paper: #fffdfb;
+}
+body {
+  background: var(--background);
+  color: var(--seatbite-ink);
+  font-family: var(--font-oswald), Arial, sans-serif;
+}
+h1, h2, h3, .seatbite-wordmark, .seatbite-dashboard-wordmark,
+.seatbite-manager-page header h1, .seatbite-gate-card h1,
+.seatbite-status-hero h1 {
+  font-family: var(--font-bangers), Impact, sans-serif !important;
+  letter-spacing: .015em !important;
+  font-weight: 400 !important;
+}
+button, input, select, textarea, label, p, td, th {
+  font-family: var(--font-oswald), Arial, sans-serif;
+}
+.seatbite-page, .seatbite-manager-page, .seatbite-status-page,
+main:not(.seatbite-page) {
+  background-color: #f4f1ee !important;
+  background-image:
+    radial-gradient(circle at 12px 12px,rgba(242,13,47,.075) 1.5px,transparent 2px) !important;
+  background-size: 28px 28px !important;
+}
+.seatbite-header, .seatbite-status-hero, .seatbite-gate-card,
+.seatbite-dashboard-header, .seatbite-manager-header {
+  border: 3px solid var(--seatbite-ink) !important;
+  box-shadow: 7px 7px 0 var(--seatbite-red) !important;
+}
+.seatbite-header, .seatbite-dashboard-header {
+  background: var(--seatbite-ink) !important;
+  color: #fff !important;
+}
+.seatbite-header h1, .seatbite-status-hero h1 {
+  font-family: var(--font-marker), "Comic Sans MS", cursive !important;
+  font-size: clamp(38px, 5vw, 64px) !important;
+  line-height: .98 !important;
+  text-transform: uppercase;
+  text-shadow: 3px 3px 0 var(--seatbite-red) !important;
+}
+.seatbite-wordmark, .seatbite-dashboard-wordmark {
+  font-family: var(--font-marker), "Comic Sans MS", cursive !important;
+  text-transform: uppercase;
+}
+.seatbite-wordmark-icon, .seatbite-dashboard-logo, .seatbite-logo-mark,
+.seatbite-gate-icon, .seatbite-cart-icon, .seatbite-product-emoji,
+.seatbite-status-food-icon, .seatbite-status-symbol {
+  border: 2px solid var(--seatbite-ink) !important;
+  border-radius: 12px 12px 5px 12px !important;
+  background: var(--seatbite-red) !important;
+  color: #fff !important;
+  box-shadow: 3px 3px 0 var(--seatbite-ink) !important;
+}
+.seatbite-food-card, .seatbite-product-card, .seatbite-cart,
+.seatbite-status-card, .seatbite-order-card, .seatbite-my-orders-panel,
+.seatbite-manager-page section, .seatbite-manager-page article,
+.seatbite-manager-page [class*="card"], main:not(.seatbite-page) table {
+  border: 2px solid var(--seatbite-ink) !important;
+  border-radius: 18px 18px 6px 18px !important;
+  background: var(--seatbite-paper) !important;
+  box-shadow: 4px 4px 0 rgba(8,8,10,.14) !important;
+}
+.seatbite-categories button, .seatbite-my-orders-button,
+.seatbite-secondary-button, .seatbite-manager-page button,
+main:not(.seatbite-page) button {
+  border: 2px solid var(--seatbite-ink) !important;
+  border-radius: 10px 10px 4px 10px !important;
+  box-shadow: 3px 3px 0 var(--seatbite-ink) !important;
+  font-weight: 800 !important;
+}
+.seatbite-categories button.seatbite-category-active,
+.seatbite-primary-button, .seatbite-add-button, .seatbite-food-card button,
+.seatbite-cart button:last-child, .seatbite-manager-page button[type="submit"],
+main:not(.seatbite-page) button[type="submit"] {
+  background: var(--seatbite-red) !important;
+  color: white !important;
+  border-color: var(--seatbite-ink) !important;
+}
+.seatbite-product-content h3 { font-size: 23px !important; }
+.seatbite-product-bottom>strong, .seatbite-cart-total strong { color: var(--seatbite-red) !important; }
+.seatbite-manager-page input, .seatbite-manager-page select,
+.seatbite-manager-page textarea, main:not(.seatbite-page) input,
+main:not(.seatbite-page) select, main:not(.seatbite-page) textarea {
+  border: 2px solid #d5d0cd !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+}
+.seatbite-footer { border-top: 2px dashed var(--seatbite-red) !important; }
+@media(max-width:680px) {
+  .seatbite-header, .seatbite-status-hero, .seatbite-gate-card,
+  .seatbite-dashboard-header, .seatbite-manager-header { box-shadow: 4px 4px 0 var(--seatbite-red) !important; }
+}

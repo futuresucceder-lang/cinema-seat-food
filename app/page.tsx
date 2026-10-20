@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 type Category = "All" | "Snacks" | "Drinks" | "Meals";
+type SavedOrder = { order_code: string; status: string; screen: string; seat: string; created_at: string };
 type FoodItem = {
   id: string;
   name: string;
@@ -32,6 +33,10 @@ function CustomerOrderPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderCode, setOrderCode] = useState("");
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [savedOrders, setSavedOrders] = useState<SavedOrder[]>([]);
+  const [showMyOrders, setShowMyOrders] = useState(false);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [ordersError, setOrdersError] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -79,6 +84,45 @@ function CustomerOrderPage() {
       setMenuLoading(false);
     }
     loadMenu();
+    return () => { cancelled = true; };
+  }, [cinemaId, supabase]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadSavedOrders() {
+      if (!cinemaId) return;
+      setOrdersLoading(true);
+      setOrdersError("");
+      try {
+        const stored = JSON.parse(localStorage.getItem("cinema_order_codes") || "[]");
+        const codes = Array.isArray(stored)
+          ? [...new Set(stored.filter((code): code is string => typeof code === "string" && code.length > 0))]
+          : [];
+        if (codes.length === 0) {
+          if (!cancelled) setSavedOrders([]);
+          return;
+        }
+        const { data, error } = await supabase
+          .from("orders")
+          .select("order_code,status,screen,seat,created_at")
+          .eq("cinema_id", cinemaId)
+          .in("order_code", codes)
+          .order("created_at", { ascending: false });
+        if (cancelled) return;
+        if (error) {
+          console.error("Could not load saved orders:", error);
+          setOrdersError("We couldn't load your previous orders. Please try again.");
+          return;
+        }
+        setSavedOrders((data || []) as SavedOrder[]);
+      } catch (error) {
+        console.warn("Could not read saved order codes:", error);
+        if (!cancelled) setSavedOrders([]);
+      } finally {
+        if (!cancelled) setOrdersLoading(false);
+      }
+    }
+    loadSavedOrders();
     return () => { cancelled = true; };
   }, [cinemaId, supabase]);
 
@@ -151,6 +195,7 @@ function CustomerOrderPage() {
     } catch (error) {
       console.warn("Could not save order code on this device:", error);
     }
+    setSavedOrders((previous) => [{ order_code: newOrderCode, status: "NEW", screen, seat, created_at: new Date().toISOString() }, ...previous.filter((item) => item.order_code !== newOrderCode)]);
     setOrderCode(newOrderCode);
     setOrderPlaced(true);
     setIsSubmitting(false);
@@ -208,7 +253,7 @@ function CustomerOrderPage() {
       <div className="seatbite-shell">
         <div className="seatbite-topline">
           <div className="seatbite-wordmark"><span className="seatbite-wordmark-icon">🍿</span><span>seat<span>bite</span></span></div>
-          <div className="seatbite-open-pill"><span></span> SERVING YOUR SCREEN</div>
+          <div className="seatbite-top-actions"><div className="seatbite-open-pill"><span></span> SERVING YOUR SCREEN</div><button type="button" className="seatbite-secondary-button seatbite-my-orders-button" onClick={() => setShowMyOrders((open) => !open)} aria-expanded={showMyOrders}>My Orders <span>↗</span></button></div>
         </div>
         <header className="seatbite-hero">
           <div className="seatbite-hero-copy">
@@ -228,6 +273,25 @@ function CustomerOrderPage() {
           <div className="seatbite-seat-copy"><span>ORDERING FOR</span><strong>Screen {screen} <i>·</i> Seat {seat}</strong></div>
           <span className="seatbite-seat-check">✓</span>
         </section>
+        {showMyOrders && (
+          <section className="seatbite-cart seatbite-my-orders-panel" aria-label="My orders">
+            <div className="seatbite-cart-heading">
+              <div className="seatbite-cart-icon">🧾</div>
+              <div><h2>My orders</h2><p>Orders saved on this device for this cinema.</p></div>
+              <button type="button" className="seatbite-my-orders-close" onClick={() => setShowMyOrders(false)} aria-label="Close my orders">×</button>
+            </div>
+            {ordersLoading ? <p className="seatbite-muted">Loading your orders…</p> :
+              ordersError ? <p className="seatbite-muted" role="alert">{ordersError}</p> :
+              savedOrders.length === 0 ? <p className="seatbite-muted">No saved orders found on this device yet. After placing an order, you can come back here anytime to track it.</p> :
+              <div className="seatbite-my-orders-list">{savedOrders.map((savedOrder) => (
+                <div className="seatbite-my-order-row" key={savedOrder.order_code}>
+                  <div><strong>{savedOrder.order_code}</strong><p>Screen {savedOrder.screen} · Seat {savedOrder.seat}</p><span className={"seatbite-status-badge status-" + (savedOrder.status || "NEW").toLowerCase()}>{(savedOrder.status || "NEW").replace("_", " ")}</span></div>
+                  <button type="button" className="seatbite-primary-button" onClick={() => router.push("/order-status?order=" + encodeURIComponent(savedOrder.order_code))}>Track order <span>→</span></button>
+                </div>
+              ))}</div>
+            }
+          </section>
+        )}
         <section className="seatbite-menu-heading">
           <div><p className="seatbite-eyebrow">THE GOOD STUFF</p><h2>What are you craving?</h2><p>Little treats for your big-screen moments.</p></div>
           <span className="seatbite-menu-count">{menuLoading ? "Loading menu…" : filteredFoodItems.length + " delicious picks"}</span>

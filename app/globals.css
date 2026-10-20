@@ -564,3 +564,47 @@ main:not(.seatbite-page) tr:last-child td { border-bottom: 0; }
  .seatbite-manager-page { padding:20px 12px 36px!important; }
  .seatbite-manager-page h1 { font-size:30px!important; }
 }
+
+
+/* Seat Bite manager, food-court, master-admin and tracking page refresh */
+.seatbite-manager-page { min-height:100vh; padding:32px 24px 48px!important; background:radial-gradient(circle at 10% 0%,#ffede4,transparent 28%),#fffaf6!important; }
+.seatbite-manager-page>div,.seatbite-manager-page>section { max-width:1180px; margin-left:auto; margin-right:auto; }
+.seatbite-manager-header { padding:28px 30px!important; margin-bottom:24px!important; border:1px solid #f0e1d8!important; border-radius:24px!important; background:#fff!important; box-shadow:0 10px 30px #4b26100b!important; }
+.seatbite-manager-kicker { color:#e65b40!important; font-size:10px!important; font-weight:900!important; letter-spacing:1.8px!important; text-transform:uppercase; }
+.seatbite-dashboard-header { padding:26px 22px 20px; border-bottom:1px solid #f0e5df; }
+.seatbite-dashboard-brand { margin-bottom:14px; }
+.seatbite-dashboard-logo { border-radius:15px; background:linear-gradient(135deg,#ff7958,#e7432c); }
+.seatbite-dashboard-wordmark { letter-spacing:-1.2px; }
+.seatbite-status-page { padding-top:24px!important; }
+.seatbite-status-shell { max-width:760px!important; margin:0 auto; padding:12px 0 36px; }
+.seatbite-status-topline { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+.seatbite-status-hero { padding:28px; border-radius:26px; background:linear-gradient(125deg,#2c1d19,#613126); color:#fff; box-shadow:0 14px 38px #4b26101c; }
+.seatbite-status-hero h1 { margin:8px 0 9px; color:#fff; font-size:clamp(28px,5vw,40px); letter-spacing:-1.5px; }
+.seatbite-status-hero p { color:#f2ddd5; line-height:1.6; }
+.seatbite-status-card { margin-top:17px; padding:23px; border:1px solid #f0e4dc; border-radius:21px; background:#fff; box-shadow:0 8px 24px #4b261009; }
+.seatbite-status-card-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.seatbite-status-card-heading h2,.seatbite-section-title { margin:0; font-size:19px; letter-spacing:-.5px; }
+.seatbite-status-symbol { display:grid; place-items:center; width:54px; height:54px; margin:0 auto 15px; border-radius:18px; background:#fff0e8; font-size:28px; }
+.seatbite-status-timeline { display:grid; gap:0; margin-top:18px; }
+.seatbite-status-timeline>div { position:relative; display:flex; align-items:center; gap:13px; min-height:58px; }
+.seatbite-timeline-icon { z-index:1; display:grid; place-items:center; width:35px; height:35px; border:1px solid #f0e1d8; border-radius:50%; background:#fff8f4; color:#9d8a80; }
+.seatbite-status-timeline .is-complete .seatbite-timeline-icon,.seatbite-status-timeline .active .seatbite-timeline-icon { border-color:#f05236; background:#f05236; color:#fff; }
+.seatbite-status-message { display:flex; align-items:flex-start; gap:12px; padding:15px; border-radius:15px; background:#fff5ef; color:#6b4a3c; line-height:1.6; }
+.seatbite-status-message-icon { font-size:22px; }
+.seatbite-status-food-list { display:grid; gap:10px; margin-top:15px; }
+.seatbite-status-food { display:flex; align-items:center; gap:12px; padding:11px; border:1px solid #f2e8e2; border-radius:14px; }
+.seatbite-status-food-icon { display:grid; place-items:center; width:43px; height:43px; border-radius:13px; background:#fff0e8; font-size:22px; }
+.seatbite-status-food-name { flex:1; font-size:13px; font-weight:750; }
+.seatbite-status-total { display:flex; align-items:center; justify-content:space-between; margin-top:18px; padding-top:17px; border-top:1px solid #f0e5df; font-weight:800; }
+.seatbite-status-total strong { font-size:24px; }
+.seatbite-status-back { width:100%; }
+.seatbite-footer { gap:12px; flex-wrap:wrap; }
+@media(max-width:640px) {
+ .seatbite-manager-page { padding:16px 12px 30px!important; }
+ .seatbite-manager-header { padding:20px 16px!important; border-radius:19px!important; }
+ .seatbite-dashboard-header { padding:18px 12px 16px; }
+ .seatbite-status-shell { padding-top:5px; }
+ .seatbite-status-hero { padding:22px 18px; border-radius:21px; }
+ .seatbite-status-card { padding:17px; border-radius:17px; }
+ .seatbite-status-topline { margin-bottom:16px; }
+}

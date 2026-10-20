@@ -220,8 +220,8 @@ export default function AdminDashboard() {
     <main
       style={{
         minHeight: "100vh",
-        background: "#111",
-        color: "white",
+        background: "#fff8f4",
+        color: "#202124",
         padding: "30px 20px 60px",
         fontFamily: "Arial, sans-serif",
       }}
@@ -254,7 +254,7 @@ export default function AdminDashboard() {
 
           <p
             style={{
-              color: "#aaa",
+              color: "#756b66",
               margin: 0,
             }}
           >
@@ -264,7 +264,7 @@ export default function AdminDashboard() {
           {cinemaName && (
             <p
               style={{
-                color: "#4ade80",
+                color: "#16803d",
                 marginTop: "10px",
                 fontSize: "18px",
                 fontWeight: "bold",
@@ -279,9 +279,9 @@ export default function AdminDashboard() {
         {errorMessage && (
           <div
             style={{
-              background: "#3b1111",
-              border: "1px solid #7f1d1d",
-              color: "#fca5a5",
+              background: "#fff0ed",
+              border: "1px solid #f45135",
+              color: "#a52b1b",
               padding: "15px",
               borderRadius: "12px",
               marginBottom: "25px",

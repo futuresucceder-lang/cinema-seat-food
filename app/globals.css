@@ -441,3 +441,51 @@ main:not(.seatbite-page) tr:last-child td { border-bottom: 0; }
  .seatbite-gate-card { padding:35px 22px; border-radius:23px; }
 }
 @media(prefers-reduced-motion:reduce) { .seatbite-loader { animation:none; } .seatbite-product-card,.seatbite-product-image { transition:none; } }
+
+
+/* Premium live order tracking */
+.seatbite-status-page { min-height:100vh; background:radial-gradient(circle at 50% 0,#ffeadf 0,transparent 340px),#fffaf6!important; }
+.seatbite-status-shell { max-width:760px; margin:0 auto; padding:24px 0 30px; }
+.seatbite-status-topline { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:27px; }
+.seatbite-status-hero { padding:26px 4px 22px; }
+.seatbite-status-hero h1 { margin:0; font-size:clamp(38px,6vw,56px); line-height:1.02; letter-spacing:-2.4px; }
+.seatbite-status-hero h1 span { color:#f05236; }
+.seatbite-status-hero>p:last-child { color:#8b786f; font-size:14px; line-height:1.65; }
+.seatbite-status-card { margin-bottom:16px; padding:24px; border:1px solid #f0e3dc; border-radius:22px; background:#fff; box-shadow:0 7px 25px #4b261009; }
+.seatbite-status-card-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.seatbite-status-card-heading .seatbite-eyebrow { margin-bottom:7px; }
+.seatbite-status-card-heading h2 { margin:0; font-size:19px; overflow-wrap:anywhere; }
+.seatbite-status-badge { padding:8px 11px; border-radius:99px; background:#fff0e7; color:#b9492f; font-size:10px; font-weight:900; letter-spacing:.5px; white-space:nowrap; }
+.status-preparing { background:#fff2d8; color:#986018; }.status-ready { background:#e7f7ed; color:#187346; }.status-completed { background:#e9f0ff; color:#315bb2; }.status-new { background:#f3eee9; color:#78675e; }
+.seatbite-status-card .seatbite-location-row { margin:19px 0 0; }
+.seatbite-section-title { margin:0 0 22px; font-size:24px; letter-spacing:-.8px; }
+.seatbite-status-timeline { display:flex; align-items:flex-start; margin:26px 0 25px; }
+.seatbite-timeline-step { position:relative; display:flex; flex:1; flex-direction:column; align-items:center; gap:9px; color:#a99a92; font-size:11px; font-weight:750; text-align:center; }
+.seatbite-timeline-icon { z-index:1; display:grid; place-items:center; width:42px; height:42px; border:1px solid #e9ded7; border-radius:50%; background:#fbf7f4; font-size:17px; }
+.seatbite-timeline-step.is-active { color:#3c2a23; }.seatbite-timeline-step.is-active .seatbite-timeline-icon { border-color:#f05236; background:#f05236; color:#fff; box-shadow:0 4px 12px #f0523630; }
+.seatbite-timeline-line { position:absolute; z-index:0; top:20px; left:calc(50% + 25px); width:calc(100% - 50px); height:3px; border-radius:9px; background:#eee4de; }
+.seatbite-timeline-line.is-active { background:#f05236; }
+.seatbite-status-message { display:flex; align-items:flex-start; gap:13px; padding:16px; border:1px solid #f4e0d6; border-radius:16px; background:#fff8f3; }
+.seatbite-status-message-icon { display:grid; place-items:center; width:42px; height:42px; flex-shrink:0; border-radius:13px; background:#ffebe2; font-size:21px; }
+.seatbite-status-message strong { display:block; margin:2px 0 5px; font-size:14px; }
+.seatbite-status-message p { margin:0; color:#948178; font-size:12px; line-height:1.55; }
+.seatbite-status-food-list { border-top:1px solid #f2e7e0; }
+.seatbite-status-food { display:flex; align-items:center; gap:12px; padding:14px 0; border-bottom:1px solid #f2e7e0; }
+.seatbite-status-food-icon { display:grid; place-items:center; width:42px; height:42px; flex-shrink:0; border-radius:13px; background:#fff0e8; font-size:21px; }
+.seatbite-status-food-name { display:flex; flex:1; flex-direction:column; gap:4px; font-size:13px; font-weight:750; }
+.seatbite-status-food-name small { color:#99877d; font-size:11px; font-weight:500; }
+.seatbite-status-food>strong { font-size:14px; }
+.seatbite-status-total { display:flex; justify-content:space-between; align-items:center; padding-top:18px; color:#7f6c62; font-size:13px; }
+.seatbite-status-total strong { color:#30221d; font-size:25px; letter-spacing:-.8px; }
+.seatbite-status-back { display:flex; justify-content:center; width:100%; margin-top:8px; text-decoration:none; }
+.seatbite-status-card .seatbite-status-symbol { display:grid; place-items:center; width:58px; height:58px; margin:0 auto 16px; border-radius:19px; background:#fff0e8; color:#e65337; font-size:30px; font-weight:900; }
+.seatbite-status-card:has(.seatbite-status-symbol) { max-width:520px; margin:12vh auto 0; text-align:center; }
+.seatbite-status-card:has(.seatbite-status-symbol) h1 { font-size:25px; letter-spacing:-.7px; }
+.seatbite-status-card:has(.seatbite-status-symbol) .seatbite-primary-button { margin-top:22px; text-decoration:none; }
+@media(max-width:600px) {
+ .seatbite-status-shell { padding-top:15px; }.seatbite-status-topline { margin-bottom:12px; }
+ .seatbite-status-card { padding:18px; border-radius:19px; }.seatbite-status-hero { padding:20px 2px 15px; }
+ .seatbite-status-hero h1 { font-size:42px; }.seatbite-status-badge { font-size:9px; padding:7px 8px; }
+ .seatbite-timeline-step { font-size:10px; }.seatbite-timeline-icon { width:35px; height:35px; font-size:14px; }
+ .seatbite-timeline-line { top:17px; left:calc(50% + 21px); width:calc(100% - 42px); }
+}

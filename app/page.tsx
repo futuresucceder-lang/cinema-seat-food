@@ -195,651 +195,126 @@ function CustomerOrderPage() {
     setSelectedCategory("All");
   }
 
-  /*
-   * If somebody opens the website without a QR code,
-   * don't silently pretend they are sitting at F12.
-   */
   if (!screen || !seat) {
     return (
-      <main
-        style={{
-          minHeight: "100vh",
-          background: "#111",
-          color: "white",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "20px",
-          fontFamily: "Arial, sans-serif",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "500px",
-            width: "100%",
-            background: "#222",
-            padding: "30px",
-            borderRadius: "16px",
-            textAlign: "center",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "55px",
-              marginBottom: "15px",
-            }}
-          >
-            🎬
-          </div>
-
-          <h1>Invalid Seat QR Code</h1>
-
-          <p
-            style={{
-              color: "#aaa",
-              lineHeight: 1.6,
-            }}
-          >
-            Please scan the QR code placed at your
-            cinema seat to order food.
-          </p>
-        </div>
+      <main className="seatbite-page seatbite-gate">
+        <section className="seatbite-gate-card">
+          <div className="seatbite-gate-icon">🎬</div>
+          <div className="seatbite-brand-small"><span>🍿</span> SEAT BITE</div>
+          <p className="seatbite-eyebrow">CINEMA, MADE DELICIOUS</p>
+          <h1>Your movie night,<br/>with better bites.</h1>
+          <p className="seatbite-muted">Scan the QR code at your cinema seat to explore the menu and order straight to your seat.</p>
+        </section>
       </main>
     );
   }
 
-  /*
-   * ORDER CONFIRMATION
-   */
   if (orderPlaced) {
     return (
-      <main
-        style={{
-          minHeight: "100vh",
-          background: "#111",
-          color: "white",
-          padding: "20px",
-          fontFamily: "Arial, sans-serif",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "600px",
-            margin: "0 auto",
-            minHeight: "90vh",
-            padding: "40px 20px",
-            textAlign: "center",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "65px",
-              marginBottom: "10px",
-            }}
-          >
-            🎉
-          </div>
-
-          <h1>Order Confirmation</h1>
-
-          <p
-            style={{
-              marginTop: "20px",
-              color: "#bbb",
-            }}
-          >
-            Your order has been received.
-          </p>
-
-          {/* SEAT INFORMATION */}
-          <div
-            style={{
-              background: "#222",
-              padding: "20px",
-              borderRadius: "15px",
-              marginTop: "25px",
-            }}
-          >
-            <p>
-              <strong>🎬 Screen:</strong> {screen}
-            </p>
-
-            <p>
-              <strong>💺 Seat:</strong> {seat}
-            </p>
-
-            <h2
-              style={{
-                marginTop: "25px",
-              }}
-            >
-              Total: ₹{total}
-            </h2>
-          </div>
-
-          {/* ORDER CODE */}
-          <div
-            style={{
-              marginTop: "20px",
-              background: "#222",
-              padding: "20px",
-              borderRadius: "15px",
-            }}
-          >
-            <p
-              style={{
-                color: "#aaa",
-                marginBottom: "8px",
-              }}
-            >
-              Your Order ID
-            </p>
-
-            <h2
-              style={{
-                margin: 0,
-                color: "#e50914",
-                wordBreak: "break-word",
-              }}
-            >
-              {orderCode}
-            </h2>
-          </div>
-
-          <p
-            style={{
-              marginTop: "20px",
-              color: "#bbb",
-            }}
-          >
-            Thank you for ordering! 🍿
-          </p>
-
-          {/* TRACK ORDER */}
-          <button
-            onClick={trackOrder}
-            style={{
-              width: "100%",
-              marginTop: "25px",
-              padding: "16px",
-              borderRadius: "10px",
-              border: "none",
-              background: "#16a34a",
-              color: "white",
-              fontWeight: "bold",
-              fontSize: "16px",
-              cursor: "pointer",
-            }}
-          >
-            📍 TRACK MY ORDER
-          </button>
-
-          {/* BACK TO MENU */}
-          <button
-            onClick={backToMenu}
-            style={{
-              width: "100%",
-              marginTop: "12px",
-              padding: "14px",
-              borderRadius: "10px",
-              border: "1px solid #444",
-              background: "#222",
-              color: "white",
-              fontWeight: "bold",
-              cursor: "pointer",
-            }}
-          >
-            BACK TO MENU
-          </button>
+      <main className="seatbite-page">
+        <div className="seatbite-shell seatbite-confirm-shell">
+          <header className="seatbite-confirm-card">
+            <div className="seatbite-success-icon">✓</div>
+            <p className="seatbite-eyebrow">ORDER RECEIVED</p>
+            <h1>You're all set!</h1>
+            <p className="seatbite-muted">Sit back, relax, and let the snacks come to you.</p>
+            <div className="seatbite-location-row">
+              <div><span>SCREEN</span><strong>{screen}</strong></div>
+              <div><span>YOUR SEAT</span><strong>{seat}</strong></div>
+            </div>
+            <div className="seatbite-order-code"><span>YOUR ORDER NUMBER</span><strong>{orderCode}</strong></div>
+            <div className="seatbite-confirm-total"><span>Total paid at counter</span><strong>₹{total}</strong></div>
+            <button className="seatbite-primary-button seatbite-full-button" onClick={trackOrder}>Track my order <span>→</span></button>
+            <button className="seatbite-secondary-button seatbite-full-button" onClick={backToMenu}>Back to menu</button>
+          </header>
         </div>
       </main>
     );
   }
 
-  /*
-   * CUSTOMER FOOD MENU
-   */
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#111",
-        color: "white",
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "700px",
-          margin: "0 auto",
-        }}
-      >
-        {/* HEADER */}
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "25px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "48px",
-            }}
-          >
-            🎬
-          </div>
-
-          <h1
-            style={{
-              fontSize: "32px",
-              margin: "8px 0",
-            }}
-          >
-            Cinema Food
-          </h1>
-
-          <p
-            style={{
-              color: "#aaa",
-              margin: 0,
-            }}
-          >
-            Order food directly from your seat
-          </p>
+    <main className="seatbite-page">
+      <div className="seatbite-shell">
+        <div className="seatbite-topline">
+          <div className="seatbite-wordmark"><span className="seatbite-wordmark-icon">🍿</span><span>seat<span>bite</span></span></div>
+          <div className="seatbite-open-pill"><span></span> SERVING YOUR SCREEN</div>
         </div>
 
-        {/* SEAT INFORMATION */}
-        <div
-          style={{
-            background: "#222",
-            padding: "18px",
-            borderRadius: "15px",
-            marginBottom: "25px",
-            display: "flex",
-            justifyContent: "space-around",
-            textAlign: "center",
-          }}
-        >
-          <div>
-            <div
-              style={{
-                color: "#999",
-                fontSize: "13px",
-              }}
-            >
-              SCREEN
-            </div>
-
-            <strong
-              style={{
-                fontSize: "20px",
-              }}
-            >
-              🎬 {screen}
-            </strong>
+        <header className="seatbite-hero">
+          <div className="seatbite-hero-copy">
+            <p className="seatbite-eyebrow">YOUR SEAT. YOUR SNACKS.</p>
+            <h1>Movie magic.<br/><span>Made tastier.</span></h1>
+            <p>Cravings don’t wait for intermission. Order your favourites and we’ll bring them to you.</p>
+            <div className="seatbite-hero-tags"><span>✦ Freshly prepared</span><span>✦ Delivered to your seat</span></div>
           </div>
-
-          <div
-            style={{
-              width: "1px",
-              background: "#444",
-            }}
-          />
-
-          <div>
-            <div
-              style={{
-                color: "#999",
-                fontSize: "13px",
-              }}
-            >
-              SEAT
-            </div>
-
-            <strong
-              style={{
-                fontSize: "20px",
-              }}
-            >
-              💺 {seat}
-            </strong>
+          <div className="seatbite-hero-art" aria-hidden="true">
+            <div className="seatbite-hero-glow"></div>
+            <div className="seatbite-popcorn-illustration">🍿</div>
+            <span className="seatbite-art-spark spark-one">✦</span><span className="seatbite-art-spark spark-two">✧</span>
+            <div className="seatbite-art-caption">THE PERFECT<br/>MOVIE SIDEKICK</div>
           </div>
-        </div>
+        </header>
 
-        {/* CATEGORIES */}
-        <div
-          style={{
-            display: "flex",
-            gap: "8px",
-            overflowX: "auto",
-            paddingBottom: "10px",
-            marginBottom: "20px",
-          }}
-        >
+        <section className="seatbite-seat-strip">
+          <div className="seatbite-seat-icon">▣</div>
+          <div className="seatbite-seat-copy"><span>ORDERING FOR</span><strong>Screen {screen} <i>·</i> Seat {seat}</strong></div>
+          <span className="seatbite-seat-check">✓</span>
+        </section>
+
+        <section className="seatbite-menu-heading">
+          <div><p className="seatbite-eyebrow">THE GOOD STUFF</p><h2>What are you craving?</h2><p>Little treats for your big-screen moments.</p></div>
+          <span className="seatbite-menu-count">{filteredFoodItems.length} delicious picks</span>
+        </section>
+
+        <nav className="seatbite-categories" aria-label="Food categories">
           {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() =>
-                setSelectedCategory(category)
-              }
-              style={{
-                flex: "0 0 auto",
-                padding: "10px 16px",
-                borderRadius: "20px",
-                border: "none",
-                background:
-                  selectedCategory === category
-                    ? "#e50914"
-                    : "#292929",
-                color: "white",
-                cursor: "pointer",
-                fontWeight: "bold",
-              }}
-            >
-              {category === "All" && "🍽️ "}
-              {category === "Snacks" && "🍿 "}
-              {category === "Drinks" && "🥤 "}
-              {category === "Meals" && "🍔 "}
-              {category}
+            <button key={category} className={selectedCategory === category ? "seatbite-category-active" : ""} onClick={() => setSelectedCategory(category)}>
+              <span>{category === "All" ? "✦" : category === "Snacks" ? "🍿" : category === "Drinks" ? "🥤" : "🍔"}</span>{category}
             </button>
           ))}
-        </div>
+        </nav>
 
-        <h2
-          style={{
-            marginBottom: "15px",
-          }}
-        >
-          🍿 Food & Drinks
-        </h2>
-
-        {/* FOOD ITEMS */}
-        <div>
+        <section className="seatbite-food-grid">
           {filteredFoodItems.map((item) => {
             const quantity = cart[item.id] || 0;
-
+            const photo = item.id === 1
+              ? "https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=500&q=85"
+              : item.id === 2
+              ? "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=500&q=85"
+              : item.id === 3
+              ? "https://images.unsplash.com/photo-1513558161293-cdab2da7f9e8?auto=format&fit=crop&w=500&q=85"
+              : "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=500&q=85";
+            const description = item.id === 1 ? "A classic, buttery cinema favourite" : item.id === 2 ? "Crispy nachos, cheesy goodness" : item.id === 3 ? "Chilled and refreshingly fizzy" : "A hearty bite between scenes";
             return (
-              <div
-                key={item.id}
-                style={{
-                  background: "#222",
-                  padding: "16px",
-                  borderRadius: "15px",
-                  marginBottom: "12px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "15px",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "14px",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "38px",
-                    }}
-                  >
-                    {item.emoji}
-                  </div>
-
-                  <div>
-                    <strong
-                      style={{
-                        fontSize: "17px",
-                      }}
-                    >
-                      {item.name}
-                    </strong>
-
-                    <div
-                      style={{
-                        color: "#aaa",
-                        marginTop: "5px",
-                      }}
-                    >
-                      ₹{item.price}
-                    </div>
+              <article className="seatbite-product-card" key={item.id}>
+                <div className="seatbite-product-image-wrap"><img className="seatbite-product-image" src={photo} alt={item.name} /><span className="seatbite-product-emoji">{item.emoji}</span></div>
+                <div className="seatbite-product-content">
+                  <span className="seatbite-product-category">{item.category}</span>
+                  <h3>{item.name}</h3>
+                  <p>{description}</p>
+                  <div className="seatbite-product-bottom"><strong>₹{item.price}</strong>
+                    {quantity === 0 ? <button className="seatbite-add-button" onClick={() => addToCart(item.id)}><span>＋</span> Add</button> :
+                      <div className="seatbite-quantity"><button aria-label={"Remove one " + item.name} onClick={() => removeFromCart(item.id)}>−</button><strong>{quantity}</strong><button aria-label={"Add one " + item.name} onClick={() => addToCart(item.id)}>＋</button></div>}
                   </div>
                 </div>
-
-                {quantity === 0 ? (
-                  <button
-                    onClick={() =>
-                      addToCart(item.id)
-                    }
-                    style={{
-                      background: "#e50914",
-                      color: "white",
-                      border: "none",
-                      padding: "10px 18px",
-                      borderRadius: "10px",
-                      cursor: "pointer",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    + Add
-                  </button>
-                ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      background: "#333",
-                      padding: "5px",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    <button
-                      onClick={() =>
-                        removeFromCart(item.id)
-                      }
-                      style={{
-                        width: "34px",
-                        height: "34px",
-                        border: "none",
-                        borderRadius: "8px",
-                        background: "#555",
-                        color: "white",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      −
-                    </button>
-
-                    <strong
-                      style={{
-                        minWidth: "20px",
-                        textAlign: "center",
-                      }}
-                    >
-                      {quantity}
-                    </strong>
-
-                    <button
-                      onClick={() =>
-                        addToCart(item.id)
-                      }
-                      style={{
-                        width: "34px",
-                        height: "34px",
-                        border: "none",
-                        borderRadius: "8px",
-                        background: "#e50914",
-                        color: "white",
-                        fontSize: "20px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      +
-                    </button>
-                  </div>
-                )}
-              </div>
+              </article>
             );
           })}
-        </div>
+        </section>
 
-        {/* CART */}
-        <div
-          style={{
-            background: "#222",
-            padding: "20px",
-            borderRadius: "15px",
-            marginTop: "25px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <h3
-              style={{
-                margin: 0,
-              }}
-            >
-              🛒 Your Cart
-            </h3>
-
-            <strong>
-              {itemCount} item
-              {itemCount !== 1 ? "s" : ""}
-            </strong>
-          </div>
-
-          {itemCount === 0 ? (
-            <p
-              style={{
-                color: "#888",
-                textAlign: "center",
-                margin: "20px 0 5px",
-              }}
-            >
-              Your cart is empty
-            </p>
-          ) : (
-            <div
-              style={{
-                marginTop: "15px",
-              }}
-            >
-              {Object.entries(cart).map(
-                ([id, quantity]) => {
-                  const item = foodItems.find(
-                    (food) =>
-                      food.id === Number(id)
-                  );
-
-                  if (!item) {
-                    return null;
-                  }
-
-                  return (
-                    <div
-                      key={id}
-                      style={{
-                        display: "flex",
-                        justifyContent:
-                          "space-between",
-                        padding: "10px 0",
-                        borderBottom:
-                          "1px solid #333",
-                      }}
-                    >
-                      <span>
-                        {item.emoji} {item.name} ×{" "}
-                        {quantity}
-                      </span>
-
-                      <strong>
-                        ₹{item.price * quantity}
-                      </strong>
-                    </div>
-                  );
-                }
-              )}
-
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginTop: "15px",
-                  fontSize: "22px",
-                  fontWeight: "bold",
-                }}
-              >
-                <span>Total</span>
-                <span>₹{total}</span>
-              </div>
-            </div>
-          )}
-
-          {/* CHECKOUT */}
-          <button
-            onClick={handleCheckout}
-            disabled={
-              isSubmitting || itemCount === 0
-            }
-            style={{
-              width: "100%",
-              marginTop: "18px",
-              padding: "15px",
-              borderRadius: "10px",
-              border: "none",
-              background:
-                itemCount === 0
-                  ? "#444"
-                  : "#e50914",
-              color: "white",
-              fontWeight: "bold",
-              fontSize: "16px",
-              cursor:
-                isSubmitting || itemCount === 0
-                  ? "not-allowed"
-                  : "pointer",
-              opacity: isSubmitting ? 0.6 : 1,
-            }}
-          >
-            {isSubmitting
-              ? "PLACING ORDER..."
-              : "CHECKOUT • ₹" + total}
-          </button>
-        </div>
+        <section className="seatbite-cart">
+          <div className="seatbite-cart-heading"><div className="seatbite-cart-icon">🛍️</div><div><h2>Your snack box</h2><p>{itemCount === 0 ? "Your movie treats will show up here." : itemCount + " item" + (itemCount !== 1 ? "s" : "") + " selected for your show"}</p></div><span className="seatbite-cart-count">{itemCount}</span></div>
+          {itemCount > 0 && <div className="seatbite-cart-lines">{Object.entries(cart).map(([id, quantity]) => { const item = foodItems.find((food) => food.id === Number(id)); if (!item) return null; return <div className="seatbite-cart-line" key={id}><span>{item.emoji} {item.name} <small>× {quantity}</small></span><strong>₹{item.price * quantity}</strong></div>; })}</div>}
+          <div className="seatbite-cart-total"><span>Order total</span><strong>₹{total}</strong></div>
+          <button className="seatbite-primary-button seatbite-full-button" onClick={handleCheckout} disabled={isSubmitting || itemCount === 0}>{isSubmitting ? "Placing your order…" : <>Continue to order <span>→</span></>}</button>
+          <p className="seatbite-secure-note">♡ Made for your movie moment</p>
+        </section>
+        <footer className="seatbite-footer"><span>🍿 seatbite</span><span>Good food. Great movies.</span></footer>
       </div>
     </main>
   );
 }
 
 export default function Page() {
-  return (
-    <Suspense
-      fallback={
-        <main
-          style={{
-            minHeight: "100vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "#111",
-            color: "white",
-            fontFamily: "Arial, sans-serif",
-          }}
-        >
-          <p>Loading cinema menu...</p>
-        </main>
-      }
-    >
-      <CustomerOrderPage />
-    </Suspense>
-  );
+  return <Suspense fallback={<main className="seatbite-page seatbite-loading"><div className="seatbite-loader">🍿</div><p>Preparing your movie menu…</p></main>}><CustomerOrderPage /></Suspense>;
 }

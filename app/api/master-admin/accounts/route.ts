@@ -2,11 +2,18 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 
-const adminSupabase = createAdminClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getAdminSupabase() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+  if (!supabaseUrl || !serviceRoleKey) {
+    throw new Error(
+      "Missing Supabase environment variables. Check Vercel Environment Variables."
+    );
+  }
+
+  return createAdminClient(supabaseUrl, serviceRoleKey);
+}
 type AccountRole = "manager" | "food_court";
 
 export async function POST(request: Request) {
@@ -16,6 +23,7 @@ export async function POST(request: Request) {
     // --------------------------------------------------
 
     const supabase = await createClient();
+    const adminSupabase = getAdminSupabase();
 
     const {
       data: { user },

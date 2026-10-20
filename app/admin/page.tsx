@@ -233,15 +233,18 @@ export default function AdminDashboard() {
         }}
       >
         {/* Header */}
-        <header
+        <header className="seatbite-manager-header"
           style={{
             textAlign: "center",
             marginBottom: "40px",
           }}
         >
-          <div style={{ fontSize: "55px" }}>
-            🎬
+          <div className="seatbite-dashboard-brand">
+            <span className="seatbite-dashboard-logo">🍿</span>
+            <span className="seatbite-dashboard-wordmark">seat<span style={{color:"#f45135"}}>bite</span></span>
           </div>
+          <p className="seatbite-manager-kicker">CINEMA OPERATIONS</p>
+          <div style={{ fontSize: "42px" }}>🎬</div>
 
           <h1
             style={{
@@ -249,7 +252,7 @@ export default function AdminDashboard() {
               margin: "5px 0",
             }}
           >
-            Cinema Food Admin
+            Manager Dashboard
           </h1>
 
           <p

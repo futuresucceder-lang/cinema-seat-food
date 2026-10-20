@@ -19,6 +19,7 @@ type AccountRole = "manager" | "food_court";
 export async function GET(request: Request) {
   try {
     const supabase = await createClient();
+    const adminSupabase = getAdminSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
 

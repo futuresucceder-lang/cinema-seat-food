@@ -83,7 +83,7 @@ function OrderStatusContent() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-[#111] text-white flex items-center justify-center">
+      <main className="min-h-screen bg-[#fff8f4] text-[#202124] flex items-center justify-center">
         <p className="text-xl">Loading your order...</p>
       </main>
     );
@@ -91,12 +91,12 @@ function OrderStatusContent() {
 
   if (error || !order) {
     return (
-      <main className="min-h-screen bg-[#111] text-white flex items-center justify-center">
+      <main className="min-h-screen bg-[#fff8f4] text-[#202124] flex items-center justify-center">
         <div className="text-center">
           <p className="text-2xl mb-4">❌ {error}</p>
           <a
             href="/"
-            className="text-blue-400 underline"
+            className="text-[#f45135] underline"
           >
             Back to menu
           </a>
@@ -108,7 +108,7 @@ function OrderStatusContent() {
   const status = order.status.toUpperCase();
 
   return (
-    <main className="min-h-screen bg-[#111] text-white px-5 py-10">
+    <main className="min-h-screen bg-[#fff8f4] text-[#202124] px-5 py-10">
       <div className="max-w-2xl mx-auto">
 
         <div className="text-center mb-8">
@@ -116,36 +116,36 @@ function OrderStatusContent() {
             🎬 Track Your Order
           </h1>
 
-          <p className="text-gray-400 mt-2">
+          <p className="text-[#756b66] mt-2">
             Your food will be delivered to your cinema seat.
           </p>
         </div>
 
         {/* Order ID */}
-        <div className="bg-[#222] rounded-2xl p-6 mb-5 text-center">
-          <p className="text-gray-400">Order ID</p>
+        <div className="bg-white shadow-sm border border-[#f0e5df] rounded-2xl p-6 mb-5 text-center">
+          <p className="text-[#756b66]">Order ID</p>
 
-          <p className="text-xl font-bold text-red-400 mt-2">
+          <p className="text-xl font-bold text-[#f45135] mt-2">
             {order.order_code}
           </p>
         </div>
 
         {/* Seat information */}
-        <div className="bg-[#222] rounded-2xl p-6 mb-5">
+        <div className="bg-white shadow-sm border border-[#f0e5df] rounded-2xl p-6 mb-5">
           <h2 className="text-xl font-bold mb-4">
             🎟️ Delivery Location
           </h2>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-[#333] rounded-xl p-4">
-              <p className="text-gray-400">Screen</p>
+            <div className="bg-[#fff5ef] rounded-xl p-4">
+              <p className="text-[#756b66]">Screen</p>
               <p className="text-lg font-bold">
                 {order.screen}
               </p>
             </div>
 
-            <div className="bg-[#333] rounded-xl p-4">
-              <p className="text-gray-400">Seat</p>
+            <div className="bg-[#fff5ef] rounded-xl p-4">
+              <p className="text-[#756b66]">Seat</p>
               <p className="text-lg font-bold">
                 {order.seat}
               </p>
@@ -154,7 +154,7 @@ function OrderStatusContent() {
         </div>
 
         {/* Status */}
-        <div className="bg-[#222] rounded-2xl p-6 mb-5">
+        <div className="bg-white shadow-sm border border-[#f0e5df] rounded-2xl p-6 mb-5">
           <h2 className="text-xl font-bold mb-6">
             📦 Order Status
           </h2>
@@ -171,12 +171,12 @@ function OrderStatusContent() {
               emoji="👨‍🍳"
             />
 
-            <div className="h-1 flex-1 bg-gray-700 mx-2">
+            <div className="h-1 flex-1 bg-[#f0e5df] mx-2">
               <div
                 className={`h-full ${
                   status === "READY" || status === "COMPLETED"
-                    ? "bg-green-500"
-                    : "bg-gray-700"
+                    ? "bg-[#16803d]"
+                    : "bg-[#f0e5df]"
                 }`}
               />
             </div>
@@ -190,12 +190,12 @@ function OrderStatusContent() {
               emoji="✅"
             />
 
-            <div className="h-1 flex-1 bg-gray-700 mx-2">
+            <div className="h-1 flex-1 bg-[#f0e5df] mx-2">
               <div
                 className={`h-full ${
                   status === "COMPLETED"
-                    ? "bg-green-500"
-                    : "bg-gray-700"
+                    ? "bg-[#16803d]"
+                    : "bg-[#f0e5df]"
                 }`}
               />
             </div>
@@ -212,10 +212,10 @@ function OrderStatusContent() {
             <span
               className={`inline-block px-6 py-3 rounded-full font-bold ${
                 status === "PREPARING"
-                  ? "bg-orange-500"
+                  ? "bg-[#f45135] text-white"
                   : status === "READY"
-                  ? "bg-green-600"
-                  : "bg-blue-600"
+                  ? "bg-[#16803d] text-white"
+                  : "bg-[#202124] text-white"
               }`}
             >
               {status === "PREPARING" && "👨‍🍳 Your order is being prepared"}
@@ -226,7 +226,7 @@ function OrderStatusContent() {
         </div>
 
         {/* Food items */}
-        <div className="bg-[#222] rounded-2xl p-6 mb-5">
+        <div className="bg-white shadow-sm border border-[#f0e5df] rounded-2xl p-6 mb-5">
           <h2 className="text-xl font-bold mb-4">
             🍿 Your Food
           </h2>
@@ -235,7 +235,7 @@ function OrderStatusContent() {
             {order.food_items?.map((item, index) => (
               <div
                 key={item.id ?? index}
-                className="flex justify-between bg-[#333] rounded-xl p-4"
+                className="flex justify-between bg-[#fff5ef] rounded-xl p-4"
               >
                 <span>
                   {item.emoji ?? "🍿"} {item.name}
@@ -250,12 +250,12 @@ function OrderStatusContent() {
         </div>
 
         {/* Total */}
-        <div className="bg-[#222] rounded-2xl p-6 flex justify-between items-center">
+        <div className="bg-white shadow-sm border border-[#f0e5df] rounded-2xl p-6 flex justify-between items-center">
           <span className="text-xl font-bold">
             Total
           </span>
 
-          <span className="text-2xl font-bold text-green-400">
+          <span className="text-2xl font-bold text-[#16803d]">
             ₹{order.total}
           </span>
         </div>
@@ -263,7 +263,7 @@ function OrderStatusContent() {
         <div className="text-center mt-8">
           <a
             href="/"
-            className="inline-block bg-white text-black px-8 py-3 rounded-xl font-bold"
+            className="inline-block bg-[#f45135] text-white px-8 py-3 rounded-xl font-bold"
           >
             BACK TO MENU
           </a>
@@ -301,7 +301,7 @@ export default function OrderStatusPage() {
   return (
     <Suspense
       fallback={
-        <main className="min-h-screen bg-[#111] text-white flex items-center justify-center">
+        <main className="min-h-screen bg-[#fff8f4] text-[#202124] flex items-center justify-center">
           <p className="text-xl">Loading your order...</p>
         </main>
       }

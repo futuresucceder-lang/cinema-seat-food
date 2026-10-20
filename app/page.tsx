@@ -11,6 +11,8 @@ const foodItems = [
     price: 180,
     emoji: "🍿",
     category: "Snacks",
+    image: "https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=700&q=85",
+    description: "Fresh, buttery cinema popcorn",
   },
   {
     id: 2,
@@ -18,6 +20,8 @@ const foodItems = [
     price: 220,
     emoji: "🧀",
     category: "Snacks",
+    image: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=700&q=85",
+    description: "Crunchy nachos with cheesy goodness",
   },
   {
     id: 3,
@@ -25,6 +29,8 @@ const foodItems = [
     price: 120,
     emoji: "🥤",
     category: "Drinks",
+    image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=700&q=85",
+    description: "A chilled, refreshing drink",
   },
   {
     id: 4,
@@ -32,6 +38,8 @@ const foodItems = [
     price: 200,
     emoji: "🍔",
     category: "Meals",
+    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=85",
+    description: "A tasty veggie burger",
   },
 ];
 
@@ -401,35 +409,11 @@ function CustomerOrderPage() {
    * CUSTOMER FOOD MENU
    */
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#fff8f4",
-        color: "#202124",
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "700px",
-          margin: "0 auto",
-        }}
-      >
+    <main className="seatbite-page" style={{ minHeight: "100vh", background: "#fff8f4", color: "#202124", padding: "20px", fontFamily: "Arial, sans-serif" }}>
+      <div className="seatbite-shell" style={{ maxWidth: "700px", margin: "0 auto" }}>
         {/* HEADER */}
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "25px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "48px",
-            }}
-          >
-            🎬
-          </div>
+        <div className="seatbite-header" style={{ textAlign: "center", marginBottom: "25px" }}>
+          <div className="seatbite-logo-mark">🍿</div>
 
           <h1
             style={{
@@ -451,17 +435,7 @@ function CustomerOrderPage() {
         </div>
 
         {/* SEAT INFORMATION */}
-        <div
-          style={{
-            background: "#ffffff",
-            padding: "18px",
-            borderRadius: "15px",
-            marginBottom: "25px",
-            display: "flex",
-            justifyContent: "space-around",
-            textAlign: "center",
-          }}
-        >
+        <div className="seatbite-seat-card" style={{ background: "#ffffff", padding: "18px", borderRadius: "15px", marginBottom: "25px", display: "flex", justifyContent: "space-around", textAlign: "center" }}>
           <div>
             <div
               style={{
@@ -509,15 +483,7 @@ function CustomerOrderPage() {
         </div>
 
         {/* CATEGORIES */}
-        <div
-          style={{
-            display: "flex",
-            gap: "8px",
-            overflowX: "auto",
-            paddingBottom: "10px",
-            marginBottom: "20px",
-          }}
-        >
+        <div className="seatbite-categories" style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "10px", marginBottom: "20px" }}>
           {categories.map((category) => (
             <button
               key={category}
@@ -564,6 +530,7 @@ function CustomerOrderPage() {
             return (
               <div
                 key={item.id}
+                className="seatbite-food-card"
                 style={{
                   background: "#ffffff",
                   padding: "16px",
@@ -577,22 +544,10 @@ function CustomerOrderPage() {
                   gap: "15px",
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "14px",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "38px",
-                    }}
-                  >
-                    {item.emoji}
-                  </div>
-
-                  <div>
+                <div className="seatbite-food-info">
+                  <img src={item.image} alt={item.name} className="seatbite-food-photo" />
+                  <div className="seatbite-food-copy">
+                    <div className="seatbite-food-emoji">{item.emoji}</div>
                     <strong
                       style={{
                         fontSize: "17px",
@@ -601,14 +556,8 @@ function CustomerOrderPage() {
                       {item.name}
                     </strong>
 
-                    <div
-                      style={{
-                        color: "#756b66",
-                        marginTop: "5px",
-                      }}
-                    >
-                      ₹{item.price}
-                    </div>
+                    <div className="seatbite-food-description">{item.description}</div>
+                    <div className="seatbite-food-price">₹{item.price}</div>
                   </div>
                 </div>
 
@@ -692,16 +641,7 @@ function CustomerOrderPage() {
         </div>
 
         {/* CART */}
-        <div
-          style={{
-            background: "#ffffff",
-            padding: "20px",
-            borderRadius: "18px",
-            border: "1px solid #f0e5df",
-            boxShadow: "0 4px 16px rgba(67, 35, 22, 0.04)",
-            marginTop: "25px",
-          }}
-        >
+        <div className="seatbite-cart" style={{ background: "#ffffff", padding: "20px", borderRadius: "18px", border: "1px solid #f0e5df", boxShadow: "0 4px 16px rgba(67, 35, 22, 0.04)", marginTop: "25px" }}>
           <div
             style={{
               display: "flex",

@@ -220,8 +220,8 @@ export default function AdminDashboard() {
     <main
       style={{
         minHeight: "100vh",
-        background: "#fff8f4",
-        color: "#202124",
+        background: "#111",
+        color: "white",
         padding: "30px 20px 60px",
         fontFamily: "Arial, sans-serif",
       }}
@@ -239,9 +239,8 @@ export default function AdminDashboard() {
             marginBottom: "40px",
           }}
         >
-          <div className="seatbite-dashboard-brand">
-            <span className="seatbite-dashboard-logo" aria-hidden="true">🍿</span>
-            <span className="seatbite-dashboard-wordmark">seat bite</span>
+          <div style={{ fontSize: "55px" }}>
+            🎬
           </div>
 
           <h1
@@ -250,22 +249,22 @@ export default function AdminDashboard() {
               margin: "5px 0",
             }}
           >
-            Manager Dashboard
+            Cinema Food Admin
           </h1>
 
           <p
             style={{
-              color: "#756b66",
+              color: "#aaa",
               margin: 0,
             }}
           >
-            Your cinema, orders and daily performance
+            Manage cinema seat food orders
           </p>
 
           {cinemaName && (
             <p
               style={{
-                color: "#16803d",
+                color: "#4ade80",
                 marginTop: "10px",
                 fontSize: "18px",
                 fontWeight: "bold",
@@ -280,9 +279,9 @@ export default function AdminDashboard() {
         {errorMessage && (
           <div
             style={{
-              background: "#fff0ed",
-              border: "1px solid #f45135",
-              color: "#a52b1b",
+              background: "#3b1111",
+              border: "1px solid #7f1d1d",
+              color: "#fca5a5",
               padding: "15px",
               borderRadius: "12px",
               marginBottom: "25px",
@@ -406,10 +405,7 @@ export default function AdminDashboard() {
         {/* Quick Action */}
         <section
           style={{
-            background: "#ffffff",
-            color: "#202124",
-            border: "1px solid #f0e5df",
-            boxShadow: "0 12px 30px rgba(75,42,27,.07)",
+            background: "#222",
             borderRadius: "18px",
             padding: "25px",
             textAlign: "center",
@@ -421,7 +417,7 @@ export default function AdminDashboard() {
 
           <p
             style={{
-              color: "#756b66",
+              color: "#aaa",
               marginBottom: "20px",
             }}
           >
@@ -442,8 +438,8 @@ export default function AdminDashboard() {
               display: "inline-block",
               padding: "13px 25px",
               borderRadius: "10px",
-              background: "#f45135",
-              color: "#ffffff",
+              background: "white",
+              color: "#111",
               textDecoration: "none",
               fontWeight: "bold",
             }}
@@ -472,10 +468,7 @@ function StatCard({
   return (
     <div
       style={{
-        background: "#ffffff",
-        border: "1px solid #f0e5df",
-        boxShadow: "0 10px 26px rgba(75,42,27,.06)",
-        color: "#202124",
+        background: "#222",
         borderRadius: "15px",
         padding: "20px",
         textAlign: "center",
@@ -495,7 +488,7 @@ function StatCard({
         {value}
       </div>
 
-      <div style={{ color: "#756b66" }}>
+      <div style={{ color: "#aaa" }}>
         {label}
       </div>
     </div>
@@ -524,14 +517,12 @@ function AdminCard({
       href={href}
       style={{
         textDecoration: "none",
-        color: "#202124",
+        color: "white",
       }}
     >
       <div
         style={{
-          background: "#ffffff",
-          border: "1px solid #f0e5df",
-          boxShadow: "0 12px 30px rgba(75,42,27,.07)",
+          background: "#222",
           borderRadius: "18px",
           padding: "25px",
           minHeight: "190px",
@@ -554,7 +545,7 @@ function AdminCard({
 
         <p
           style={{
-            color: "#756b66",
+            color: "#aaa",
             lineHeight: "1.5",
             minHeight: "45px",
           }}
@@ -568,8 +559,8 @@ function AdminCard({
             marginTop: "8px",
             padding: "6px 10px",
             borderRadius: "20px",
-            background: "#fff0e9",
-            color: "#a53b26",
+            background: "#333",
+            color: "#ddd",
             fontSize: "12px",
             fontWeight: "bold",
           }}

@@ -233,27 +233,27 @@ export default function FoodCourtPage() {
     if (status === "PREPARING") {
       return {
         background: "#fff0d9",
-        color: "#fff",
+        color: "#8a4b00",
       };
     }
 
     if (status === "READY") {
       return {
         background: "#e4f6e9",
-        color: "#fff",
+        color: "#176534",
       };
     }
 
     if (status === "COMPLETED") {
       return {
         background: "#f0e5df",
-        color: "#fff",
+        color: "#59473f",
       };
     }
 
     return {
       background: "#fff5ef",
-      color: "#fff",
+      color: "#59473f",
     };
   }
 
@@ -266,15 +266,21 @@ export default function FoodCourtPage() {
         padding: "25px",
       }}
     >
-      {/* Header */}
-      <h1
-        style={{
-          textAlign: "center",
-          marginBottom: "5px",
-        }}
-      >
-        🍿 Food Court Dashboard
-      </h1>
+      {/* Seat Bite brand header */}
+      <header className="seatbite-dashboard-header">
+        <div className="seatbite-dashboard-brand">
+          <span className="seatbite-dashboard-logo" aria-hidden="true">🍿</span>
+          <span className="seatbite-dashboard-wordmark">seat bite</span>
+        </div>
+        <h1
+          style={{
+            textAlign: "center",
+            marginBottom: "5px",
+          }}
+        >
+          Food Court Dashboard
+        </h1>
+      </header>
 
       <p
         style={{

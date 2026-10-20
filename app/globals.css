@@ -489,3 +489,23 @@ main:not(.seatbite-page) tr:last-child td { border-bottom: 0; }
  .seatbite-timeline-step { font-size:10px; }.seatbite-timeline-icon { width:35px; height:35px; font-size:14px; }
  .seatbite-timeline-line { top:17px; left:calc(50% + 21px); width:calc(100% - 42px); }
 }
+
+
+/* Manager dashboard: transform legacy dark inline styles into Seat Bite's premium workspace */
+.seatbite-manager-page { background:radial-gradient(circle at 8% 0%,#ffede5,transparent 28%),#fffaf7!important; color:#2b211d!important; }
+.seatbite-manager-page header h1 { font-size:clamp(30px,4vw,42px)!important; letter-spacing:-1.7px!important; color:#2b211d!important; }
+.seatbite-manager-page header p { color:#89776e!important; }
+.seatbite-manager-page header p[style*="#4ade80"] { display:inline-block; padding:8px 13px; border:1px solid #f0ddd3; border-radius:99px; background:#fff; color:#e34f34!important; }
+.seatbite-manager-page h2 { color:#30231e!important; letter-spacing:-.8px!important; }
+.seatbite-manager-page section[style*="grid-template-columns"] > div { border:1px solid #f0e3dc!important; background:#fff!important; color:#30231e!important; border-radius:20px!important; box-shadow:0 8px 24px #4b26100b; }
+.seatbite-manager-page section[style*="grid-template-columns"] > a { color:#30231e!important; }
+.seatbite-manager-page section[style*="grid-template-columns"] > a > div { border:1px solid #f0e3dc!important; background:#fff!important; color:#30231e!important; border-radius:21px!important; box-shadow:0 8px 24px #4b26100b; transition:transform .18s,box-shadow .18s; }
+.seatbite-manager-page section[style*="grid-template-columns"] > a:hover > div { transform:translateY(-3px); box-shadow:0 14px 32px #4b261018; }
+.seatbite-manager-page section[style*="grid-template-columns"] > a h3 { color:#30231e!important; }
+.seatbite-manager-page section[style*="grid-template-columns"] > a p { color:#89776e!important; }
+.seatbite-manager-page section[style*="grid-template-columns"] > a span { background:#fff0e9!important; color:#d84c32!important; }
+.seatbite-manager-page section[style*="Quick Action"] { border:1px solid #f0e3dc!important; background:#fff!important; color:#30231e!important; box-shadow:0 8px 24px #4b26100b; }
+.seatbite-manager-page section[style*="Quick Action"] p { color:#89776e!important; }
+.seatbite-manager-page section:last-child a { background:#f05236!important; color:#fff!important; box-shadow:0 7px 18px #f052362d; }
+.seatbite-manager-page button { border-radius:12px!important; }
+@media(max-width:640px) { .seatbite-manager-page { padding:20px 14px 35px!important; } .seatbite-manager-page header { margin-bottom:28px!important; } }

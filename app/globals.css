@@ -47,3 +47,157 @@ img { max-width: 100%; }
   }
   button:hover:not(:disabled) { transform: translateY(-1px); }
 }
+
+
+/* Seat Bite customer ordering experience */
+.seatbite-page {
+  padding: 0 24px 48px !important;
+  background: linear-gradient(180deg, #fff0e9 0, #fff8f4 300px, #fff8f4 100%) !important;
+}
+.seatbite-shell {
+  max-width: 1080px !important;
+  padding: 28px 0 36px;
+}
+.seatbite-header {
+  position: relative;
+  text-align: left !important;
+  margin: 0 0 28px !important;
+  padding: 28px 32px 30px 116px;
+  min-height: 148px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 26px;
+  color: #fff !important;
+  background: radial-gradient(circle at 85% 10%, rgba(255,255,255,.22), transparent 28%), linear-gradient(120deg, #f45135, #e23e2c) !important;
+  box-shadow: 0 16px 38px rgba(244,81,53,.18);
+  overflow: hidden;
+}
+.seatbite-header h1 {
+  margin: 0 0 8px !important;
+  font-size: clamp(30px, 4vw, 42px) !important;
+  line-height: 1.05;
+  letter-spacing: -1.4px;
+  color: #fff !important;
+}
+.seatbite-header p {
+  color: rgba(255,255,255,.9) !important;
+  font-size: 15px;
+}
+.seatbite-logo-mark {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 66px;
+  height: 66px;
+  border-radius: 22px;
+  font-size: 34px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(95,24,13,.15);
+}
+.seatbite-seat-card {
+  border: 1px solid #f0e0d8;
+  border-radius: 18px !important;
+  box-shadow: 0 6px 20px rgba(67,35,22,.04);
+}
+.seatbite-categories {
+  gap: 10px !important;
+  margin: 0 0 22px !important;
+  padding: 5px 2px 12px !important;
+}
+.seatbite-categories button {
+  border: 1px solid #f0e0d8 !important;
+  border-radius: 999px !important;
+  padding: 11px 19px !important;
+  background: #fff !important;
+  color: #5e514b !important;
+  box-shadow: 0 3px 10px rgba(67,35,22,.035);
+  white-space: nowrap;
+}
+.seatbite-categories button[style*="244, 81, 53"] {
+  background: #f45135 !important;
+  color: #fff !important;
+  border-color: #f45135 !important;
+}
+.seatbite-shell > h2 {
+  margin: 0 0 16px !important;
+  font-size: 24px;
+  letter-spacing: -.5px;
+}
+.seatbite-shell > h2 + div {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.seatbite-food-card {
+  margin: 0 !important;
+  min-height: 148px;
+  border: 1px solid #f0e5df;
+  border-radius: 20px !important;
+  padding: 20px !important;
+  box-shadow: 0 5px 18px rgba(67,35,22,.045) !important;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.seatbite-food-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(67,35,22,.09) !important;
+}
+.seatbite-food-card > div:first-child > div:first-child {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  background: #fff1eb;
+  font-size: 34px !important;
+  flex-shrink: 0;
+}
+.seatbite-food-card strong { font-size: 16px !important; }
+.seatbite-food-card button {
+  border-radius: 999px !important;
+  min-width: 74px;
+  font-weight: 700;
+}
+.seatbite-cart {
+  position: sticky;
+  bottom: 14px;
+  z-index: 5;
+  border: 1px solid #f0e0d8 !important;
+  border-radius: 22px !important;
+  box-shadow: 0 14px 42px rgba(67,35,22,.13) !important;
+  backdrop-filter: blur(14px);
+}
+.seatbite-cart button:last-child {
+  border-radius: 13px !important;
+  background: #f45135 !important;
+  color: #fff !important;
+  min-height: 52px;
+  letter-spacing: .2px;
+}
+@media (max-width: 680px) {
+  .seatbite-page { padding: 0 14px 28px !important; }
+  .seatbite-shell { padding-top: 14px; }
+  .seatbite-header {
+    padding: 22px 18px 22px 86px;
+    min-height: 126px;
+    border-radius: 22px;
+  }
+  .seatbite-logo-mark {
+    left: 16px;
+    width: 54px;
+    height: 54px;
+    border-radius: 17px;
+    font-size: 28px;
+  }
+  .seatbite-header h1 { font-size: 31px !important; }
+  .seatbite-header p { font-size: 13px; }
+  .seatbite-shell > h2 + div { grid-template-columns: 1fr; gap: 11px; }
+  .seatbite-food-card { min-height: 120px; padding: 14px !important; }
+  .seatbite-food-card > div:first-child > div:first-child {
+    width: 52px; height: 52px; font-size: 29px !important;
+  }
+  .seatbite-cart { bottom: 8px; padding: 16px !important; }
+}

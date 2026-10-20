@@ -509,3 +509,38 @@ main:not(.seatbite-page) tr:last-child td { border-bottom: 0; }
 .seatbite-manager-page section:last-child a { background:#f05236!important; color:#fff!important; box-shadow:0 7px 18px #f052362d; }
 .seatbite-manager-page button { border-radius:12px!important; }
 @media(max-width:640px) { .seatbite-manager-page { padding:20px 14px 35px!important; } .seatbite-manager-page header { margin-bottom:28px!important; } }
+
+
+/* Seat Bite live order tracking */
+.seatbite-status-page { padding-top:22px!important; }
+.seatbite-status-shell { width:min(100%,760px); margin:0 auto; }
+.seatbite-status-topline { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:24px; }
+.seatbite-status-hero { padding:30px; border-radius:25px; background:linear-gradient(120deg,#30201b,#633126); color:#fff; }
+.seatbite-status-hero h1 { margin:0; color:#fff; font-size:clamp(32px,5vw,46px); letter-spacing:-1.8px; }
+.seatbite-status-hero h1 span { color:#ffb58e; }
+.seatbite-status-hero>p:last-child { max-width:440px; margin:12px 0 0; color:#f0d9d0; font-size:13px; line-height:1.7; }
+.seatbite-status-card { margin-top:16px; padding:23px; border:1px solid #f0e3db; border-radius:21px; background:#fff; box-shadow:0 7px 24px #4b261009; }
+.seatbite-status-card-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.seatbite-status-card-heading h2 { margin:0; font-size:20px; overflow-wrap:anywhere; }
+.seatbite-status-badge { padding:8px 11px; border-radius:99px; background:#fff0e7; color:#b64a2d; font-size:10px; font-weight:900; letter-spacing:.5px; }
+.seatbite-status-badge.status-preparing { background:#fff4d8; color:#9b6700; }
+.seatbite-status-badge.status-ready,.seatbite-status-badge.status-completed { background:#e6f7ed; color:#167547; }
+.seatbite-section-title { margin:0 0 22px; font-size:22px; letter-spacing:-.7px; }
+.seatbite-status-timeline { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); }
+.seatbite-timeline-step { position:relative; display:flex; align-items:center; flex-direction:column; gap:9px; color:#a3948b; font-size:11px; font-weight:700; text-align:center; }
+.seatbite-timeline-icon { position:relative; z-index:1; display:grid; place-items:center; width:42px; height:42px; border:1px solid #eaded6; border-radius:50%; background:#fffaf7; font-size:17px; }
+.seatbite-timeline-step.is-active { color:#d94c32; }
+.seatbite-timeline-step.is-active .seatbite-timeline-icon { border-color:#f05236; background:#f05236; color:#fff; box-shadow:0 0 0 5px #fff0e9; }
+.seatbite-timeline-line { position:absolute; z-index:0; top:20px; left:calc(50% + 22px); width:calc(100% - 44px); height:2px; background:#eaded6; }
+.seatbite-timeline-line.is-active { background:#f05236; }
+.seatbite-status-message { margin-top:22px; padding:15px; border-radius:14px; background:#fff5ef; color:#6d5145; font-size:13px; line-height:1.6; }
+.seatbite-status-symbol { display:grid; place-items:center; width:55px; height:55px; margin:0 auto 16px; border-radius:18px; background:#fff0e8; color:#e65337; font-size:25px; font-weight:900; }
+.seatbite-status-card .seatbite-primary-button { margin-top:18px; }
+@media(max-width:540px) {
+ .seatbite-status-topline { align-items:flex-start; flex-direction:column; }
+ .seatbite-status-hero { padding:24px 20px; }
+ .seatbite-status-card { padding:17px; }
+ .seatbite-timeline-icon { width:36px; height:36px; font-size:14px; }
+ .seatbite-timeline-line { top:17px; left:calc(50% + 19px); width:calc(100% - 38px); }
+ .seatbite-timeline-step { font-size:10px; }
+}

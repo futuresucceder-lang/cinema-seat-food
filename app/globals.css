@@ -1,26 +1,546 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fff8f4;
+  --foreground: #202124;
+  --brand: #f45135;
+  --brand-hover: #df3d25;
+  --surface: #ffffff;
+  --muted: #756b66;
+  --border: #f0e5df;
+  --success: #16803d;
+  --radius-card: 18px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-mono: monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: .6; }
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; }
+::selection { background: #ffd8ce; color: #202124; }
+:focus-visible { outline: 3px solid #f45135; outline-offset: 3px; }
+
+@media (max-width: 520px) {
+  main { padding-left: 14px !important; padding-right: 14px !important; }
+  h1 { line-height: 1.15; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  button, a {
+    transition: background-color 160ms ease, color 160ms ease,
+      border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+  }
+  button:hover:not(:disabled) { transform: translateY(-1px); }
+}
+
+
+/* Seat Bite customer ordering experience */
+.seatbite-page {
+  padding: 0 24px 48px !important;
+  background: linear-gradient(180deg, #fff0e9 0, #fff8f4 300px, #fff8f4 100%) !important;
+}
+.seatbite-shell {
+  max-width: 1080px !important;
+  padding: 28px 0 36px;
+}
+.seatbite-header {
+  position: relative;
+  text-align: left !important;
+  margin: 0 0 28px !important;
+  padding: 28px 32px 30px 116px;
+  min-height: 148px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 26px;
+  color: #fff !important;
+  background: radial-gradient(circle at 85% 10%, rgba(255,255,255,.22), transparent 28%), linear-gradient(120deg, #f45135, #e23e2c) !important;
+  box-shadow: 0 16px 38px rgba(244,81,53,.18);
+  overflow: hidden;
+}
+.seatbite-header h1 {
+  margin: 0 0 8px !important;
+  font-size: clamp(30px, 4vw, 42px) !important;
+  line-height: 1.05;
+  letter-spacing: -1.4px;
+  color: #fff !important;
+}
+.seatbite-header p {
+  color: rgba(255,255,255,.9) !important;
+  font-size: 15px;
+}
+.seatbite-logo-mark {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 66px;
+  height: 66px;
+  border-radius: 22px;
+  font-size: 34px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(95,24,13,.15);
+}
+.seatbite-seat-card {
+  border: 1px solid #f0e0d8;
+  border-radius: 18px !important;
+  box-shadow: 0 6px 20px rgba(67,35,22,.04);
+}
+.seatbite-categories {
+  gap: 10px !important;
+  margin: 0 0 22px !important;
+  padding: 5px 2px 12px !important;
+}
+.seatbite-categories button {
+  border: 1px solid #f0e0d8 !important;
+  border-radius: 999px !important;
+  padding: 11px 19px !important;
+  background: #fff !important;
+  color: #5e514b !important;
+  box-shadow: 0 3px 10px rgba(67,35,22,.035);
+  white-space: nowrap;
+}
+.seatbite-categories button.seatbite-category-active {
+  background: #f45135 !important;
+  color: #fff !important;
+  border-color: #f45135 !important;
+}
+.seatbite-shell > h2 {
+  margin: 0 0 16px !important;
+  font-size: 24px;
+  letter-spacing: -.5px;
+}
+.seatbite-shell > h2 + div {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.seatbite-food-card {
+  margin: 0 !important;
+  min-height: 148px;
+  border: 1px solid #f0e5df;
+  border-radius: 20px !important;
+  padding: 20px !important;
+  box-shadow: 0 5px 18px rgba(67,35,22,.045) !important;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.seatbite-food-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(67,35,22,.09) !important;
+}
+.seatbite-food-card > div:first-child > div:first-child {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  background: #fff1eb;
+  font-size: 34px !important;
+  flex-shrink: 0;
+}
+.seatbite-food-card strong { font-size: 16px !important; }
+.seatbite-food-card button {
+  border-radius: 999px !important;
+  min-width: 74px;
+  font-weight: 700;
+}
+.seatbite-cart {
+  position: sticky;
+  bottom: 14px;
+  z-index: 5;
+  border: 1px solid #f0e0d8 !important;
+  border-radius: 22px !important;
+  box-shadow: 0 14px 42px rgba(67,35,22,.13) !important;
+  backdrop-filter: blur(14px);
+}
+.seatbite-cart button:last-child {
+  border-radius: 13px !important;
+  background: #f45135 !important;
+  color: #fff !important;
+  min-height: 52px;
+  letter-spacing: .2px;
+}
+@media (max-width: 680px) {
+  .seatbite-page { padding: 0 14px 28px !important; }
+  .seatbite-shell { padding-top: 14px; }
+  .seatbite-header {
+    padding: 22px 18px 22px 86px;
+    min-height: 126px;
+    border-radius: 22px;
+  }
+  .seatbite-logo-mark {
+    left: 16px;
+    width: 54px;
+    height: 54px;
+    border-radius: 17px;
+    font-size: 28px;
+  }
+  .seatbite-header h1 { font-size: 31px !important; }
+  .seatbite-header p { font-size: 13px; }
+  .seatbite-shell > h2 + div { grid-template-columns: 1fr; gap: 11px; }
+  .seatbite-food-card { min-height: 120px; padding: 14px !important; }
+  .seatbite-food-card > div:first-child > div:first-child {
+    width: 52px; height: 52px; font-size: 29px !important;
+  }
+  .seatbite-cart { bottom: 8px; padding: 16px !important; }
+}
+
+
+/* Real, responsive Seat Bite menu cards */
+.seatbite-food-card { display:flex !important; align-items:center !important; justify-content:space-between !important; gap:16px !important; }
+.seatbite-food-info { display:flex; align-items:center; gap:15px; min-width:0; flex:1; }
+.seatbite-food-photo { width:112px; height:100px; object-fit:cover; border-radius:15px; flex-shrink:0; background:#fff0e9; }
+.seatbite-food-copy { min-width:0; }
+.seatbite-food-emoji { font-size:12px; margin-bottom:5px; }
+.seatbite-food-description { color:#756b66; font-size:13px; line-height:1.4; margin-top:5px; }
+.seatbite-food-price { color:#e8472e; font-weight:800; font-size:17px; margin-top:8px; }
+.seatbite-header h1 { color:#fff !important; }
+.seatbite-header p { color:rgba(255,255,255,.92) !important; }
+.seatbite-logo-mark { color:#f45135; }
+.seatbite-food-card button { flex-shrink:0; }
+@media (max-width:680px) {
+ .seatbite-food-info { gap:11px; }
+ .seatbite-food-photo { width:84px; height:88px; border-radius:13px; }
+ .seatbite-food-description { font-size:12px; }
+ .seatbite-food-price { font-size:16px; }
+ .seatbite-food-card { gap:8px !important; }
+ .seatbite-food-card button { padding:10px 12px !important; min-width:65px; }
+}
+@media (max-width:390px) {
+ .seatbite-food-photo { width:68px; height:78px; }
+ .seatbite-food-info { gap:8px; }
+ .seatbite-food-emoji { display:none; }
+ .seatbite-food-card { padding:12px !important; }
+}
+
+
+/* Seat Bite brand mark and consistent dashboard design */
+.seatbite-logo-mark { padding: 0 !important; background: #fff !important; }
+.seatbite-logo-mark svg { display:block; width:100%; height:100%; filter: drop-shadow(0 4px 8px rgba(232,61,43,.16)); }
+main:not(.seatbite-page) {
+  color: var(--foreground);
+}
+main:not(.seatbite-page) h1,
+main:not(.seatbite-page) h2,
+main:not(.seatbite-page) h3 {
+  letter-spacing: -.035em;
+}
+main:not(.seatbite-page) button {
+  border-radius: 12px;
+  font-weight: 650;
+}
+main:not(.seatbite-page) input,
+main:not(.seatbite-page) select,
+main:not(.seatbite-page) textarea {
+  min-height: 42px;
+  border: 1px solid #e9dcd5;
+  border-radius: 11px;
+  background: #fff;
+  color: #202124;
+  padding: 10px 12px;
+}
+main:not(.seatbite-page) input:focus,
+main:not(.seatbite-page) select:focus,
+main:not(.seatbite-page) textarea:focus {
+  border-color: #f45135;
+  outline: 3px solid rgba(244,81,53,.13);
+}
+main:not(.seatbite-page) table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  border: 1px solid #f0e5df;
+  border-radius: 16px;
+  overflow: hidden;
+}
+main:not(.seatbite-page) th {
+  background: #fff0e9;
+  color: #59473f;
+  text-align: left;
+  font-weight: 750;
+}
+main:not(.seatbite-page) th,
+main:not(.seatbite-page) td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f3e9e4;
+}
+main:not(.seatbite-page) tr:last-child td { border-bottom: 0; }
+@media (max-width: 640px) {
+  main:not(.seatbite-page) { overflow-wrap: anywhere; }
+  main:not(.seatbite-page) table { display:block; overflow-x:auto; white-space:nowrap; }
+}
+
+
+/* Shared Seat Bite dashboard brand */
+.seatbite-dashboard-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.seatbite-dashboard-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff704f, #e83d2b);
+  color: #fff;
+  font-size: 25px;
+  box-shadow: 0 5px 14px rgba(244,81,53,.22);
+}
+.seatbite-dashboard-wordmark {
+  color: #202124;
+  font-size: 25px;
+  font-weight: 850;
+  letter-spacing: -.06em;
+}
+.seatbite-dashboard-brand-dark .seatbite-dashboard-wordmark { color: #fff; }
+.seatbite-dashboard-header { text-align: center; margin: 0 auto 24px; }
+@media (max-width: 640px) {
+  .seatbite-dashboard-brand { gap: 8px; }
+  .seatbite-dashboard-logo { width: 40px; height: 40px; font-size: 22px; }
+  .seatbite-dashboard-wordmark { font-size: 23px; }
+}
+
+
+/* Fresh premium Seat Bite customer experience */
+.seatbite-page { min-height:100vh; padding:0 24px 30px!important; color:#2a211e; background:#fffaf6!important; }
+.seatbite-shell { max-width:1100px!important; margin:0 auto; padding:24px 0 24px; }
+.seatbite-topline { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; }
+.seatbite-wordmark { display:flex; align-items:center; gap:10px; font-size:27px; font-weight:900; letter-spacing:-1.4px; color:#29211e; }
+.seatbite-wordmark>span:last-child>span { color:#f05236; }
+.seatbite-wordmark-icon { display:grid; place-items:center; width:43px; height:43px; border-radius:14px; background:#fff0e8; font-size:25px; }
+.seatbite-open-pill { display:flex; align-items:center; gap:8px; padding:9px 13px; border:1px solid #f0e2d9; border-radius:99px; background:#fff; color:#74645c; font-size:10px; font-weight:800; letter-spacing:1px; }
+.seatbite-open-pill>span { width:7px; height:7px; border-radius:50%; background:#25a56a; box-shadow:0 0 0 4px #e7f7ee; }
+.seatbite-hero { display:grid; grid-template-columns:1.15fr .85fr; min-height:320px; overflow:hidden; border-radius:30px; background:radial-gradient(circle at 78% 25%,rgba(255,195,128,.24),transparent 30%),linear-gradient(115deg,#2c1d19,#4c2720 62%,#6b3024); color:#fff; box-shadow:0 18px 45px rgba(69,34,23,.13); }
+.seatbite-hero-copy { padding:42px 0 38px 44px; align-self:center; }
+.seatbite-eyebrow { margin:0 0 12px; color:#ed7458; font-size:10px; font-weight:900; letter-spacing:2px; }
+.seatbite-hero .seatbite-eyebrow { color:#ffb49e; }
+.seatbite-hero h1 { margin:0; color:#fff; font-size:clamp(38px,5.5vw,60px); line-height:.99; letter-spacing:-2.8px; }
+.seatbite-hero h1 span { color:#ffb58e; }
+.seatbite-hero-copy>p:not(.seatbite-eyebrow) { max-width:430px; margin:18px 0; color:#f2ddd5; font-size:14px; line-height:1.7; }
+.seatbite-hero-tags { display:flex; flex-wrap:wrap; gap:8px; }
+.seatbite-hero-tags span { padding:8px 10px; border:1px solid #755048; border-radius:99px; color:#ffe3d8; font-size:11px; }
+.seatbite-hero-art { position:relative; display:grid; place-items:center; min-height:280px; overflow:hidden; }
+.seatbite-hero-glow { position:absolute; width:250px; height:250px; border-radius:50%; background:#f45b38; opacity:.22; filter:blur(2px); }
+.seatbite-popcorn-illustration { position:relative; z-index:1; display:grid; place-items:center; width:205px; height:205px; border-radius:50%; background:radial-gradient(circle at 35% 25%,#fff6df,#ffb77e 72%); font-size:125px; transform:rotate(7deg); box-shadow:0 20px 55px #1c100d80,inset 0 0 0 10px #ffffff26; }
+.seatbite-art-spark { position:absolute; color:#ffc18f; font-size:35px; }
+.spark-one { top:48px; right:54px; }.spark-two { left:35px; bottom:60px; font-size:48px; }
+.seatbite-art-caption { position:absolute; right:26px; bottom:20px; color:#eec3b2; font-size:9px; font-weight:800; line-height:1.5; letter-spacing:1.5px; text-align:right; }
+.seatbite-seat-strip { display:flex; align-items:center; gap:14px; margin:20px 0 36px; padding:17px 20px; border:1px solid #f1e4dc; border-radius:18px; background:#fff; box-shadow:0 5px 18px #4b26100a; }
+.seatbite-seat-icon { display:grid; place-items:center; width:45px; height:45px; border-radius:14px; background:#fff0e9; color:#ed563b; font-size:23px; }
+.seatbite-seat-copy { display:flex; flex:1; flex-direction:column; gap:4px; }
+.seatbite-seat-copy span,.seatbite-order-code span { color:#95847b; font-size:9px; font-weight:900; letter-spacing:1.4px; }
+.seatbite-seat-copy strong { font-size:16px; }.seatbite-seat-copy i { color:#f05236; font-style:normal; }
+.seatbite-seat-check { display:grid; place-items:center; width:27px; height:27px; border-radius:50%; background:#e7f7ee; color:#198653; font-weight:900; }
+.seatbite-menu-heading { display:flex; align-items:end; justify-content:space-between; gap:18px; margin-bottom:20px; }
+.seatbite-menu-heading .seatbite-eyebrow { margin-bottom:7px; }
+.seatbite-menu-heading h2 { margin:0; font-size:clamp(25px,3vw,33px); letter-spacing:-1.2px; }
+.seatbite-menu-heading>div>p:last-child { margin:8px 0 0; color:#897970; font-size:13px; }
+.seatbite-menu-count { padding-bottom:4px; color:#98877d; font-size:12px; white-space:nowrap; }
+.seatbite-categories { display:flex; gap:9px!important; overflow-x:auto; margin:0 0 22px!important; padding:2px 2px 12px!important; }
+.seatbite-categories button { display:flex; align-items:center; gap:8px; padding:11px 17px!important; border:1px solid #eee1d9!important; border-radius:99px!important; background:#fff!important; color:#66564e!important; font-size:13px; font-weight:750; white-space:nowrap; box-shadow:0 3px 9px #4b261008; }
+.seatbite-categories button span { font-size:15px; }
+.seatbite-categories button.seatbite-category-active { border-color:#f05236!important; background:#f05236!important; color:#fff!important; box-shadow:0 5px 15px #f0523635; }
+.seatbite-food-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:17px; }
+.seatbite-product-card { overflow:hidden; border:1px solid #f0e5de; border-radius:21px; background:#fff; box-shadow:0 6px 20px #4b261009; transition:transform .2s,box-shadow .2s; }
+.seatbite-product-card:hover { transform:translateY(-3px); box-shadow:0 14px 30px #4b261014; }
+.seatbite-product-image-wrap { position:relative; height:180px; overflow:hidden; background:#f8e8df; }
+.seatbite-product-image { display:block; width:100%; height:100%; object-fit:cover; transition:transform .35s; }
+.seatbite-product-card:hover .seatbite-product-image { transform:scale(1.04); }
+.seatbite-product-emoji { position:absolute; right:13px; bottom:12px; display:grid; place-items:center; width:38px; height:38px; border:2px solid #fff; border-radius:13px; background:#fff9f4; font-size:20px; box-shadow:0 4px 12px #30160f1c; }
+.seatbite-product-content { padding:17px 18px 18px; }
+.seatbite-product-category { color:#e75a40; font-size:9px; font-weight:900; letter-spacing:1.4px; text-transform:uppercase; }
+.seatbite-product-content h3 { margin:7px 0 5px; font-size:18px; letter-spacing:-.5px; }
+.seatbite-product-content p { min-height:34px; margin:0; color:#928178; font-size:12px; line-height:1.5; }
+.seatbite-product-bottom { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:16px; }
+.seatbite-product-bottom>strong { color:#33231e; font-size:20px; letter-spacing:-.5px; }
+.seatbite-add-button { display:flex; align-items:center; gap:5px; padding:10px 15px; border:0; border-radius:11px; background:#f05236; color:#fff; font-size:12px; font-weight:800; box-shadow:0 4px 10px #f0523624; }
+.seatbite-add-button span { font-size:16px; }
+.seatbite-quantity { display:flex; align-items:center; gap:12px; padding:4px; border:1px solid #f2ddd4; border-radius:12px; background:#fff8f4; }
+.seatbite-quantity button { width:29px; height:29px; border:0; border-radius:8px; background:#f05236; color:#fff; font-size:18px; }
+.seatbite-quantity strong { min-width:12px; text-align:center; font-size:13px; }
+.seatbite-cart { max-width:680px; margin:30px auto 0; padding:23px!important; border:1px solid #efded5!important; border-radius:23px!important; background:#fff!important; box-shadow:0 12px 36px #4b261010!important; }
+.seatbite-cart-heading { display:flex; align-items:center; gap:12px; }
+.seatbite-cart-icon { display:grid; place-items:center; width:46px; height:46px; border-radius:15px; background:#fff0e8; font-size:22px; }
+.seatbite-cart-heading>div:nth-child(2) { flex:1; }
+.seatbite-cart-heading h2 { margin:0; font-size:18px; letter-spacing:-.5px; }
+.seatbite-cart-heading p { margin:5px 0 0; color:#98877e; font-size:12px; }
+.seatbite-cart-count { display:grid; place-items:center; width:31px; height:31px; border-radius:50%; background:#fdf0e9; color:#e65337; font-weight:900; }
+.seatbite-cart-lines { margin-top:17px; padding-top:5px; border-top:1px solid #f2e8e2; }
+.seatbite-cart-line { display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid #f6eee9; font-size:13px; }
+.seatbite-cart-line small { color:#8f7f76; }
+.seatbite-cart-total { display:flex; justify-content:space-between; align-items:center; margin:18px 0; padding-top:4px; color:#7c6b62; font-size:13px; }
+.seatbite-cart-total strong { color:#2e211c; font-size:27px; letter-spacing:-1px; }
+.seatbite-primary-button { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:15px 18px; border:0; border-radius:13px; background:#f05236; color:#fff; font-weight:800; box-shadow:0 7px 17px #f0523628; }
+.seatbite-primary-button:disabled { background:#d6c9c2; box-shadow:none; }
+.seatbite-full-button { width:100%; }
+.seatbite-secondary-button { margin-top:10px; padding:14px 18px; border:1px solid #eddfd7; border-radius:13px; background:#fff; color:#6c5850; font-weight:750; }
+.seatbite-secure-note { margin:13px 0 0; color:#a28f85; font-size:11px; text-align:center; }
+.seatbite-footer { display:flex; justify-content:space-between; margin-top:35px; padding:18px 0 4px; border-top:1px solid #f0e4dd; color:#a08d82; font-size:11px; }
+.seatbite-footer span:first-child { color:#59453b; font-weight:900; }
+.seatbite-gate { display:grid; place-items:center; padding:24px!important; background:radial-gradient(circle at 50% 15%,#ffeadf,transparent 45%),#fffaf6!important; }
+.seatbite-gate-card { width:min(100%,560px); padding:52px 35px; border:1px solid #f0e1d8; border-radius:30px; background:#fff; text-align:center; box-shadow:0 25px 80px #4b261012; }
+.seatbite-gate-icon { display:grid; place-items:center; width:78px; height:78px; margin:0 auto 18px; border-radius:25px; background:#fff0e8; font-size:42px; }
+.seatbite-brand-small { margin-bottom:28px; color:#2c211c; font-size:18px; font-weight:900; letter-spacing:-.6px; }.seatbite-brand-small span { margin-right:6px; }
+.seatbite-gate-card h1 { margin:0; font-size:clamp(30px,6vw,43px); line-height:1.1; letter-spacing:-1.8px; }
+.seatbite-muted { color:#918077; font-size:14px; line-height:1.7; }
+.seatbite-confirm-shell { max-width:590px!important; padding-top:50px; }
+.seatbite-confirm-card { padding:35px; border:1px solid #f0e1d8; border-radius:28px; background:#fff; text-align:center; box-shadow:0 20px 65px #4b261010; }
+.seatbite-success-icon { display:grid; place-items:center; width:66px; height:66px; margin:0 auto 22px; border-radius:50%; background:#e8f7ee; color:#16834d; font-size:34px; font-weight:800; }
+.seatbite-confirm-card h1 { margin:0; font-size:39px; letter-spacing:-1.7px; }
+.seatbite-location-row { display:grid; grid-template-columns:1fr 1fr; margin:26px 0 14px; padding:16px 0; border:1px solid #f0e5de; border-radius:16px; background:#fffaf7; }
+.seatbite-location-row>div { display:flex; flex-direction:column; gap:7px; }.seatbite-location-row>div+div { border-left:1px solid #eddfd7; }
+.seatbite-location-row span { color:#98867c; font-size:9px; font-weight:900; letter-spacing:1.4px; }.seatbite-location-row strong { font-size:22px; }
+.seatbite-order-code { display:flex; flex-direction:column; gap:8px; padding:17px; border-radius:15px; background:#fff0e9; }.seatbite-order-code strong { color:#df4b32; font-size:18px; overflow-wrap:anywhere; }
+.seatbite-confirm-total { display:flex; justify-content:space-between; margin:22px 0; color:#8c7b71; font-size:13px; }.seatbite-confirm-total strong { color:#2b211d; font-size:23px; }
+.seatbite-loading { display:grid; place-content:center; justify-items:center; color:#78665d; }.seatbite-loader { font-size:48px; animation:seatbite-bob 1s ease-in-out infinite alternate; }
+@keyframes seatbite-bob { to { transform:translateY(-8px) rotate(6deg); } }
+@media(max-width:720px) {
+ .seatbite-page { padding:0 14px 22px!important; }.seatbite-shell { padding-top:14px; }
+ .seatbite-hero { grid-template-columns:1fr .65fr; min-height:280px; border-radius:23px; }
+ .seatbite-hero-copy { padding:28px 0 28px 24px; }.seatbite-hero h1 { font-size:clamp(34px,7vw,47px); letter-spacing:-1.8px; }
+ .seatbite-hero-art { min-height:230px; }.seatbite-popcorn-illustration { width:140px; height:140px; font-size:86px; }
+ .seatbite-hero-glow { width:170px; height:170px; }.seatbite-art-caption { display:none; }.spark-one { right:15px; top:30px; }.spark-two { left:8px; bottom:35px; }
+ .seatbite-product-image-wrap { height:150px; }.seatbite-product-content { padding:14px; }
+}
+@media(max-width:540px) {
+ .seatbite-topline { margin-bottom:15px; }.seatbite-wordmark { font-size:24px; }.seatbite-open-pill { padding:8px 9px; font-size:8px; letter-spacing:.7px; }
+ .seatbite-hero { grid-template-columns:1fr; position:relative; min-height:290px; }
+ .seatbite-hero-copy { position:relative; z-index:2; padding:29px 23px 28px; }.seatbite-hero-copy>p:not(.seatbite-eyebrow) { max-width:310px; margin:13px 0; font-size:13px; }
+ .seatbite-hero-art { position:absolute; width:140px; height:140px; min-height:0; right:-15px; bottom:-10px; opacity:.38; }.seatbite-popcorn-illustration { width:125px; height:125px; font-size:76px; }
+ .seatbite-hero-tags { max-width:280px; }.seatbite-hero-tags span { font-size:9px; }
+ .seatbite-seat-strip { margin:15px 0 28px; padding:13px; }.seatbite-menu-heading { align-items:start; }.seatbite-menu-count { display:none; }
+ .seatbite-food-grid { grid-template-columns:1fr; gap:13px; }.seatbite-product-card { display:grid; grid-template-columns:118px minmax(0,1fr); }
+ .seatbite-product-image-wrap { height:100%; min-height:165px; }.seatbite-product-emoji { right:8px; bottom:8px; width:30px; height:30px; font-size:16px; border-radius:10px; }
+ .seatbite-product-content { display:flex; flex-direction:column; justify-content:center; padding:13px; }.seatbite-product-content h3 { font-size:16px; }.seatbite-product-content p { min-height:0; font-size:11px; }
+ .seatbite-product-bottom { margin-top:12px; }.seatbite-product-bottom>strong { font-size:18px; }.seatbite-add-button { padding:9px 10px; font-size:11px; }
+ .seatbite-cart { padding:17px!important; margin-top:22px; }.seatbite-footer { margin-top:25px; }
+ .seatbite-confirm-shell { padding-top:22px; }.seatbite-confirm-card { padding:25px 18px; }.seatbite-confirm-card h1 { font-size:33px; }
+ .seatbite-gate-card { padding:35px 22px; border-radius:23px; }
+}
+@media(prefers-reduced-motion:reduce) { .seatbite-loader { animation:none; } .seatbite-product-card,.seatbite-product-image { transition:none; } }
+
+
+/* Premium live order tracking */
+.seatbite-status-page { min-height:100vh; background:radial-gradient(circle at 50% 0,#ffeadf 0,transparent 340px),#fffaf6!important; }
+.seatbite-status-shell { max-width:760px; margin:0 auto; padding:24px 0 30px; }
+.seatbite-status-topline { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:27px; }
+.seatbite-status-hero { padding:26px 4px 22px; }
+.seatbite-status-hero h1 { margin:0; font-size:clamp(38px,6vw,56px); line-height:1.02; letter-spacing:-2.4px; }
+.seatbite-status-hero h1 span { color:#f05236; }
+.seatbite-status-hero>p:last-child { color:#8b786f; font-size:14px; line-height:1.65; }
+.seatbite-status-card { margin-bottom:16px; padding:24px; border:1px solid #f0e3dc; border-radius:22px; background:#fff; box-shadow:0 7px 25px #4b261009; }
+.seatbite-status-card-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.seatbite-status-card-heading .seatbite-eyebrow { margin-bottom:7px; }
+.seatbite-status-card-heading h2 { margin:0; font-size:19px; overflow-wrap:anywhere; }
+.seatbite-status-badge { padding:8px 11px; border-radius:99px; background:#fff0e7; color:#b9492f; font-size:10px; font-weight:900; letter-spacing:.5px; white-space:nowrap; }
+.status-preparing { background:#fff2d8; color:#986018; }.status-ready { background:#e7f7ed; color:#187346; }.status-completed { background:#e9f0ff; color:#315bb2; }.status-new { background:#f3eee9; color:#78675e; }
+.seatbite-status-card .seatbite-location-row { margin:19px 0 0; }
+.seatbite-section-title { margin:0 0 22px; font-size:24px; letter-spacing:-.8px; }
+.seatbite-status-timeline { display:flex; align-items:flex-start; margin:26px 0 25px; }
+.seatbite-timeline-step { position:relative; display:flex; flex:1; flex-direction:column; align-items:center; gap:9px; color:#a99a92; font-size:11px; font-weight:750; text-align:center; }
+.seatbite-timeline-icon { z-index:1; display:grid; place-items:center; width:42px; height:42px; border:1px solid #e9ded7; border-radius:50%; background:#fbf7f4; font-size:17px; }
+.seatbite-timeline-step.is-active { color:#3c2a23; }.seatbite-timeline-step.is-active .seatbite-timeline-icon { border-color:#f05236; background:#f05236; color:#fff; box-shadow:0 4px 12px #f0523630; }
+.seatbite-timeline-line { position:absolute; z-index:0; top:20px; left:calc(50% + 25px); width:calc(100% - 50px); height:3px; border-radius:9px; background:#eee4de; }
+.seatbite-timeline-line.is-active { background:#f05236; }
+.seatbite-status-message { display:flex; align-items:flex-start; gap:13px; padding:16px; border:1px solid #f4e0d6; border-radius:16px; background:#fff8f3; }
+.seatbite-status-message-icon { display:grid; place-items:center; width:42px; height:42px; flex-shrink:0; border-radius:13px; background:#ffebe2; font-size:21px; }
+.seatbite-status-message strong { display:block; margin:2px 0 5px; font-size:14px; }
+.seatbite-status-message p { margin:0; color:#948178; font-size:12px; line-height:1.55; }
+.seatbite-status-food-list { border-top:1px solid #f2e7e0; }
+.seatbite-status-food { display:flex; align-items:center; gap:12px; padding:14px 0; border-bottom:1px solid #f2e7e0; }
+.seatbite-status-food-icon { display:grid; place-items:center; width:42px; height:42px; flex-shrink:0; border-radius:13px; background:#fff0e8; font-size:21px; }
+.seatbite-status-food-name { display:flex; flex:1; flex-direction:column; gap:4px; font-size:13px; font-weight:750; }
+.seatbite-status-food-name small { color:#99877d; font-size:11px; font-weight:500; }
+.seatbite-status-food>strong { font-size:14px; }
+.seatbite-status-total { display:flex; justify-content:space-between; align-items:center; padding-top:18px; color:#7f6c62; font-size:13px; }
+.seatbite-status-total strong { color:#30221d; font-size:25px; letter-spacing:-.8px; }
+.seatbite-status-back { display:flex; justify-content:center; width:100%; margin-top:8px; text-decoration:none; }
+.seatbite-status-card .seatbite-status-symbol { display:grid; place-items:center; width:58px; height:58px; margin:0 auto 16px; border-radius:19px; background:#fff0e8; color:#e65337; font-size:30px; font-weight:900; }
+.seatbite-status-card:has(.seatbite-status-symbol) { max-width:520px; margin:12vh auto 0; text-align:center; }
+.seatbite-status-card:has(.seatbite-status-symbol) h1 { font-size:25px; letter-spacing:-.7px; }
+.seatbite-status-card:has(.seatbite-status-symbol) .seatbite-primary-button { margin-top:22px; text-decoration:none; }
+@media(max-width:600px) {
+ .seatbite-status-shell { padding-top:15px; }.seatbite-status-topline { margin-bottom:12px; }
+ .seatbite-status-card { padding:18px; border-radius:19px; }.seatbite-status-hero { padding:20px 2px 15px; }
+ .seatbite-status-hero h1 { font-size:42px; }.seatbite-status-badge { font-size:9px; padding:7px 8px; }
+ .seatbite-timeline-step { font-size:10px; }.seatbite-timeline-icon { width:35px; height:35px; font-size:14px; }
+ .seatbite-timeline-line { top:17px; left:calc(50% + 21px); width:calc(100% - 42px); }
+}
+
+
+/* Manager dashboard: transform legacy dark inline styles into Seat Bite's premium workspace */
+.seatbite-manager-page { background:radial-gradient(circle at 8% 0%,#ffede5,transparent 28%),#fffaf7!important; color:#2b211d!important; }
+.seatbite-manager-page header h1 { font-size:clamp(30px,4vw,42px)!important; letter-spacing:-1.7px!important; color:#2b211d!important; }
+.seatbite-manager-page header p { color:#89776e!important; }
+.seatbite-manager-page header p[style*="#4ade80"] { display:inline-block; padding:8px 13px; border:1px solid #f0ddd3; border-radius:99px; background:#fff; color:#e34f34!important; }
+.seatbite-manager-page h2 { color:#30231e!important; letter-spacing:-.8px!important; }
+.seatbite-manager-page section[style*="grid-template-columns"] > div { border:1px solid #f0e3dc!important; background:#fff!important; color:#30231e!important; border-radius:20px!important; box-shadow:0 8px 24px #4b26100b; }
+.seatbite-manager-page section[style*="grid-template-columns"] > a { color:#30231e!important; }
+.seatbite-manager-page section[style*="grid-template-columns"] > a > div { border:1px solid #f0e3dc!important; background:#fff!important; color:#30231e!important; border-radius:21px!important; box-shadow:0 8px 24px #4b26100b; transition:transform .18s,box-shadow .18s; }
+.seatbite-manager-page section[style*="grid-template-columns"] > a:hover > div { transform:translateY(-3px); box-shadow:0 14px 32px #4b261018; }
+.seatbite-manager-page section[style*="grid-template-columns"] > a h3 { color:#30231e!important; }
+.seatbite-manager-page section[style*="grid-template-columns"] > a p { color:#89776e!important; }
+.seatbite-manager-page section[style*="grid-template-columns"] > a span { background:#fff0e9!important; color:#d84c32!important; }
+.seatbite-manager-page section[style*="Quick Action"] { border:1px solid #f0e3dc!important; background:#fff!important; color:#30231e!important; box-shadow:0 8px 24px #4b26100b; }
+.seatbite-manager-page section[style*="Quick Action"] p { color:#89776e!important; }
+.seatbite-manager-page section:last-child a { background:#f05236!important; color:#fff!important; box-shadow:0 7px 18px #f052362d; }
+.seatbite-manager-page button { border-radius:12px!important; }
+@media(max-width:640px) { .seatbite-manager-page { padding:20px 14px 35px!important; } .seatbite-manager-page header { margin-bottom:28px!important; } }
+
+
+/* Seat Bite live order tracking */
+.seatbite-status-page { padding-top:22px!important; }
+.seatbite-status-shell { width:min(100%,760px); margin:0 auto; }
+.seatbite-status-topline { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:24px; }
+.seatbite-status-hero { padding:30px; border-radius:25px; background:linear-gradient(120deg,#30201b,#633126); color:#fff; }
+.seatbite-status-hero h1 { margin:0; color:#fff; font-size:clamp(32px,5vw,46px); letter-spacing:-1.8px; }
+.seatbite-status-hero h1 span { color:#ffb58e; }
+.seatbite-status-hero>p:last-child { max-width:440px; margin:12px 0 0; color:#f0d9d0; font-size:13px; line-height:1.7; }
+.seatbite-status-card { margin-top:16px; padding:23px; border:1px solid #f0e3db; border-radius:21px; background:#fff; box-shadow:0 7px 24px #4b261009; }
+.seatbite-status-card-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.seatbite-status-card-heading h2 { margin:0; font-size:20px; overflow-wrap:anywhere; }
+.seatbite-status-badge { padding:8px 11px; border-radius:99px; background:#fff0e7; color:#b64a2d; font-size:10px; font-weight:900; letter-spacing:.5px; }
+.seatbite-status-badge.status-preparing { background:#fff4d8; color:#9b6700; }
+.seatbite-status-badge.status-ready,.seatbite-status-badge.status-completed { background:#e6f7ed; color:#167547; }
+.seatbite-section-title { margin:0 0 22px; font-size:22px; letter-spacing:-.7px; }
+.seatbite-status-timeline { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); }
+.seatbite-timeline-step { position:relative; display:flex; align-items:center; flex-direction:column; gap:9px; color:#a3948b; font-size:11px; font-weight:700; text-align:center; }
+.seatbite-timeline-icon { position:relative; z-index:1; display:grid; place-items:center; width:42px; height:42px; border:1px solid #eaded6; border-radius:50%; background:#fffaf7; font-size:17px; }
+.seatbite-timeline-step.is-active { color:#d94c32; }
+.seatbite-timeline-step.is-active .seatbite-timeline-icon { border-color:#f05236; background:#f05236; color:#fff; box-shadow:0 0 0 5px #fff0e9; }
+.seatbite-timeline-line { position:absolute; z-index:0; top:20px; left:calc(50% + 22px); width:calc(100% - 44px); height:2px; background:#eaded6; }
+.seatbite-timeline-line.is-active { background:#f05236; }
+.seatbite-status-message { margin-top:22px; padding:15px; border-radius:14px; background:#fff5ef; color:#6d5145; font-size:13px; line-height:1.6; }
+.seatbite-status-symbol { display:grid; place-items:center; width:55px; height:55px; margin:0 auto 16px; border-radius:18px; background:#fff0e8; color:#e65337; font-size:25px; font-weight:900; }
+.seatbite-status-card .seatbite-primary-button { margin-top:18px; }
+@media(max-width:540px) {
+ .seatbite-status-topline { align-items:flex-start; flex-direction:column; }
+ .seatbite-status-hero { padding:24px 20px; }
+ .seatbite-status-card { padding:17px; }
+ .seatbite-timeline-icon { width:36px; height:36px; font-size:14px; }
+ .seatbite-timeline-line { top:17px; left:calc(50% + 19px); width:calc(100% - 38px); }
+ .seatbite-timeline-step { font-size:10px; }
 }

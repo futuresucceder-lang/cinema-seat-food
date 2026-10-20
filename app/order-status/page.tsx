@@ -6,307 +6,64 @@ import { createClient } from "../../lib/supabase/client";
 
 const supabase = createClient();
 
-type FoodItem = {
-  id?: string;
-  name: string;
-  price?: number;
-  emoji?: string;
-  quantity?: number;
-};
-
-type Order = {
-  order_code: string;
-  movie: string | null;
-  screen: string;
-  seat: string;
-  food_items: FoodItem[];
-  total: number;
-  status: string;
-  created_at: string;
-};
+type FoodItem = { id?: string; name: string; price?: number; emoji?: string; quantity?: number };
+type Order = { order_code: string; movie: string | null; screen: string; seat: string; food_items: FoodItem[]; total: number; status: string; created_at: string };
 
 function OrderStatusContent() {
   const searchParams = useSearchParams();
   const orderCode = searchParams.get("order");
-
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!orderCode) {
-      setError("Order ID is missing.");
-      setLoading(false);
-      return;
-    }
-
+    if (!orderCode) { setError("Order ID is missing."); setLoading(false); return; }
     async function loadOrder() {
-      const { data, error } = await supabase
-        .from("orders")
-        .select("*")
-        .eq("order_code", orderCode)
-        .single();
-
-      if (error) {
-        console.error(error);
-        setError("Order not found.");
-      } else {
-        setOrder(data);
-      }
-
+      const { data, error } = await supabase.from("orders").select("*").eq("order_code", orderCode).single();
+      if (error) { console.error(error); setError("Order not found."); } else { setOrder(data); }
       setLoading(false);
     }
-
     loadOrder();
-
-    // Listen for changes to this order
-    const channel = supabase
-      .channel(`order-status-${orderCode}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "orders",
-          filter: `order_code=eq.${orderCode}`,
-        },
-        (payload) => {
-          setOrder(payload.new as Order);
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    const channel = supabase.channel(`order-status-${orderCode}`).on("postgres_changes", {
+      event: "UPDATE", schema: "public", table: "orders", filter: `order_code=eq.${orderCode}`,
+    }, (payload) => setOrder(payload.new as Order)).subscribe();
+    return () => { supabase.removeChannel(channel); };
   }, [orderCode]);
 
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-[#111] text-white flex items-center justify-center">
-        <p className="text-xl">Loading your order...</p>
-      </main>
-    );
-  }
+  if (loading) return <main className="seatbite-page seatbite-status-page"><div className="seatbite-status-card"><div className="seatbite-loader">🍿</div><p>Getting your order update…</p></div></main>;
+  if (error || !order) return <main className="seatbite-page seatbite-status-page"><div className="seatbite-status-card"><div className="seatbite-status-symbol">!</div><h1>We couldn't find that order</h1><p className="seatbite-muted">{error}</p><a href="/" className="seatbite-primary-button seatbite-full-button">Back to Seat Bite <span>→</span></a></div></main>;
 
-  if (error || !order) {
-    return (
-      <main className="min-h-screen bg-[#111] text-white flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-2xl mb-4">❌ {error}</p>
-          <a
-            href="/"
-            className="text-blue-400 underline"
-          >
-            Back to menu
-          </a>
-        </div>
-      </main>
-    );
-  }
-
-  const status = order.status.toUpperCase();
+  const status = (order.status || "NEW").toUpperCase();
+  const stages = [
+    { label: "Received", emoji: "📋", active: ["NEW", "PREPARING", "READY", "COMPLETED"].includes(status) },
+    { label: "Preparing", emoji: "👨‍🍳", active: ["PREPARING", "READY", "COMPLETED"].includes(status) },
+    { label: "Ready", emoji: "🔔", active: ["READY", "COMPLETED"].includes(status) },
+    { label: "Delivered", emoji: "🎉", active: status === "COMPLETED" },
+  ];
+  const statusCopy: Record<string, string> = { NEW: "Your order has been received", PREPARING: "The kitchen is preparing your order", READY: "Your snacks are ready to come to you!", COMPLETED: "Enjoy your movie — order completed" };
 
   return (
-    <main className="min-h-screen bg-[#111] text-white px-5 py-10">
-      <div className="max-w-2xl mx-auto">
-
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">
-            🎬 Track Your Order
-          </h1>
-
-          <p className="text-gray-400 mt-2">
-            Your food will be delivered to your cinema seat.
-          </p>
-        </div>
-
-        {/* Order ID */}
-        <div className="bg-[#222] rounded-2xl p-6 mb-5 text-center">
-          <p className="text-gray-400">Order ID</p>
-
-          <p className="text-xl font-bold text-red-400 mt-2">
-            {order.order_code}
-          </p>
-        </div>
-
-        {/* Seat information */}
-        <div className="bg-[#222] rounded-2xl p-6 mb-5">
-          <h2 className="text-xl font-bold mb-4">
-            🎟️ Delivery Location
-          </h2>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-[#333] rounded-xl p-4">
-              <p className="text-gray-400">Screen</p>
-              <p className="text-lg font-bold">
-                {order.screen}
-              </p>
-            </div>
-
-            <div className="bg-[#333] rounded-xl p-4">
-              <p className="text-gray-400">Seat</p>
-              <p className="text-lg font-bold">
-                {order.seat}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Status */}
-        <div className="bg-[#222] rounded-2xl p-6 mb-5">
-          <h2 className="text-xl font-bold mb-6">
-            📦 Order Status
-          </h2>
-
-          <div className="flex items-center justify-between">
-
-            <StatusStep
-              label="Preparing"
-              active={
-                status === "PREPARING" ||
-                status === "READY" ||
-                status === "COMPLETED"
-              }
-              emoji="👨‍🍳"
-            />
-
-            <div className="h-1 flex-1 bg-gray-700 mx-2">
-              <div
-                className={`h-full ${
-                  status === "READY" || status === "COMPLETED"
-                    ? "bg-green-500"
-                    : "bg-gray-700"
-                }`}
-              />
-            </div>
-
-            <StatusStep
-              label="Ready"
-              active={
-                status === "READY" ||
-                status === "COMPLETED"
-              }
-              emoji="✅"
-            />
-
-            <div className="h-1 flex-1 bg-gray-700 mx-2">
-              <div
-                className={`h-full ${
-                  status === "COMPLETED"
-                    ? "bg-green-500"
-                    : "bg-gray-700"
-                }`}
-              />
-            </div>
-
-            <StatusStep
-              label="Completed"
-              active={status === "COMPLETED"}
-              emoji="🎉"
-            />
-
-          </div>
-
-          <div className="text-center mt-7">
-            <span
-              className={`inline-block px-6 py-3 rounded-full font-bold ${
-                status === "PREPARING"
-                  ? "bg-orange-500"
-                  : status === "READY"
-                  ? "bg-green-600"
-                  : "bg-blue-600"
-              }`}
-            >
-              {status === "PREPARING" && "👨‍🍳 Your order is being prepared"}
-              {status === "READY" && "✅ Your order is ready!"}
-              {status === "COMPLETED" && "🎉 Order completed"}
-            </span>
-          </div>
-        </div>
-
-        {/* Food items */}
-        <div className="bg-[#222] rounded-2xl p-6 mb-5">
-          <h2 className="text-xl font-bold mb-4">
-            🍿 Your Food
-          </h2>
-
-          <div className="space-y-3">
-            {order.food_items?.map((item, index) => (
-              <div
-                key={item.id ?? index}
-                className="flex justify-between bg-[#333] rounded-xl p-4"
-              >
-                <span>
-                  {item.emoji ?? "🍿"} {item.name}
-                </span>
-
-                <span className="font-bold">
-                  × {item.quantity ?? 1}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Total */}
-        <div className="bg-[#222] rounded-2xl p-6 flex justify-between items-center">
-          <span className="text-xl font-bold">
-            Total
-          </span>
-
-          <span className="text-2xl font-bold text-green-400">
-            ₹{order.total}
-          </span>
-        </div>
-
-        <div className="text-center mt-8">
-          <a
-            href="/"
-            className="inline-block bg-white text-black px-8 py-3 rounded-xl font-bold"
-          >
-            BACK TO MENU
-          </a>
-        </div>
-
+    <main className="seatbite-page seatbite-status-page">
+      <div className="seatbite-status-shell">
+        <header className="seatbite-status-topline"><a href="/" className="seatbite-wordmark"><span className="seatbite-wordmark-icon">🍿</span><span>seat<span>bite</span></span></a><span className="seatbite-open-pill"><span></span> LIVE ORDER UPDATES</span></header>
+        <section className="seatbite-status-hero"><p className="seatbite-eyebrow">YOUR MOVIE NIGHT, IN MOTION</p><h1>Track your <span>order.</span></h1><p>We'll keep you posted while your favourites make their way to you.</p></section>
+        <section className="seatbite-status-card seatbite-order-summary">
+          <div className="seatbite-status-card-heading"><div><p className="seatbite-eyebrow">ORDER NUMBER</p><h2>{order.order_code}</h2></div><span className={"seatbite-status-badge status-" + status.toLowerCase()}>{status.replace("_", " ")}</span></div>
+          <div className="seatbite-location-row"><div><span>SCREEN</span><strong>{order.screen}</strong></div><div><span>YOUR SEAT</span><strong>{order.seat}</strong></div></div>
+        </section>
+        <section className="seatbite-status-card">
+          <p className="seatbite-eyebrow">THE LATEST</p><h2 className="seatbite-section-title">Your snack journey</h2>
+          <div className="seatbite-status-timeline">{stages.map((stage, index) => <div className={"seatbite-timeline-step " + (stage.active ? "is-active" : "")} key={stage.label}><div className="seatbite-timeline-icon">{stage.active ? "✓" : stage.emoji}</div><span>{stage.label}</span>{index < stages.length - 1 && <div className={"seatbite-timeline-line " + (stages[index + 1].active ? "is-active" : "")}></div>}</div>)}</div>
+          <div className="seatbite-status-message"><span className="seatbite-status-message-icon">{status === "COMPLETED" ? "🎉" : status === "READY" ? "🔔" : status === "PREPARING" ? "👨‍🍳" : "🍿"}</span><div><strong>{statusCopy[status] || "Your order status has been updated"}</strong><p>Keep enjoying the show. This page updates when the team changes your order status.</p></div></div>
+        </section>
+        <section className="seatbite-status-card"><p className="seatbite-eyebrow">IN YOUR SNACK BOX</p><h2 className="seatbite-section-title">Your order</h2><div className="seatbite-status-food-list">{order.food_items?.map((item, index) => <div className="seatbite-status-food" key={item.id ?? index}><span className="seatbite-status-food-icon">{item.emoji ?? "🍿"}</span><span className="seatbite-status-food-name">{item.name}<small>Quantity: {item.quantity ?? 1}</small></span><strong>₹{(item.price ?? 0) * (item.quantity ?? 1)}</strong></div>)}</div><div className="seatbite-status-total"><span>Total</span><strong>₹{order.total}</strong></div></section>
+        <a href={`/?screen=${encodeURIComponent(order.screen)}&seat=${encodeURIComponent(order.seat)}`} className="seatbite-secondary-button seatbite-status-back">← Back to menu</a>
+        <footer className="seatbite-footer"><span>🍿 seatbite</span><span>Good food. Great movies.</span></footer>
       </div>
     </main>
   );
 }
 
-function StatusStep({
-  label,
-  active,
-  emoji,
-}: {
-  label: string;
-  active: boolean;
-  emoji: string;
-}) {
-  return (
-    <div
-      className={`text-center min-w-[75px] ${
-        active ? "opacity-100" : "opacity-40"
-      }`}
-    >
-      <div className="text-2xl">{emoji}</div>
-
-      <p className="text-xs mt-2 font-semibold">
-        {label}
-      </p>
-    </div>
-  );
-}
 export default function OrderStatusPage() {
-  return (
-    <Suspense
-      fallback={
-        <main className="min-h-screen bg-[#111] text-white flex items-center justify-center">
-          <p className="text-xl">Loading your order...</p>
-        </main>
-      }
-    >
-      <OrderStatusContent />
-    </Suspense>
-  );
+  return <Suspense fallback={<main className="seatbite-page seatbite-loading"><div className="seatbite-loader">🍿</div><p>Loading your order…</p></main>}><OrderStatusContent /></Suspense>;
 }

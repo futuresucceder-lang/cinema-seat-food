@@ -356,7 +356,7 @@ export default function MasterAdminPage() {
     <main
       style={{
         minHeight: "100vh",
-        background: "#f5f5f5",
+        background: "#fff8f4",
         padding: "40px 20px",
         fontFamily: "Arial, sans-serif",
       }}
@@ -370,14 +370,18 @@ export default function MasterAdminPage() {
         {/* HEADER */}
         <div
           style={{
-            background: "#111",
+            background: "#202124",
             color: "white",
             padding: "28px",
             borderRadius: "16px",
             marginBottom: "25px",
           }}
         >
-          <h1 style={{ margin: 0, fontSize: "30px" }}>
+          <div className="seatbite-dashboard-brand seatbite-dashboard-brand-dark">
+            <span className="seatbite-dashboard-logo" aria-hidden="true">🍿</span>
+            <span className="seatbite-dashboard-wordmark">seat bite</span>
+          </div>
+          <h1 style={{ margin: "18px 0 0", fontSize: "30px" }}>
             🛡️ Master Admin
           </h1>
 
@@ -420,7 +424,7 @@ export default function MasterAdminPage() {
                 flex: 1,
                 minWidth: "250px",
                 padding: "13px",
-                border: "1px solid #ccc",
+                border: "1px solid #f0e5df",
                 borderRadius: "8px",
                 fontSize: "16px",
               }}

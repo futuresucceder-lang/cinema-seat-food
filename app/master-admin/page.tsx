@@ -300,7 +300,7 @@ export default function MasterAdminPage() {
     <main
       style={{
         minHeight: "100vh",
-        background: "#f5f5f5",
+        background: "#fff8f4",
         padding: "40px 20px",
         fontFamily: "Arial, sans-serif",
       }}
@@ -314,7 +314,7 @@ export default function MasterAdminPage() {
         {/* HEADER */}
         <div
           style={{
-            background: "#111",
+            background: "#202124",
             color: "white",
             padding: "28px",
             borderRadius: "16px",
@@ -364,7 +364,7 @@ export default function MasterAdminPage() {
                 flex: 1,
                 minWidth: "250px",
                 padding: "13px",
-                border: "1px solid #ccc",
+                border: "1px solid #f0e5df",
                 borderRadius: "8px",
                 fontSize: "16px",
               }}

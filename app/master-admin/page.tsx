@@ -321,7 +321,11 @@ export default function MasterAdminPage() {
             marginBottom: "25px",
           }}
         >
-          <h1 style={{ margin: 0, fontSize: "30px" }}>
+          <div className="seatbite-dashboard-brand seatbite-dashboard-brand-dark">
+            <span className="seatbite-dashboard-logo" aria-hidden="true">🍿</span>
+            <span className="seatbite-dashboard-wordmark">seat bite</span>
+          </div>
+          <h1 style={{ margin: "18px 0 0", fontSize: "30px" }}>
             🛡️ Master Admin
           </h1>
 

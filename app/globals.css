@@ -201,3 +201,31 @@ img { max-width: 100%; }
   }
   .seatbite-cart { bottom: 8px; padding: 16px !important; }
 }
+
+
+/* Real, responsive Seat Bite menu cards */
+.seatbite-food-card { display:flex !important; align-items:center !important; justify-content:space-between !important; gap:16px !important; }
+.seatbite-food-info { display:flex; align-items:center; gap:15px; min-width:0; flex:1; }
+.seatbite-food-photo { width:112px; height:100px; object-fit:cover; border-radius:15px; flex-shrink:0; background:#fff0e9; }
+.seatbite-food-copy { min-width:0; }
+.seatbite-food-emoji { font-size:12px; margin-bottom:5px; }
+.seatbite-food-description { color:#756b66; font-size:13px; line-height:1.4; margin-top:5px; }
+.seatbite-food-price { color:#e8472e; font-weight:800; font-size:17px; margin-top:8px; }
+.seatbite-header h1 { color:#fff !important; }
+.seatbite-header p { color:rgba(255,255,255,.92) !important; }
+.seatbite-logo-mark { color:#f45135; }
+.seatbite-food-card button { flex-shrink:0; }
+@media (max-width:680px) {
+ .seatbite-food-info { gap:11px; }
+ .seatbite-food-photo { width:84px; height:88px; border-radius:13px; }
+ .seatbite-food-description { font-size:12px; }
+ .seatbite-food-price { font-size:16px; }
+ .seatbite-food-card { gap:8px !important; }
+ .seatbite-food-card button { padding:10px 12px !important; min-width:65px; }
+}
+@media (max-width:390px) {
+ .seatbite-food-photo { width:68px; height:78px; }
+ .seatbite-food-info { gap:8px; }
+ .seatbite-food-emoji { display:none; }
+ .seatbite-food-card { padding:12px !important; }
+}

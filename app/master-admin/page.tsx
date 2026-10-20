@@ -227,6 +227,56 @@ export default function MasterAdminPage() {
     }));
   }
 
+  async function resetAccountPassword(cinema: Cinema, role: "manager" | "food_court") {
+    const form = accountForms[cinema.id];
+    if (!form) {
+      alert("Open the Accounts section first.");
+      return;
+    }
+
+    const email = role === "manager" ? form.managerEmail.trim() : form.foodCourtEmail.trim();
+    if (!email) {
+      alert("Please enter the account email first.");
+      return;
+    }
+
+    const label = role === "manager" ? "Manager" : "Food Court";
+    if (!window.confirm(`Reset the ${label} password for ${cinema.name}? The previous password will stop working.`)) return;
+
+    const newPassword = generatePassword();
+    setSavingAccounts((current) => ({ ...current, [cinema.id]: true }));
+    try {
+      const response = await fetch("/api/master-admin/accounts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cinemaId: cinema.id,
+          managerEmail: form.managerEmail.trim(),
+          managerPassword: role === "manager" ? newPassword : "",
+          foodCourtEmail: form.foodCourtEmail.trim(),
+          foodCourtPassword: role === "food_court" ? newPassword : "",
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Password reset failed.");
+
+      setAccountForms((current) => ({
+        ...current,
+        [cinema.id]: {
+          ...current[cinema.id],
+          managerPassword: role === "manager" ? newPassword : "",
+          foodCourtPassword: role === "food_court" ? newPassword : "",
+        },
+      }));
+
+      window.prompt(`${label} password reset successfully. Copy the new password now:`, newPassword);
+    } catch (error) {
+      alert("Could not reset password: " + (error instanceof Error ? error.message : "Unknown error"));
+    } finally {
+      setSavingAccounts((current) => ({ ...current, [cinema.id]: false }));
+    }
+  }
+
   async function saveAccounts(cinema: Cinema) {
     const form = accountForms[cinema.id];
 
@@ -644,6 +694,22 @@ export default function MasterAdminPage() {
 
                             <button
                               type="button"
+                              disabled={isSaving}
+                              onClick={() => resetAccountPassword(cinema, "manager")}
+                              style={{
+                                padding: "10px 14px",
+                                border: "none",
+                                borderRadius: "7px",
+                                background: "#c62828",
+                                color: "white",
+                                cursor: isSaving ? "not-allowed" : "pointer",
+                              }}
+                            >
+                              Reset & Save
+                            </button>
+
+                            <button
+                              type="button"
                               onClick={() =>
                                 updateAccountField(
                                   cinema.id,
@@ -742,6 +808,22 @@ export default function MasterAdminPage() {
                                 borderRadius: "7px",
                               }}
                             />
+
+                            <button
+                              type="button"
+                              disabled={isSaving}
+                              onClick={() => resetAccountPassword(cinema, "food_court")}
+                              style={{
+                                padding: "10px 14px",
+                                border: "none",
+                                borderRadius: "7px",
+                                background: "#c62828",
+                                color: "white",
+                                cursor: isSaving ? "not-allowed" : "pointer",
+                              }}
+                            >
+                              Reset & Save
+                            </button>
 
                             <button
                               type="button"

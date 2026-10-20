@@ -629,3 +629,193 @@ main:not(.seatbite-page) tr:last-child td { border-bottom: 0; }
  .seatbite-my-order-row { align-items:flex-start; flex-direction:column; }
  .seatbite-my-order-row .seatbite-primary-button { width:100%; }
 }
+
+
+/* SEAT BITE PLAYFUL CINEMA REDESIGN — global visual layer */
+:root {
+  --background: #f8f6f2;
+  --foreground: #111114;
+  --brand: #ff1744;
+  --brand-hover: #d90d35;
+  --surface: #ffffff;
+  --muted: #66636a;
+  --border: #e8e3e0;
+  --success: #16834a;
+  --radius-card: 18px;
+}
+body {
+  background: #f8f6f2;
+  color: #111114;
+  font-family: Arial, Helvetica, sans-serif;
+}
+::selection { background: #ff1744; color: #fff; }
+:focus-visible { outline-color: #ff1744; }
+button, a, input, select, textarea { accent-color: #ff1744; }
+button:not(:disabled):hover, a:hover { transition: transform .18s ease, box-shadow .18s ease, background .18s ease; }
+button:not(:disabled):hover { transform: translateY(-2px); }
+
+/* Playful marker / sticker energy without changing app behavior */
+.seatbite-page {
+  color: #151519 !important;
+  background:
+    radial-gradient(circle at 8% 13%, rgba(255,23,68,.08) 0 3px, transparent 4px),
+    radial-gradient(circle at 92% 30%, rgba(255,23,68,.09) 0 4px, transparent 5px),
+    #f8f6f2 !important;
+}
+.seatbite-shell { max-width: 1240px !important; }
+.seatbite-header {
+  background:
+    radial-gradient(circle at 88% 22%, rgba(255,255,255,.18) 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 75%, rgba(255,23,68,.35) 0 5px, transparent 6px),
+    linear-gradient(125deg,#08080a 0%,#151519 68%,#252127 100%) !important;
+  color: #fff !important;
+  border: 2px solid #111 !important;
+  border-radius: 28px 28px 12px 28px !important;
+  box-shadow: 8px 8px 0 #ff1744, 0 18px 36px rgba(15,15,18,.15) !important;
+  transform: rotate(-.35deg);
+}
+.seatbite-header h1 {
+  color: #fff !important;
+  font-weight: 950 !important;
+  letter-spacing: -1.8px !important;
+  text-transform: uppercase;
+  text-shadow: 3px 3px 0 #ff1744;
+}
+.seatbite-header p { color: #f4f0f0 !important; }
+.seatbite-logo-mark {
+  border: 3px solid #111 !important;
+  border-radius: 18px 18px 7px 18px !important;
+  background: #ff1744 !important;
+  color: #fff !important;
+  box-shadow: 4px 4px 0 #fff !important;
+}
+.seatbite-seat-card, .seatbite-food-card, .seatbite-cart,
+.seatbite-status-card, .seatbite-order-card {
+  border: 2px solid #17171a !important;
+  box-shadow: 4px 5px 0 rgba(17,17,20,.10) !important;
+}
+.seatbite-categories button {
+  border: 2px solid #17171a !important;
+  background: #fff !important;
+  color: #17171a !important;
+  box-shadow: 3px 3px 0 #17171a !important;
+  font-weight: 800 !important;
+}
+.seatbite-categories button.seatbite-category-active {
+  background: #ff1744 !important;
+  border-color: #17171a !important;
+  color: #fff !important;
+  box-shadow: 3px 3px 0 #17171a !important;
+}
+.seatbite-food-card {
+  background: #fff !important;
+  border-radius: 20px 20px 8px 20px !important;
+}
+.seatbite-food-card:hover {
+  transform: translate(-2px,-3px) rotate(-.25deg) !important;
+  box-shadow: 7px 8px 0 #ff1744 !important;
+}
+.seatbite-food-card > div:first-child > div:first-child {
+  background: #fff0f2 !important;
+  border: 1px solid #ffccd5;
+}
+.seatbite-food-card button,
+.seatbite-cart button:last-child,
+.seatbite-primary-button,
+.seatbite-full-button {
+  background: #ff1744 !important;
+  color: #fff !important;
+  border: 2px solid #17171a !important;
+  box-shadow: 3px 3px 0 #17171a !important;
+  font-weight: 900 !important;
+}
+.seatbite-food-card button:hover,
+.seatbite-cart button:last-child:hover,
+.seatbite-primary-button:hover {
+  background: #d90d35 !important;
+  box-shadow: 5px 5px 0 #17171a !important;
+}
+.seatbite-cart {
+  background: rgba(255,255,255,.96) !important;
+  border-radius: 18px 18px 6px 18px !important;
+}
+.seatbite-status-shell { max-width: 900px !important; }
+.seatbite-status-topline { border-bottom: 2px dashed #ff1744 !important; }
+.seatbite-wordmark, .seatbite-dashboard-wordmark { font-weight: 950 !important; letter-spacing: -1.1px; }
+.seatbite-wordmark span:last-child span, .seatbite-dashboard-wordmark span { color: #ff1744 !important; }
+.seatbite-open-pill { border: 1px solid #ff1744 !important; }
+.seatbite-status-hero h1 {
+  font-weight: 950 !important;
+  letter-spacing: -1.8px !important;
+  text-transform: uppercase;
+}
+.seatbite-status-hero h1 span { color: #ff1744 !important; }
+.seatbite-status-card {
+  background: #fff !important;
+  border-radius: 22px 22px 8px 22px !important;
+}
+.seatbite-status-badge { border: 1px solid #17171a !important; font-weight: 900 !important; }
+.seatbite-status-message { background: #fff0f2 !important; border: 1px dashed #ff1744 !important; }
+.seatbite-secondary-button, .seatbite-status-back {
+  border: 2px solid #17171a !important;
+  box-shadow: 3px 3px 0 #17171a !important;
+  background: #fff !important;
+  color: #17171a !important;
+  font-weight: 800 !important;
+}
+.seatbite-footer { border-top: 2px dashed #ff1744 !important; }
+
+/* Admin and staff areas: white work surfaces, ink-black navigation, vivid red actions */
+.seatbite-manager-page {
+  background: #f8f6f2 !important;
+  color: #151519 !important;
+}
+.seatbite-manager-page h1,
+.seatbite-manager-page h2,
+.seatbite-manager-page h3 { color: #151519; }
+.seatbite-manager-page .seatbite-dashboard-brand { color: #151519 !important; }
+.seatbite-dashboard-header {
+  background: #111114 !important;
+  color: #fff !important;
+  border: 2px solid #111114 !important;
+  border-radius: 22px 22px 8px 22px !important;
+  box-shadow: 5px 5px 0 #ff1744 !important;
+}
+.seatbite-dashboard-logo {
+  background: #ff1744 !important;
+  border: 2px solid #fff !important;
+}
+.seatbite-dashboard-wordmark { color: #fff !important; }
+.seatbite-manager-page button,
+.seatbite-manager-page a,
+main:not(.seatbite-page) button {
+  border-radius: 12px;
+}
+.seatbite-manager-page input,
+.seatbite-manager-page select,
+.seatbite-manager-page textarea,
+main:not(.seatbite-page) input,
+main:not(.seatbite-page) select,
+main:not(.seatbite-page) textarea {
+  border-radius: 12px !important;
+}
+.seatbite-manager-page button:not([data-variant="secondary"]),
+.seatbite-manager-page .primary,
+main:not(.seatbite-page) button[type="submit"] {
+  border-color: #ff1744;
+}
+main[style*="background: rgb(17, 17, 17)"],
+main[style*="background: #111"] {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255,23,68,.15), transparent 26%),
+    #101013 !important;
+}
+main[style*="background: rgb(255, 248, 244)"],
+main[style*="background: #fff8f4"] {
+  background: #f8f6f2 !important;
+}
+@media (max-width: 680px) {
+  .seatbite-header { transform: none; box-shadow: 4px 4px 0 #ff1744 !important; }
+  .seatbite-food-card:hover { transform: none !important; }
+  .seatbite-status-card, .seatbite-food-card { box-shadow: 3px 3px 0 rgba(17,17,20,.1) !important; }
+}

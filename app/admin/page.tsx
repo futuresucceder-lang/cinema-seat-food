@@ -243,14 +243,8 @@ export default function AdminDashboard() {
             🎬
           </div>
 
-          <h1
-            style={{
-              fontSize: "36px",
-              margin: "5px 0",
-            }}
-          >
-            Cinema Food Admin
-          </h1>
+          <div className="seatbite-dashboard-brand"><span className="seatbite-dashboard-logo">🍿</span><span className="seatbite-dashboard-wordmark">seat<span style={{color:"#f05236"}}>bite</span></span></div>
+          <h1 className="seatbite-manager-title">Manager Dashboard</h1>
 
           <p
             style={{

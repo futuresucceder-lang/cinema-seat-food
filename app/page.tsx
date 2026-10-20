@@ -11,8 +11,6 @@ const foodItems = [
     price: 180,
     emoji: "🍿",
     category: "Snacks",
-    image: "https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=700&q=85",
-    description: "Fresh, buttery cinema popcorn",
   },
   {
     id: 2,
@@ -20,8 +18,6 @@ const foodItems = [
     price: 220,
     emoji: "🧀",
     category: "Snacks",
-    image: "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=700&q=85",
-    description: "Crunchy nachos with cheesy goodness",
   },
   {
     id: 3,
@@ -29,8 +25,6 @@ const foodItems = [
     price: 120,
     emoji: "🥤",
     category: "Drinks",
-    image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?auto=format&fit=crop&w=700&q=85",
-    description: "A chilled, refreshing drink",
   },
   {
     id: 4,
@@ -38,8 +32,6 @@ const foodItems = [
     price: 200,
     emoji: "🍔",
     category: "Meals",
-    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=85",
-    description: "A tasty veggie burger",
   },
 ];
 
@@ -212,8 +204,8 @@ function CustomerOrderPage() {
       <main
         style={{
           minHeight: "100vh",
-          background: "#fff8f4",
-          color: "#202124",
+          background: "#111",
+          color: "white",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -225,10 +217,9 @@ function CustomerOrderPage() {
           style={{
             maxWidth: "500px",
             width: "100%",
-            background: "#ffffff",
+            background: "#222",
             padding: "30px",
-            borderRadius: "20px",
-            boxShadow: "0 18px 50px rgba(67, 35, 22, 0.08)",
+            borderRadius: "16px",
             textAlign: "center",
           }}
         >
@@ -241,11 +232,11 @@ function CustomerOrderPage() {
             🎬
           </div>
 
-          <h1>Welcome to Seat Bite 🍿</h1>
+          <h1>Invalid Seat QR Code</h1>
 
           <p
             style={{
-              color: "#756b66",
+              color: "#aaa",
               lineHeight: 1.6,
             }}
           >
@@ -265,8 +256,8 @@ function CustomerOrderPage() {
       <main
         style={{
           minHeight: "100vh",
-          background: "#fff8f4",
-          color: "#202124",
+          background: "#111",
+          color: "white",
           padding: "20px",
           fontFamily: "Arial, sans-serif",
         }}
@@ -289,12 +280,12 @@ function CustomerOrderPage() {
             🎉
           </div>
 
-          <h1 className="seatbite-confirmation-title">Order Confirmed!</h1>
+          <h1>Order Confirmation</h1>
 
           <p
             style={{
               marginTop: "20px",
-              color: "#756b66",
+              color: "#bbb",
             }}
           >
             Your order has been received.
@@ -303,7 +294,7 @@ function CustomerOrderPage() {
           {/* SEAT INFORMATION */}
           <div
             style={{
-              background: "#ffffff",
+              background: "#222",
               padding: "20px",
               borderRadius: "15px",
               marginTop: "25px",
@@ -330,14 +321,14 @@ function CustomerOrderPage() {
           <div
             style={{
               marginTop: "20px",
-              background: "#ffffff",
+              background: "#222",
               padding: "20px",
               borderRadius: "15px",
             }}
           >
             <p
               style={{
-                color: "#756b66",
+                color: "#aaa",
                 marginBottom: "8px",
               }}
             >
@@ -347,7 +338,7 @@ function CustomerOrderPage() {
             <h2
               style={{
                 margin: 0,
-                color: "#f45135",
+                color: "#e50914",
                 wordBreak: "break-word",
               }}
             >
@@ -358,7 +349,7 @@ function CustomerOrderPage() {
           <p
             style={{
               marginTop: "20px",
-              color: "#756b66",
+              color: "#bbb",
             }}
           >
             Thank you for ordering! 🍿
@@ -373,7 +364,7 @@ function CustomerOrderPage() {
               padding: "16px",
               borderRadius: "10px",
               border: "none",
-              background: "#f45135",
+              background: "#16a34a",
               color: "white",
               fontWeight: "bold",
               fontSize: "16px",
@@ -391,9 +382,9 @@ function CustomerOrderPage() {
               marginTop: "12px",
               padding: "14px",
               borderRadius: "10px",
-              border: "1px solid #f0e5df",
-              background: "#ffffff",
-              color: "#202124",
+              border: "1px solid #444",
+              background: "#222",
+              color: "white",
               fontWeight: "bold",
               cursor: "pointer",
             }}
@@ -409,27 +400,34 @@ function CustomerOrderPage() {
    * CUSTOMER FOOD MENU
    */
   return (
-    <main className="seatbite-page" style={{ minHeight: "100vh", background: "#fff8f4", color: "#202124", padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <div className="seatbite-shell" style={{ maxWidth: "700px", margin: "0 auto" }}>
+    <main
+      style={{
+        minHeight: "100vh",
+        background: "#111",
+        color: "white",
+        padding: "20px",
+        fontFamily: "Arial, sans-serif",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "700px",
+          margin: "0 auto",
+        }}
+      >
         {/* HEADER */}
-        <div className="seatbite-header" style={{ textAlign: "center", marginBottom: "25px" }}>
-          <div className="seatbite-logo-mark" aria-label="Seat Bite logo">
-            <svg viewBox="0 0 72 72" role="img" aria-hidden="true">
-              <defs>
-                <linearGradient id="seatbiteLogoGradient" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#ff704f" />
-                  <stop offset="100%" stopColor="#e83d2b" />
-                </linearGradient>
-              </defs>
-              <rect x="8" y="8" width="56" height="56" rx="18" fill="url(#seatbiteLogoGradient)" />
-              <path d="M20 24h32l-3 7H23z" fill="#fff" />
-              <path d="M23 33h26l-3 22H26z" fill="#fff" />
-              <path d="M27 35l2 16M36 35v16M45 35l-2 16" stroke="#f45135" strokeWidth="2.4" strokeLinecap="round" />
-              <circle cx="27" cy="20" r="6" fill="#fff5dc" />
-              <circle cx="36" cy="17" r="7" fill="#fff5dc" />
-              <circle cx="45" cy="20" r="6" fill="#fff5dc" />
-              <path d="M27 14l2 4M36 10l1 5M45 14l-2 4" stroke="#ffcf6e" strokeWidth="2" strokeLinecap="round" />
-            </svg>
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: "25px",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "48px",
+            }}
+          >
+            🎬
           </div>
 
           <h1
@@ -438,12 +436,12 @@ function CustomerOrderPage() {
               margin: "8px 0",
             }}
           >
-            Seat Bite
+            Cinema Food
           </h1>
 
           <p
             style={{
-              color: "#756b66",
+              color: "#aaa",
               margin: 0,
             }}
           >
@@ -452,11 +450,21 @@ function CustomerOrderPage() {
         </div>
 
         {/* SEAT INFORMATION */}
-        <div className="seatbite-seat-card" style={{ background: "#ffffff", padding: "18px", borderRadius: "15px", marginBottom: "25px", display: "flex", justifyContent: "space-around", textAlign: "center" }}>
+        <div
+          style={{
+            background: "#222",
+            padding: "18px",
+            borderRadius: "15px",
+            marginBottom: "25px",
+            display: "flex",
+            justifyContent: "space-around",
+            textAlign: "center",
+          }}
+        >
           <div>
             <div
               style={{
-                color: "#756b66",
+                color: "#999",
                 fontSize: "13px",
               }}
             >
@@ -475,14 +483,14 @@ function CustomerOrderPage() {
           <div
             style={{
               width: "1px",
-              background: "#e7d8d0",
+              background: "#444",
             }}
           />
 
           <div>
             <div
               style={{
-                color: "#756b66",
+                color: "#999",
                 fontSize: "13px",
               }}
             >
@@ -500,11 +508,18 @@ function CustomerOrderPage() {
         </div>
 
         {/* CATEGORIES */}
-        <div className="seatbite-categories" style={{ display: "flex", gap: "8px", overflowX: "auto", paddingBottom: "10px", marginBottom: "20px" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            overflowX: "auto",
+            paddingBottom: "10px",
+            marginBottom: "20px",
+          }}
+        >
           {categories.map((category) => (
             <button
               key={category}
-              className={selectedCategory === category ? "seatbite-category-active" : ""}
               onClick={() =>
                 setSelectedCategory(category)
               }
@@ -515,9 +530,9 @@ function CustomerOrderPage() {
                 border: "none",
                 background:
                   selectedCategory === category
-                    ? "#f45135"
-                    : "#fff0ea",
-                color: "#202124",
+                    ? "#e50914"
+                    : "#292929",
+                color: "white",
                 cursor: "pointer",
                 fontWeight: "bold",
               }}
@@ -547,13 +562,10 @@ function CustomerOrderPage() {
             return (
               <div
                 key={item.id}
-                className="seatbite-food-card"
                 style={{
-                  background: "#ffffff",
+                  background: "#222",
                   padding: "16px",
-                  borderRadius: "16px",
-                  border: "1px solid #f0e5df",
-                  boxShadow: "0 4px 16px rgba(67, 35, 22, 0.04)",
+                  borderRadius: "15px",
                   marginBottom: "12px",
                   display: "flex",
                   alignItems: "center",
@@ -561,10 +573,22 @@ function CustomerOrderPage() {
                   gap: "15px",
                 }}
               >
-                <div className="seatbite-food-info">
-                  <img src={item.image} alt={item.name} className="seatbite-food-photo" />
-                  <div className="seatbite-food-copy">
-                    <div className="seatbite-food-emoji">{item.emoji}</div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "14px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "38px",
+                    }}
+                  >
+                    {item.emoji}
+                  </div>
+
+                  <div>
                     <strong
                       style={{
                         fontSize: "17px",
@@ -573,8 +597,14 @@ function CustomerOrderPage() {
                       {item.name}
                     </strong>
 
-                    <div className="seatbite-food-description">{item.description}</div>
-                    <div className="seatbite-food-price">₹{item.price}</div>
+                    <div
+                      style={{
+                        color: "#aaa",
+                        marginTop: "5px",
+                      }}
+                    >
+                      ₹{item.price}
+                    </div>
                   </div>
                 </div>
 
@@ -584,8 +614,8 @@ function CustomerOrderPage() {
                       addToCart(item.id)
                     }
                     style={{
-                      background: "#f45135",
-                      color: "#ffffff",
+                      background: "#e50914",
+                      color: "white",
                       border: "none",
                       padding: "10px 18px",
                       borderRadius: "10px",
@@ -601,7 +631,7 @@ function CustomerOrderPage() {
                       display: "flex",
                       alignItems: "center",
                       gap: "10px",
-                      background: "#f7ebe5",
+                      background: "#333",
                       padding: "5px",
                       borderRadius: "10px",
                     }}
@@ -615,8 +645,8 @@ function CustomerOrderPage() {
                         height: "34px",
                         border: "none",
                         borderRadius: "8px",
-                        background: "#eadbd4",
-                        color: "#202124",
+                        background: "#555",
+                        color: "white",
                         fontSize: "20px",
                         cursor: "pointer",
                       }}
@@ -642,8 +672,8 @@ function CustomerOrderPage() {
                         height: "34px",
                         border: "none",
                         borderRadius: "8px",
-                        background: "#f45135",
-                        color: "#ffffff",
+                        background: "#e50914",
+                        color: "white",
                         fontSize: "20px",
                         cursor: "pointer",
                       }}
@@ -658,7 +688,14 @@ function CustomerOrderPage() {
         </div>
 
         {/* CART */}
-        <div className="seatbite-cart" style={{ background: "#ffffff", padding: "20px", borderRadius: "18px", border: "1px solid #f0e5df", boxShadow: "0 4px 16px rgba(67, 35, 22, 0.04)", marginTop: "25px" }}>
+        <div
+          style={{
+            background: "#222",
+            padding: "20px",
+            borderRadius: "15px",
+            marginTop: "25px",
+          }}
+        >
           <div
             style={{
               display: "flex",
@@ -683,7 +720,7 @@ function CustomerOrderPage() {
           {itemCount === 0 ? (
             <p
               style={{
-                color: "#756b66",
+                color: "#888",
                 textAlign: "center",
                 margin: "20px 0 5px",
               }}
@@ -716,7 +753,7 @@ function CustomerOrderPage() {
                           "space-between",
                         padding: "10px 0",
                         borderBottom:
-                          "1px solid #f0e5df",
+                          "1px solid #333",
                       }}
                     >
                       <span>
@@ -761,9 +798,9 @@ function CustomerOrderPage() {
               border: "none",
               background:
                 itemCount === 0
-                  ? "#e7d8d0"
-                  : "#f45135",
-              color: "#ffffff",
+                  ? "#444"
+                  : "#e50914",
+              color: "white",
               fontWeight: "bold",
               fontSize: "16px",
               cursor:
@@ -793,12 +830,12 @@ export default function Page() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "#fff8f4",
-            color: "#202124",
+            background: "#111",
+            color: "white",
             fontFamily: "Arial, sans-serif",
           }}
         >
-          <p>Preparing your cinema menu...</p>
+          <p>Loading cinema menu...</p>
         </main>
       }
     >

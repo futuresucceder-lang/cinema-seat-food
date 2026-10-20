@@ -544,3 +544,23 @@ main:not(.seatbite-page) tr:last-child td { border-bottom: 0; }
  .seatbite-timeline-line { top:17px; left:calc(50% + 19px); width:calc(100% - 38px); }
  .seatbite-timeline-step { font-size:10px; }
 }
+
+
+/* Seat Bite dashboard refinement */
+.seatbite-manager-page { background:radial-gradient(circle at 12% 0%,#ffede4,transparent 32%),#fffaf6!important; color:#2b211d!important; }
+.seatbite-manager-page h1,.seatbite-manager-page h2,.seatbite-manager-page h3 { color:#2b211d!important; }
+.seatbite-manager-page p { color:#83746b!important; }
+.seatbite-manager-page section[style],.seatbite-manager-page div[style*="background: rgb(34, 34, 34)"],.seatbite-manager-page div[style*="background: #222"] { background:#fff!important; border:1px solid #f0e3dc!important; box-shadow:0 8px 26px #4b26100d; border-radius:20px!important; }
+.seatbite-manager-page a[style] { color:#2b211d!important; }
+.seatbite-manager-page a div[style] { background:#fff!important; border:1px solid #f0e3dc; box-shadow:0 7px 24px #4b26100b; border-radius:20px!important; }
+.seatbite-manager-page a div[style]:hover { border-color:#f4b4a5; box-shadow:0 12px 30px #4b261016; }
+.seatbite-manager-page a span[style] { background:#fff0e9!important; color:#d94c33!important; }
+.seatbite-manager-page button { border-radius:12px!important; }
+.seatbite-manager-page button:not(:disabled) { transition:transform .15s,box-shadow .15s; }
+.seatbite-manager-page button:hover:not(:disabled) { transform:translateY(-1px); }
+.seatbite-manager-page > div { max-width:1180px!important; }
+.seatbite-manager-page header h1 { letter-spacing:-1.5px; }
+@media(max-width:540px) {
+ .seatbite-manager-page { padding:20px 12px 36px!important; }
+ .seatbite-manager-page h1 { font-size:30px!important; }
+}

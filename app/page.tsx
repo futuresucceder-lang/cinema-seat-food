@@ -204,8 +204,8 @@ function CustomerOrderPage() {
       <main
         style={{
           minHeight: "100vh",
-          background: "#111",
-          color: "white",
+          background: "#fff8f4",
+          color: "#202124",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -217,7 +217,7 @@ function CustomerOrderPage() {
           style={{
             maxWidth: "500px",
             width: "100%",
-            background: "#222",
+            background: "#ffffff",
             padding: "30px",
             borderRadius: "16px",
             textAlign: "center",
@@ -232,11 +232,11 @@ function CustomerOrderPage() {
             🎬
           </div>
 
-          <h1>Invalid Seat QR Code</h1>
+          <h1>Welcome to Seat Bite</h1>
 
           <p
             style={{
-              color: "#aaa",
+              color: "#756b66",
               lineHeight: 1.6,
             }}
           >
@@ -256,8 +256,8 @@ function CustomerOrderPage() {
       <main
         style={{
           minHeight: "100vh",
-          background: "#111",
-          color: "white",
+          background: "#fff8f4",
+          color: "#202124",
           padding: "20px",
           fontFamily: "Arial, sans-serif",
         }}
@@ -294,7 +294,7 @@ function CustomerOrderPage() {
           {/* SEAT INFORMATION */}
           <div
             style={{
-              background: "#222",
+              background: "#ffffff",
               padding: "20px",
               borderRadius: "15px",
               marginTop: "25px",
@@ -321,14 +321,14 @@ function CustomerOrderPage() {
           <div
             style={{
               marginTop: "20px",
-              background: "#222",
+              background: "#ffffff",
               padding: "20px",
               borderRadius: "15px",
             }}
           >
             <p
               style={{
-                color: "#aaa",
+                color: "#756b66",
                 marginBottom: "8px",
               }}
             >
@@ -338,7 +338,7 @@ function CustomerOrderPage() {
             <h2
               style={{
                 margin: 0,
-                color: "#e50914",
+                color: "#f45135",
                 wordBreak: "break-word",
               }}
             >
@@ -364,7 +364,7 @@ function CustomerOrderPage() {
               padding: "16px",
               borderRadius: "10px",
               border: "none",
-              background: "#16a34a",
+              background: "#16803d",
               color: "white",
               fontWeight: "bold",
               fontSize: "16px",
@@ -383,8 +383,8 @@ function CustomerOrderPage() {
               padding: "14px",
               borderRadius: "10px",
               border: "1px solid #444",
-              background: "#222",
-              color: "white",
+              background: "#ffffff",
+              color: "#202124",
               fontWeight: "bold",
               cursor: "pointer",
             }}
@@ -403,8 +403,8 @@ function CustomerOrderPage() {
     <main
       style={{
         minHeight: "100vh",
-        background: "#111",
-        color: "white",
+        background: "#fff8f4",
+        color: "#202124",
         padding: "20px",
         fontFamily: "Arial, sans-serif",
       }}
@@ -436,12 +436,12 @@ function CustomerOrderPage() {
               margin: "8px 0",
             }}
           >
-            Cinema Food
+            Seat Bite
           </h1>
 
           <p
             style={{
-              color: "#aaa",
+              color: "#756b66",
               margin: 0,
             }}
           >
@@ -452,7 +452,7 @@ function CustomerOrderPage() {
         {/* SEAT INFORMATION */}
         <div
           style={{
-            background: "#222",
+            background: "#ffffff",
             padding: "18px",
             borderRadius: "15px",
             marginBottom: "25px",
@@ -464,7 +464,7 @@ function CustomerOrderPage() {
           <div>
             <div
               style={{
-                color: "#999",
+                color: "#756b66",
                 fontSize: "13px",
               }}
             >
@@ -483,14 +483,14 @@ function CustomerOrderPage() {
           <div
             style={{
               width: "1px",
-              background: "#444",
+              background: "#e7d8d0",
             }}
           />
 
           <div>
             <div
               style={{
-                color: "#999",
+                color: "#756b66",
                 fontSize: "13px",
               }}
             >
@@ -530,9 +530,9 @@ function CustomerOrderPage() {
                 border: "none",
                 background:
                   selectedCategory === category
-                    ? "#e50914"
-                    : "#292929",
-                color: "white",
+                    ? "#f45135"
+                    : "#fff0ea",
+                color: "#202124",
                 cursor: "pointer",
                 fontWeight: "bold",
               }}
@@ -563,7 +563,7 @@ function CustomerOrderPage() {
               <div
                 key={item.id}
                 style={{
-                  background: "#222",
+                  background: "#ffffff",
                   padding: "16px",
                   borderRadius: "15px",
                   marginBottom: "12px",
@@ -599,7 +599,7 @@ function CustomerOrderPage() {
 
                     <div
                       style={{
-                        color: "#aaa",
+                        color: "#756b66",
                         marginTop: "5px",
                       }}
                     >
@@ -614,8 +614,8 @@ function CustomerOrderPage() {
                       addToCart(item.id)
                     }
                     style={{
-                      background: "#e50914",
-                      color: "white",
+                      background: "#f45135",
+                      color: "#202124",
                       border: "none",
                       padding: "10px 18px",
                       borderRadius: "10px",
@@ -631,7 +631,7 @@ function CustomerOrderPage() {
                       display: "flex",
                       alignItems: "center",
                       gap: "10px",
-                      background: "#333",
+                      background: "#f7ebe5",
                       padding: "5px",
                       borderRadius: "10px",
                     }}
@@ -645,8 +645,8 @@ function CustomerOrderPage() {
                         height: "34px",
                         border: "none",
                         borderRadius: "8px",
-                        background: "#555",
-                        color: "white",
+                        background: "#eadbd4",
+                        color: "#202124",
                         fontSize: "20px",
                         cursor: "pointer",
                       }}
@@ -672,8 +672,8 @@ function CustomerOrderPage() {
                         height: "34px",
                         border: "none",
                         borderRadius: "8px",
-                        background: "#e50914",
-                        color: "white",
+                        background: "#f45135",
+                        color: "#202124",
                         fontSize: "20px",
                         cursor: "pointer",
                       }}
@@ -690,7 +690,7 @@ function CustomerOrderPage() {
         {/* CART */}
         <div
           style={{
-            background: "#222",
+            background: "#ffffff",
             padding: "20px",
             borderRadius: "15px",
             marginTop: "25px",
@@ -720,7 +720,7 @@ function CustomerOrderPage() {
           {itemCount === 0 ? (
             <p
               style={{
-                color: "#888",
+                color: "#756b66",
                 textAlign: "center",
                 margin: "20px 0 5px",
               }}
@@ -798,9 +798,9 @@ function CustomerOrderPage() {
               border: "none",
               background:
                 itemCount === 0
-                  ? "#444"
-                  : "#e50914",
-              color: "white",
+                  ? "#e7d8d0"
+                  : "#f45135",
+              color: "#202124",
               fontWeight: "bold",
               fontSize: "16px",
               cursor:
@@ -830,12 +830,12 @@ export default function Page() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "#111",
-            color: "white",
+            background: "#fff8f4",
+            color: "#202124",
             fontFamily: "Arial, sans-serif",
           }}
         >
-          <p>Loading cinema menu...</p>
+          <p>Preparing your cinema menu...</p>
         </main>
       }
     >

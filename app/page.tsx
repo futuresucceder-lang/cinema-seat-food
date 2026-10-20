@@ -521,6 +521,7 @@ function CustomerOrderPage() {
           {categories.map((category) => (
             <button
               key={category}
+              className={selectedCategory === category ? "seatbite-category-active" : ""}
               onClick={() =>
                 setSelectedCategory(category)
               }

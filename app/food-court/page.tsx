@@ -225,34 +225,34 @@ export default function FoodCourtPage() {
   function getStatusStyle(status: string | null) {
     if (status === "NEW") {
       return {
-        background: "#7f1d1d",
+        background: "#f45135",
         color: "#fff",
       };
     }
 
     if (status === "PREPARING") {
       return {
-        background: "#78350f",
+        background: "#fff0d9",
         color: "#fff",
       };
     }
 
     if (status === "READY") {
       return {
-        background: "#14532d",
+        background: "#e4f6e9",
         color: "#fff",
       };
     }
 
     if (status === "COMPLETED") {
       return {
-        background: "#374151",
+        background: "#f0e5df",
         color: "#fff",
       };
     }
 
     return {
-      background: "#333",
+      background: "#fff5ef",
       color: "#fff",
     };
   }
@@ -261,8 +261,8 @@ export default function FoodCourtPage() {
     <main
       style={{
         minHeight: "100vh",
-        background: "#111",
-        color: "white",
+        background: "#fff8f4",
+        color: "#202124",
         padding: "25px",
       }}
     >
@@ -279,7 +279,7 @@ export default function FoodCourtPage() {
       <p
         style={{
           textAlign: "center",
-          color: "#aaa",
+          color: "#756b66",
           marginBottom: "30px",
         }}
       >

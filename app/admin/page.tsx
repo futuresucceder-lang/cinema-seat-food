@@ -406,7 +406,10 @@ export default function AdminDashboard() {
         {/* Quick Action */}
         <section
           style={{
-            background: "#222",
+            background: "#ffffff",
+            color: "#202124",
+            border: "1px solid #f0e5df",
+            boxShadow: "0 12px 30px rgba(75,42,27,.07)",
             borderRadius: "18px",
             padding: "25px",
             textAlign: "center",
@@ -418,7 +421,7 @@ export default function AdminDashboard() {
 
           <p
             style={{
-              color: "#aaa",
+              color: "#756b66",
               marginBottom: "20px",
             }}
           >
@@ -439,8 +442,8 @@ export default function AdminDashboard() {
               display: "inline-block",
               padding: "13px 25px",
               borderRadius: "10px",
-              background: "white",
-              color: "#111",
+              background: "#f45135",
+              color: "#ffffff",
               textDecoration: "none",
               fontWeight: "bold",
             }}
@@ -469,7 +472,10 @@ function StatCard({
   return (
     <div
       style={{
-        background: "#222",
+        background: "#ffffff",
+        border: "1px solid #f0e5df",
+        boxShadow: "0 10px 26px rgba(75,42,27,.06)",
+        color: "#202124",
         borderRadius: "15px",
         padding: "20px",
         textAlign: "center",
@@ -489,7 +495,7 @@ function StatCard({
         {value}
       </div>
 
-      <div style={{ color: "#aaa" }}>
+      <div style={{ color: "#756b66" }}>
         {label}
       </div>
     </div>
@@ -518,12 +524,14 @@ function AdminCard({
       href={href}
       style={{
         textDecoration: "none",
-        color: "white",
+        color: "#202124",
       }}
     >
       <div
         style={{
-          background: "#222",
+          background: "#ffffff",
+          border: "1px solid #f0e5df",
+          boxShadow: "0 12px 30px rgba(75,42,27,.07)",
           borderRadius: "18px",
           padding: "25px",
           minHeight: "190px",
@@ -546,7 +554,7 @@ function AdminCard({
 
         <p
           style={{
-            color: "#aaa",
+            color: "#756b66",
             lineHeight: "1.5",
             minHeight: "45px",
           }}
@@ -560,8 +568,8 @@ function AdminCard({
             marginTop: "8px",
             padding: "6px 10px",
             borderRadius: "20px",
-            background: "#333",
-            color: "#ddd",
+            background: "#fff0e9",
+            color: "#a53b26",
             fontSize: "12px",
             fontWeight: "bold",
           }}

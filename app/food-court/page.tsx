@@ -321,7 +321,10 @@ export default function FoodCourtPage() {
         {/* New */}
         <div
           style={{
-            background: "#7f1d1d",
+            background: "#ffffff",
+            color: "#202124",
+            border: "1px solid #f0e5df",
+            boxShadow: "0 8px 24px rgba(75,42,27,.06)",
             padding: "20px",
             borderRadius: "15px",
             textAlign: "center",
@@ -344,7 +347,10 @@ export default function FoodCourtPage() {
         {/* Preparing */}
         <div
           style={{
-            background: "#78350f",
+            background: "#ffffff",
+            color: "#202124",
+            border: "1px solid #f0e5df",
+            boxShadow: "0 8px 24px rgba(75,42,27,.06)",
             padding: "20px",
             borderRadius: "15px",
             textAlign: "center",
@@ -367,7 +373,10 @@ export default function FoodCourtPage() {
         {/* Ready */}
         <div
           style={{
-            background: "#14532d",
+            background: "#ffffff",
+            color: "#202124",
+            border: "1px solid #f0e5df",
+            boxShadow: "0 8px 24px rgba(75,42,27,.06)",
             padding: "20px",
             borderRadius: "15px",
             textAlign: "center",
@@ -390,7 +399,10 @@ export default function FoodCourtPage() {
         {/* Completed */}
         <div
           style={{
-            background: "#374151",
+            background: "#ffffff",
+            color: "#202124",
+            border: "1px solid #f0e5df",
+            boxShadow: "0 8px 24px rgba(75,42,27,.06)",
             padding: "20px",
             borderRadius: "15px",
             textAlign: "center",
@@ -511,7 +523,9 @@ export default function FoodCourtPage() {
           <div
             style={{
               textAlign: "center",
-              background: "#222",
+              background: "#ffffff",
+              color: "#202124",
+              border: "1px solid #f0e5df",
               padding: "30px",
               borderRadius: "15px",
               maxWidth: "600px",
@@ -519,7 +533,7 @@ export default function FoodCourtPage() {
             }}
           >
             <h2>No orders here</h2>
-            <p style={{ color: "#aaa" }}>
+            <p style={{ color: "#756b66" }}>
               New customer orders will appear here
               automatically.
             </p>
@@ -545,11 +559,13 @@ export default function FoodCourtPage() {
             <div
               key={order.id}
               style={{
-                background: "#222",
+                background: "#ffffff",
+                color: "#202124",
+                border: "1px solid #f0e5df",
                 borderRadius: "18px",
                 padding: "22px",
                 boxShadow:
-                  "0 5px 20px rgba(0,0,0,0.3)",
+                  "0 12px 30px rgba(75,42,27,.08)",
               }}
             >
               {/* Order Header */}
@@ -588,7 +604,7 @@ export default function FoodCourtPage() {
               {/* Seat Information */}
               <div
                 style={{
-                  background: "#333",
+                  background: "#fff0e9",
                   padding: "15px",
                   borderRadius: "12px",
                   marginBottom: "15px",
@@ -612,7 +628,7 @@ export default function FoodCourtPage() {
 
               <div
                 style={{
-                  background: "#181818",
+                  background: "#fff8f4",
                   padding: "12px",
                   borderRadius: "10px",
                   marginBottom: "15px",

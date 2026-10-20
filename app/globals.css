@@ -117,7 +117,7 @@ img { max-width: 100%; }
   box-shadow: 0 3px 10px rgba(67,35,22,.035);
   white-space: nowrap;
 }
-.seatbite-categories button[style*="244, 81, 53"] {
+.seatbite-categories button.seatbite-category-active {
   background: #f45135 !important;
   color: #fff !important;
   border-color: #f45135 !important;

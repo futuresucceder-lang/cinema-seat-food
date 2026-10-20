@@ -413,7 +413,24 @@ function CustomerOrderPage() {
       <div className="seatbite-shell" style={{ maxWidth: "700px", margin: "0 auto" }}>
         {/* HEADER */}
         <div className="seatbite-header" style={{ textAlign: "center", marginBottom: "25px" }}>
-          <div className="seatbite-logo-mark">🍿</div>
+          <div className="seatbite-logo-mark" aria-label="Seat Bite logo">
+            <svg viewBox="0 0 72 72" role="img" aria-hidden="true">
+              <defs>
+                <linearGradient id="seatbiteLogoGradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#ff704f" />
+                  <stop offset="100%" stopColor="#e83d2b" />
+                </linearGradient>
+              </defs>
+              <rect x="8" y="8" width="56" height="56" rx="18" fill="url(#seatbiteLogoGradient)" />
+              <path d="M20 24h32l-3 7H23z" fill="#fff" />
+              <path d="M23 33h26l-3 22H26z" fill="#fff" />
+              <path d="M27 35l2 16M36 35v16M45 35l-2 16" stroke="#f45135" strokeWidth="2.4" strokeLinecap="round" />
+              <circle cx="27" cy="20" r="6" fill="#fff5dc" />
+              <circle cx="36" cy="17" r="7" fill="#fff5dc" />
+              <circle cx="45" cy="20" r="6" fill="#fff5dc" />
+              <path d="M27 14l2 4M36 10l1 5M45 14l-2 4" stroke="#ffcf6e" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </div>
 
           <h1
             style={{

@@ -239,8 +239,9 @@ export default function AdminDashboard() {
             marginBottom: "40px",
           }}
         >
-          <div style={{ fontSize: "55px" }}>
-            🎬
+          <div className="seatbite-dashboard-brand">
+            <span className="seatbite-dashboard-logo" aria-hidden="true">🍿</span>
+            <span className="seatbite-dashboard-wordmark">seat bite</span>
           </div>
 
           <h1
@@ -249,7 +250,7 @@ export default function AdminDashboard() {
               margin: "5px 0",
             }}
           >
-            Cinema Food Admin
+            Manager Dashboard
           </h1>
 
           <p
@@ -258,7 +259,7 @@ export default function AdminDashboard() {
               margin: 0,
             }}
           >
-            Manage cinema seat food orders
+            Your cinema, orders and daily performance
           </p>
 
           {cinemaName && (

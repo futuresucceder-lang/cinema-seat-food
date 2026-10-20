@@ -45,7 +45,7 @@ function CustomerOrderPage() {
       setMenuError("");
       const { data, error } = await supabase
         .from("food_items")
-        .select("id, cinema_id, name, description, price, image_url, category, emoji, is_available")
+        .select("*")
         .eq("cinema_id", cinemaId)
         .eq("is_available", true)
         .order("created_at", { ascending: true });

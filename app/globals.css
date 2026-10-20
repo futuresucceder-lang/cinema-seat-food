@@ -608,3 +608,24 @@ main:not(.seatbite-page) tr:last-child td { border-bottom: 0; }
  .seatbite-status-card { padding:17px; border-radius:17px; }
  .seatbite-status-topline { margin-bottom:16px; }
 }
+
+
+/* Customer menu: persistent access to previous orders */
+.seatbite-top-actions { display:flex; align-items:center; gap:10px; }
+.seatbite-my-orders-button { padding:10px 15px; white-space:nowrap; border:1px solid #f0d8cc; background:#fff; color:#7b3928; font-weight:800; cursor:pointer; }
+.seatbite-my-orders-button span { margin-left:5px; }
+.seatbite-my-orders-panel { margin:18px 0 24px; padding:20px; }
+.seatbite-my-orders-close { width:34px; height:34px; border:0; border-radius:50%; background:#fff0e8; color:#b44830; font-size:23px; cursor:pointer; }
+.seatbite-my-orders-list { display:grid; gap:10px; margin-top:14px; }
+.seatbite-my-order-row { display:flex; justify-content:space-between; align-items:center; gap:14px; padding:14px; border:1px solid #f0e5df; border-radius:15px; background:#fffdfa; }
+.seatbite-my-order-row>div { min-width:0; }
+.seatbite-my-order-row>div>strong { overflow-wrap:anywhere; font-size:13px; }
+.seatbite-my-order-row p { margin:5px 0 8px; color:#8c786d; font-size:12px; }
+.seatbite-my-order-row .seatbite-primary-button { width:auto; flex-shrink:0; padding:10px 13px; font-size:12px; }
+@media(max-width:600px) {
+ .seatbite-top-actions { align-items:flex-end; flex-direction:column; gap:8px; }
+ .seatbite-my-orders-button { padding:8px 12px; font-size:12px; }
+ .seatbite-my-orders-panel { padding:15px; }
+ .seatbite-my-order-row { align-items:flex-start; flex-direction:column; }
+ .seatbite-my-order-row .seatbite-primary-button { width:100%; }
+}

@@ -219,7 +219,8 @@ function CustomerOrderPage() {
             width: "100%",
             background: "#ffffff",
             padding: "30px",
-            borderRadius: "16px",
+            borderRadius: "20px",
+            boxShadow: "0 18px 50px rgba(67, 35, 22, 0.08)",
             textAlign: "center",
           }}
         >
@@ -285,7 +286,7 @@ function CustomerOrderPage() {
           <p
             style={{
               marginTop: "20px",
-              color: "#bbb",
+              color: "#756b66",
             }}
           >
             Your order has been received.
@@ -565,7 +566,9 @@ function CustomerOrderPage() {
                 style={{
                   background: "#ffffff",
                   padding: "16px",
-                  borderRadius: "15px",
+                  borderRadius: "16px",
+                  border: "1px solid #f0e5df",
+                  boxShadow: "0 4px 16px rgba(67, 35, 22, 0.04)",
                   marginBottom: "12px",
                   display: "flex",
                   alignItems: "center",
@@ -615,7 +618,7 @@ function CustomerOrderPage() {
                     }
                     style={{
                       background: "#f45135",
-                      color: "#202124",
+                      color: "#ffffff",
                       border: "none",
                       padding: "10px 18px",
                       borderRadius: "10px",
@@ -673,7 +676,7 @@ function CustomerOrderPage() {
                         border: "none",
                         borderRadius: "8px",
                         background: "#f45135",
-                        color: "#202124",
+                        color: "#ffffff",
                         fontSize: "20px",
                         cursor: "pointer",
                       }}
@@ -692,7 +695,9 @@ function CustomerOrderPage() {
           style={{
             background: "#ffffff",
             padding: "20px",
-            borderRadius: "15px",
+            borderRadius: "18px",
+            border: "1px solid #f0e5df",
+            boxShadow: "0 4px 16px rgba(67, 35, 22, 0.04)",
             marginTop: "25px",
           }}
         >
@@ -753,7 +758,7 @@ function CustomerOrderPage() {
                           "space-between",
                         padding: "10px 0",
                         borderBottom:
-                          "1px solid #333",
+                          "1px solid #f0e5df",
                       }}
                     >
                       <span>

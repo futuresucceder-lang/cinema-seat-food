@@ -112,8 +112,12 @@ function OrderStatusContent() {
       <div className="max-w-2xl mx-auto">
 
         <div className="text-center mb-8">
+          <div className="seatbite-dashboard-brand">
+            <span className="seatbite-dashboard-logo" aria-hidden="true">🍿</span>
+            <span className="seatbite-dashboard-wordmark">seat bite</span>
+          </div>
           <h1 className="text-3xl font-bold">
-            🎬 Track Your Order
+            Track Your Order
           </h1>
 
           <p className="text-[#756b66] mt-2">

@@ -171,37 +171,46 @@ export default function MasterAdminPage() {
     return password;
   }
 
-  function openAccountEditor(cinema: Cinema) {
+  async function openAccountEditor(cinema: Cinema) {
     if (openCinemaId === cinema.id) {
       setOpenCinemaId(null);
       return;
     }
 
-    const slug = createSlug(cinema.name) || "cinema";
-    const shortId = cinema.id.slice(0, 8);
-
+    setError("");
+    setOpenCinemaId(cinema.id);
     setAccountForms((current) => ({
       ...current,
       [cinema.id]: {
-        managerEmail:
-          current[cinema.id]?.managerEmail ||
-          `manager.${slug}.${shortId}@cinema.com`,
-
-        managerPassword:
-          current[cinema.id]?.managerPassword ||
-          generatePassword(),
-
-        foodCourtEmail:
-          current[cinema.id]?.foodCourtEmail ||
-          `foodcourt.${slug}.${shortId}@cinema.com`,
-
-        foodCourtPassword:
-          current[cinema.id]?.foodCourtPassword ||
-          generatePassword(),
+        managerEmail: current[cinema.id]?.managerEmail || "",
+        managerPassword: "",
+        foodCourtEmail: current[cinema.id]?.foodCourtEmail || "",
+        foodCourtPassword: "",
       },
     }));
 
-    setOpenCinemaId(cinema.id);
+    try {
+      const response = await fetch(
+        `/api/master-admin/accounts?cinemaId=${encodeURIComponent(cinema.id)}`
+      );
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Could not load saved account details.");
+      }
+
+      setAccountForms((current) => ({
+        ...current,
+        [cinema.id]: {
+          managerEmail: result.accounts?.manager?.email || current[cinema.id]?.managerEmail || "",
+          managerPassword: "",
+          foodCourtEmail: result.accounts?.food_court?.email || current[cinema.id]?.foodCourtEmail || "",
+          foodCourtPassword: "",
+        },
+      }));
+    } catch (error) {
+      console.error(error);
+      setError(error instanceof Error ? error.message : "Could not load account details.");
+    }
   }
 
   function updateAccountField(
@@ -226,21 +235,18 @@ export default function MasterAdminPage() {
       return;
     }
 
-    if (
-      !form.managerEmail.trim() ||
-      !form.managerPassword ||
-      !form.foodCourtEmail.trim() ||
-      !form.foodCourtPassword
-    ) {
-      alert("Please fill in all four account fields.");
+    if (!form.managerEmail.trim() || !form.foodCourtEmail.trim()) {
+      alert("Please enter both the Manager and Food Court login emails.");
       return;
     }
 
-    if (
-      form.managerPassword.length < 6 ||
-      form.foodCourtPassword.length < 6
-    ) {
-      alert("Passwords must be at least 6 characters.");
+    if (form.managerPassword && form.managerPassword.length < 6) {
+      alert("Manager password must be at least 6 characters, or leave it blank to keep the current password.");
+      return;
+    }
+
+    if (form.foodCourtPassword && form.foodCourtPassword.length < 6) {
+      alert("Food Court password must be at least 6 characters, or leave it blank to keep the current password.");
       return;
     }
 

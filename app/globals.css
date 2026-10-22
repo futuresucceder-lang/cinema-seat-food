@@ -1040,3 +1040,99 @@ h1,h2,h3,.seatbite-wordmark,.seatbite-dashboard-wordmark { letter-spacing:-.035e
  .seatbite-food-grid { gap:8px !important; }
  .seatbite-product-content { padding:9px !important; }
 }
+
+
+/* Accessibility and contrast repair after the reference redesign.
+   Keep text readable in manager, cinema setup, and login forms even when
+   older inline styles or page-specific selectors are present. */
+:root {
+  --background: #f4f3f0;
+  --foreground: #111111;
+  --brand: #ff0038;
+  --brand-hover: #d9002e;
+  --surface: #ffffff;
+  --muted: #656565;
+  --border: #deddd9;
+}
+input, textarea, select {
+  color: #151515 !important;
+  -webkit-text-fill-color: #151515;
+  caret-color: #ff0038;
+}
+input::placeholder, textarea::placeholder {
+  color: #777777 !important;
+  opacity: 1;
+  -webkit-text-fill-color: #777777;
+}
+input:disabled, textarea:disabled, select:disabled {
+  color: #555555 !important;
+  -webkit-text-fill-color: #555555;
+  opacity: 1;
+}
+/* Light input fields in dashboards and cinema/screen/seat forms */
+.seatbite-manager-page input,
+.seatbite-manager-page textarea,
+.seatbite-manager-page select,
+.seatbite-food-court-page input,
+.seatbite-food-court-page textarea,
+.seatbite-food-court-page select,
+.seatbite-dashboard-page input,
+.seatbite-dashboard-page textarea,
+.seatbite-dashboard-page select {
+  background: #ffffff !important;
+  color: #151515 !important;
+  -webkit-text-fill-color: #151515 !important;
+  border: 1px solid #d6d4d0 !important;
+}
+.seatbite-manager-page input::placeholder,
+.seatbite-food-court-page input::placeholder,
+.seatbite-dashboard-page input::placeholder,
+.seatbite-manager-page textarea::placeholder,
+.seatbite-food-court-page textarea::placeholder {
+  color: #777777 !important;
+  -webkit-text-fill-color: #777777 !important;
+}
+/* Dark login panels retain dark fields, but entered text stays white and visible. */
+.seatbite-auth-page input,
+.seatbite-login-page input,
+.auth-page input,
+.seatbite-auth-card input,
+.seatbite-login-card input,
+.auth-card input,
+.seatbite-manager-login input,
+.seatbite-food-court-login input,
+form[data-theme="dark"] input {
+  background: #101010 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ff0038 !important;
+  border: 1px solid #4a4a4a !important;
+}
+.seatbite-auth-page input::placeholder,
+.seatbite-login-page input::placeholder,
+.auth-page input::placeholder,
+.seatbite-auth-card input::placeholder,
+.seatbite-login-card input::placeholder,
+.auth-card input::placeholder,
+.seatbite-manager-login input::placeholder,
+.seatbite-food-court-login input::placeholder,
+form[data-theme="dark"] input::placeholder {
+  color: #bcbcbc !important;
+  -webkit-text-fill-color: #bcbcbc !important;
+}
+/* Restore clear contrast on white content panels and tables. */
+.seatbite-manager-page section,
+.seatbite-food-court-page section,
+.seatbite-dashboard-page section {
+  color: #171717;
+}
+.seatbite-manager-page td,
+.seatbite-food-court-page td,
+.seatbite-dashboard-page td {
+  color: #242424;
+}
+.seatbite-manager-page th,
+.seatbite-food-court-page th,
+.seatbite-dashboard-page th {
+  color: #111111;
+}

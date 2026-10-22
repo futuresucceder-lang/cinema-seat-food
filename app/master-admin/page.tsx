@@ -9,6 +9,27 @@ type Cinema = {
   created_at: string;
 };
 
+type RevenueSummary = {
+  generatedAt: string;
+  summary: {
+    completedRevenue: number;
+    completedOrders: number;
+    totalOrders: number;
+    activeOrders: number;
+    cinemaCount: number;
+  };
+  cinemas: Array<{
+    cinemaId: string;
+    cinemaName: string;
+    completedRevenue: number;
+    completedOrders: number;
+    allOrders: number;
+    activeOrders: number;
+  }>;
+  daily: Array<{ date: string; revenue: number; orders: number }>;
+  revenueDefinition: string;
+};
+
 type AccountForm = {
   managerEmail: string;
   managerPassword: string;
@@ -24,6 +45,9 @@ export default function MasterAdminPage() {
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
   const [error, setError] = useState("");
+  const [revenue, setRevenue] = useState<RevenueSummary | null>(null);
+  const [revenueLoading, setRevenueLoading] = useState(true);
+  const [revenueError, setRevenueError] = useState("");
 
   const [openCinemaId, setOpenCinemaId] = useState<string | null>(null);
 
@@ -54,8 +78,24 @@ export default function MasterAdminPage() {
     setLoading(false);
   }
 
+  async function loadRevenue() {
+    setRevenueLoading(true);
+    setRevenueError("");
+    try {
+      const response = await fetch("/api/master-admin/revenue", { cache: "no-store" });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Could not load revenue.");
+      setRevenue(result as RevenueSummary);
+    } catch (error) {
+      setRevenueError(error instanceof Error ? error.message : "Could not load revenue.");
+    } finally {
+      setRevenueLoading(false);
+    }
+  }
+
   useEffect(() => {
     loadCinemas();
+    loadRevenue();
   }, []);
 
   async function addCinema() {
@@ -395,6 +435,98 @@ export default function MasterAdminPage() {
             Manage cinemas, managers and food court staff
           </p>
         </div>
+
+        {/* REVENUE OVERVIEW */}
+        <section
+          aria-labelledby="master-revenue-heading"
+          style={{
+            background: "#fff",
+            padding: "25px",
+            borderRadius: "16px",
+            marginBottom: "25px",
+            border: "1px solid #f0e5df",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+            <div>
+              <p style={{ margin: "0 0 6px", color: "#d92727", fontWeight: 800, letterSpacing: "1px", fontSize: "12px" }}>BUSINESS OVERVIEW</p>
+              <h2 id="master-revenue-heading" style={{ margin: 0 }}>💰 All-Cinema Revenue</h2>
+              <p style={{ color: "#666", margin: "8px 0 0", fontSize: "13px" }}>Revenue from orders marked COMPLETED.</p>
+            </div>
+            <button type="button" onClick={loadRevenue} disabled={revenueLoading} style={{ border: 0, borderRadius: "9px", padding: "10px 15px", background: "#d92727", color: "#fff", fontWeight: 700, cursor: revenueLoading ? "wait" : "pointer" }}>
+              {revenueLoading ? "Refreshing…" : "↻ Refresh"}
+            </button>
+          </div>
+
+          {revenueError && (
+            <div role="alert" style={{ marginTop: "16px", padding: "12px", borderRadius: "9px", background: "#fff0f0", color: "#a31919" }}>
+              {revenueError} — Check that you are signed in as Master Admin and that SUPABASE_SERVICE_ROLE_KEY is configured on the server.
+            </div>
+          )}
+
+          {revenueLoading && !revenue ? (
+            <p style={{ color: "#666", marginTop: "20px" }}>Loading revenue summary…</p>
+          ) : revenue ? (
+            <>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(165px, 1fr))", gap: "12px", marginTop: "22px" }}>
+                {[
+                  { label: "Completed Revenue", value: new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 }).format(revenue.summary.completedRevenue) },
+                  { label: "Completed Orders", value: revenue.summary.completedOrders.toLocaleString("en-IN") },
+                  { label: "Active Orders", value: revenue.summary.activeOrders.toLocaleString("en-IN") },
+                  { label: "Total Orders", value: revenue.summary.totalOrders.toLocaleString("en-IN") },
+                  { label: "Cinemas", value: revenue.summary.cinemaCount.toLocaleString("en-IN") },
+                ].map((stat) => (
+                  <div key={stat.label} style={{ border: "1px solid #eee", borderRadius: "12px", padding: "16px", background: "#fffdfc", minWidth: 0 }}>
+                    <div style={{ color: "#666", fontSize: "12px", fontWeight: 700, marginBottom: "8px" }}>{stat.label}</div>
+                    <div style={{ color: "#171717", fontSize: "clamp(18px, 2.5vw, 25px)", fontWeight: 900, overflowWrap: "anywhere" }}>{stat.value}</div>
+                  </div>
+                ))}
+              </div>
+
+              <h3 style={{ margin: "26px 0 12px" }}>Revenue by Cinema</h3>
+              {revenue.cinemas.length === 0 ? (
+                <p style={{ color: "#666" }}>No cinemas have been added yet.</p>
+              ) : (
+                <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "520px" }}>
+                    <thead>
+                      <tr style={{ textAlign: "left", background: "#f7f7f7" }}>
+                        {["Cinema", "Completed Revenue", "Completed Orders", "Active Orders"].map((heading) => (
+                          <th key={heading} style={{ padding: "12px", fontSize: "12px", color: "#444", borderBottom: "1px solid #e5e5e5" }}>{heading}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {revenue.cinemas.map((cinema) => (
+                        <tr key={cinema.cinemaId}>
+                          <td style={{ padding: "13px 12px", borderBottom: "1px solid #eee", fontWeight: 700, color: "#171717" }}>{cinema.cinemaName}</td>
+                          <td style={{ padding: "13px 12px", borderBottom: "1px solid #eee", color: "#171717", fontWeight: 800 }}>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2 }).format(cinema.completedRevenue)}</td>
+                          <td style={{ padding: "13px 12px", borderBottom: "1px solid #eee", color: "#444" }}>{cinema.completedOrders}</td>
+                          <td style={{ padding: "13px 12px", borderBottom: "1px solid #eee", color: "#444" }}>{cinema.activeOrders}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              <h3 style={{ margin: "26px 0 12px" }}>Last 7 Days</h3>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(105px, 1fr))", gap: "8px" }}>
+                {revenue.daily.map((day) => (
+                  <div key={day.date} style={{ padding: "12px", background: "#f8f8f8", borderRadius: "10px" }}>
+                    <div style={{ fontSize: "12px", color: "#666", marginBottom: "7px" }}>{new Date(day.date + "T12:00:00").toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</div>
+                    <div style={{ fontWeight: 800, color: "#171717", fontSize: "14px" }}>{new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(day.revenue)}</div>
+                    <div style={{ fontSize: "11px", color: "#666", marginTop: "5px" }}>{day.orders} completed</div>
+                  </div>
+                ))}
+              </div>
+              <p style={{ color: "#777", fontSize: "12px", lineHeight: 1.5, marginTop: "18px" }}>{revenue.revenueDefinition} Refreshed {new Date(revenue.generatedAt).toLocaleString("en-IN")}.</p>
+            </>
+          ) : !revenueError ? (
+            <p style={{ color: "#666", marginTop: "20px" }}>Revenue summary is not available yet.</p>
+          ) : null}
+        </section>
 
         {/* ADD CINEMA */}
         <section

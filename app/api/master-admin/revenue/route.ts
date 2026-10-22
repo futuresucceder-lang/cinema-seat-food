@@ -39,8 +39,21 @@ export async function GET() {
       .eq("id", user.id)
       .maybeSingle();
 
-    if (profileError || profile?.role !== "master_admin") {
-      return NextResponse.json({ error: "Master Admin access required." }, { status: 403 });
+    // The existing Master Admin login flow stores trusted roles in Supabase
+    // app_metadata. Some older accounts may also have the role in profiles.
+    // Never use user_metadata for authorization because users can edit it.
+    const trustedRole = user.app_metadata?.role;
+    if (profileError || (trustedRole !== "master_admin" && profile?.role !== "master_admin")) {
+      console.warn("Master Admin revenue denied:", {
+        userId: user.id,
+        appRole: trustedRole ?? null,
+        profileRole: profile?.role ?? null,
+        profileLookupError: profileError?.message ?? null,
+      });
+      return NextResponse.json(
+        { error: "Master Admin access required. Your account role is not recognized by the server. Please sign out and back in after verifying the Master Admin role." },
+        { status: 403 }
+      );
     }
 
     const [{ data: cinemas, error: cinemaError }, firstPage] = await Promise.all([

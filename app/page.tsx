@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/client";
 
 type Category = "All" | "Snacks" | "Drinks" | "Meals";
 type SavedOrder = { order_code: string; status: string; screen: string; seat: string; created_at: string };
+type ShowSchedule = { id: string; show_end_at: string };
+type DeliveryOption = "NOW" | "INTERVAL";
 type FoodItem = {
   id: string;
   name: string;
@@ -37,6 +39,10 @@ function CustomerOrderPage() {
   const [showMyOrders, setShowMyOrders] = useState(false);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [ordersError, setOrdersError] = useState("");
+  const [deliveryOption, setDeliveryOption] = useState<DeliveryOption>("NOW");
+  const [showSchedule, setShowSchedule] = useState<ShowSchedule | null>(null);
+  const [scheduleChecked, setScheduleChecked] = useState(false);
+  const [currentTime, setCurrentTime] = useState(Date.now());
 
   useEffect(() => {
     let cancelled = false;
@@ -86,6 +92,23 @@ function CustomerOrderPage() {
     loadMenu();
     return () => { cancelled = true; };
   }, [cinemaId, supabase]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadShowSchedule() {
+      if (!cinemaId || !screen) { setShowSchedule(null); setScheduleChecked(true); return; }
+      const { data, error } = await supabase.from("show_schedules").select("id,show_end_at")
+        .eq("cinema_id", cinemaId).eq("screen", screen)
+        .gt("show_end_at", new Date().toISOString()).order("show_end_at", { ascending: true }).limit(1).maybeSingle();
+      if (cancelled) return;
+      if (error) { console.error("Could not load show schedule:", error); setShowSchedule(null); }
+      else setShowSchedule(data as ShowSchedule | null);
+      setScheduleChecked(true);
+    }
+    loadShowSchedule();
+    const clock = window.setInterval(() => setCurrentTime(Date.now()), 15000);
+    return () => { cancelled = true; window.clearInterval(clock); };
+  }, [cinemaId, screen, supabase]);
 
   useEffect(() => {
     let cancelled = false;
@@ -150,7 +173,13 @@ function CustomerOrderPage() {
     return sum + (item?.price || 0) * quantity;
   }, 0);
 
+  const showEndMs = showSchedule ? new Date(showSchedule.show_end_at).getTime() : null;
+  const orderCutoffMs = showEndMs === null ? null : showEndMs - 30 * 60 * 1000;
+  const orderingClosed = orderCutoffMs !== null && currentTime >= orderCutoffMs;
+  const cutoffLabel = orderCutoffMs === null ? "" : new Date(orderCutoffMs).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+
   async function handleCheckout() {
+    if (orderingClosed) { alert("Online food ordering for this show closed 30 minutes before the show ends. Please contact cinema staff."); return; }
     if (!cinemaId || !screen || !seat) {
       alert("This QR code is missing the cinema, screen, or seat information. Please scan the QR code at your seat again.");
       return;
@@ -182,6 +211,7 @@ function CustomerOrderPage() {
       food_items: orderedFoodItems,
       total,
       status: "NEW",
+      delivery_option: deliveryOption,
     });
     if (error) {
       console.error("Order error:", error);
@@ -259,7 +289,7 @@ function CustomerOrderPage() {
           <div className="seatbite-hero-copy">
             <p className="seatbite-eyebrow">YOUR SEAT. YOUR SNACKS.</p>
             <h1>Movie magic.<br /><span>Made tastier.</span></h1>
-            <p>Cravings don’t wait for intermission. Order your favourites and we’ll bring them to you.</p>
+            <p>Order your favourites and choose delivery now or during the interval.</p>
             <div className="seatbite-hero-tags"><span>✦ Freshly prepared</span><span>✦ Delivered to your seat</span></div>
           </div>
           <div className="seatbite-hero-art" aria-hidden="true">
@@ -292,6 +322,22 @@ function CustomerOrderPage() {
             }
           </section>
         )}
+        <section className="seatbite-seat-strip" aria-label="Delivery timing" style={{display:"block",marginTop:14}}>
+          <div style={{fontWeight:800,marginBottom:10,color:"#202124"}}>When would you like your order?</div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(190px,1fr))",gap:10}}>
+            <label style={{display:"flex",alignItems:"flex-start",gap:10,padding:13,border:"1px solid "+(deliveryOption==="NOW"?"#f45135":"#e8d8d1"),borderRadius:12,background:deliveryOption==="NOW"?"#fff0e9":"#fff",cursor:"pointer",color:"#202124"}}>
+              <input type="radio" name="deliveryOption" checked={deliveryOption==="NOW"} onChange={()=>setDeliveryOption("NOW")} style={{marginTop:4,accentColor:"#f45135"}} />
+              <span><strong>Deliver Now</strong><br/><small>Bring it to my seat as soon as possible.</small></span>
+            </label>
+            <label style={{display:"flex",alignItems:"flex-start",gap:10,padding:13,border:"1px solid "+(deliveryOption==="INTERVAL"?"#f45135":"#e8d8d1"),borderRadius:12,background:deliveryOption==="INTERVAL"?"#fff0e9":"#fff",cursor:"pointer",color:"#202124"}}>
+              <input type="radio" name="deliveryOption" checked={deliveryOption==="INTERVAL"} onChange={()=>setDeliveryOption("INTERVAL")} style={{marginTop:4,accentColor:"#f45135"}} />
+              <span><strong>Deliver During Interval</strong><br/><small>Prepare it for the movie break.</small></span>
+            </label>
+          </div>
+          {showSchedule && !orderingClosed && <p style={{margin:"10px 0 0",fontSize:13,color:"#59473f"}}>Ordering closes at {cutoffLabel} (30 minutes before this show ends).</p>}
+          {orderingClosed && <p role="alert" style={{margin:"10px 0 0",fontWeight:800,color:"#b42318"}}>Ordering is closed for this show. Please contact cinema staff.</p>}
+          {!scheduleChecked && <p style={{margin:"8px 0 0",fontSize:12,color:"#756b66"}}>Checking show ordering time…</p>}
+        </section>
         <section className="seatbite-menu-heading">
           <div><p className="seatbite-eyebrow">THE GOOD STUFF</p><h2>What are you craving?</h2><p>Little treats for your big-screen moments.</p></div>
           <span className="seatbite-menu-count">{menuLoading ? "Loading menu…" : filteredFoodItems.length + " delicious picks"}</span>
@@ -334,7 +380,7 @@ function CustomerOrderPage() {
           <div className="seatbite-cart-heading"><div className="seatbite-cart-icon">🛍️</div><div><h2>Your snack box</h2><p>{itemCount === 0 ? "Your movie treats will show up here." : itemCount + " item" + (itemCount !== 1 ? "s" : "") + " selected for your show"}</p></div><span className="seatbite-cart-count">{itemCount}</span></div>
           {itemCount > 0 && <div className="seatbite-cart-lines">{Object.entries(cart).map(([id, quantity]) => { const item = foodItems.find((food) => food.id === id); if (!item) return null; return <div className="seatbite-cart-line" key={id}><span>{item.emoji} {item.name} <small>× {quantity}</small></span><strong>₹{item.price * quantity}</strong></div>; })}</div>}
           <div className="seatbite-cart-total"><span>Order total</span><strong>₹{total}</strong></div>
-          <button className="seatbite-primary-button seatbite-full-button" onClick={handleCheckout} disabled={isSubmitting || menuLoading || !!menuError || itemCount === 0}>{isSubmitting ? "Placing your order…" : <>Continue to order <span>→</span></>}</button>
+          <button className="seatbite-primary-button seatbite-full-button" onClick={handleCheckout} disabled={isSubmitting || menuLoading || !!menuError || itemCount === 0 || orderingClosed}>{orderingClosed ? "Ordering closed for this show" : isSubmitting ? "Placing your order…" : <>Continue to order <span>→</span></>}</button>
           <p className="seatbite-secure-note">♡ Made for your movie moment</p>
         </section>
         <footer className="seatbite-footer"><span>🍿 seatbite</span><span>Good food. Great movies.</span></footer>

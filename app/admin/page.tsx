@@ -407,6 +407,14 @@ export default function AdminDashboard() {
             badge="Manage QR codes"
           />
 
+          <AdminCard
+            href="/show-schedule"
+            icon="⏱️"
+            title="Show Schedule"
+            description="Set show end times and close ordering 30 minutes before the end."
+            badge="Manage show times"
+          />
+
           {/* Screens & Seats */}
           <AdminCard
             href="/screens-seats"

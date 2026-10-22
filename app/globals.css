@@ -1136,3 +1136,38 @@ form[data-theme="dark"] input::placeholder {
 .seatbite-dashboard-page th {
   color: #111111;
 }
+
+
+/* Customer menu on phones: one full-width food card per row, as requested. */
+@media (max-width: 800px) {
+  .seatbite-food-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .seatbite-product-card {
+    display: grid !important;
+    grid-template-columns: 112px minmax(0, 1fr) !important;
+    align-items: stretch !important;
+    min-width: 0;
+  }
+  .seatbite-product-image-wrap {
+    height: 100% !important;
+    min-height: 112px;
+  }
+  .seatbite-product-image,
+  .seatbite-product-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 112px;
+  }
+  .seatbite-product-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+}
+@media (max-width: 420px) {
+  .seatbite-product-card {
+    grid-template-columns: 100px minmax(0, 1fr) !important;
+  }
+}

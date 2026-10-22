@@ -54,6 +54,7 @@ router.refresh();
 
   return (
     <main
+      className="seatbite-manager-login"
       style={{
         minHeight: "100vh",
         background: "#111",

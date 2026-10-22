@@ -13,6 +13,7 @@ export default function ShowSchedulePage() {
   const [showStartAt, setShowStartAt] = useState("");
   const [showEndAt, setShowEndAt] = useState("");
   const [schedules, setSchedules] = useState<ShowSchedule[]>([]);
+  const [now, setNow] = useState(() => Date.now());
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
@@ -35,7 +36,14 @@ export default function ShowSchedulePage() {
     setLoading(false);
   }
 
-  useEffect(() => { void load(); }, []);
+  useEffect(() => {
+    void load();
+    const timer = window.setInterval(() => setNow(Date.now()), 30_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  // Keep expired shows in the database for records, but hide them from the active schedule list.
+  const activeSchedules = schedules.filter(item => new Date(item.show_end_at).getTime() > now);
 
   async function addSchedule(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -94,8 +102,8 @@ export default function ShowSchedulePage() {
       </form>
       {message && <p role="status" style={{padding:12,background:"#fff",border:"1px solid #deddd9",borderRadius:9,color:"#8a102b",fontWeight:750}}>{message}</p>}
       <h2 style={{marginTop:28}}>Saved shows</h2>
-      {loading ? <p>Loading shows…</p> : schedules.length===0 ? <p>No shows added yet. Add a screen and its start/end time above.</p> :
-        <div style={{display:"grid",gap:10}}>{schedules.map(item=><article key={item.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap",padding:16,background:"#fff",border:"1px solid #deddd9",borderLeft:"4px solid #ff0038",borderRadius:10}}>
+      {loading ? <p>Loading shows…</p> : activeSchedules.length===0 ? <p>No active shows. Add a new show and its start/end time above.</p> :
+        <div style={{display:"grid",gap:10}}>{activeSchedules.map(item=><article key={item.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,flexWrap:"wrap",padding:16,background:"#fff",border:"1px solid #deddd9",borderLeft:"4px solid #ff0038",borderRadius:10}}>
           <div>
             <strong style={{fontSize:17}}>Screen {item.screen}</strong>
             <p style={{margin:"7px 0",color:"#242424"}}><strong>Starts:</strong> {new Date(item.show_start_at).toLocaleString()}</p>

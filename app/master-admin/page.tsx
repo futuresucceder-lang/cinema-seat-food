@@ -58,6 +58,54 @@ export default function MasterAdminPage() {
   const [savingAccounts, setSavingAccounts] = useState<
     Record<string, boolean>
   >({});
+  const [authReady, setAuthReady] = useState(false);
+  const [isMasterAdmin, setIsMasterAdmin] = useState(false);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [signingIn, setSigningIn] = useState(false);
+
+  async function checkMasterAdmin() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      setIsMasterAdmin(false);
+      setAuthReady(true);
+      return false;
+    }
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
+    const allowed = user.app_metadata?.role === "master_admin" || profile?.role === "master_admin";
+    setIsMasterAdmin(Boolean(allowed));
+    setAuthReady(true);
+    return Boolean(allowed);
+  }
+
+  async function handleMasterAdminLogin(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSigningIn(true);
+    setAuthError("");
+    const { error } = await supabase.auth.signInWithPassword({ email: loginEmail.trim(), password: loginPassword });
+    if (error) {
+      setAuthError("Login failed. Check your email and password.");
+      setSigningIn(false);
+      return;
+    }
+    const allowed = await checkMasterAdmin();
+    if (!allowed) {
+      await supabase.auth.signOut();
+      setAuthError("This account does not have Master Admin access.");
+    } else {
+      await Promise.all([loadCinemas(), loadRevenue()]);
+    }
+    setSigningIn(false);
+  }
+
+  async function handleMasterAdminLogout() {
+    await supabase.auth.signOut();
+    setIsMasterAdmin(false);
+    setCinemas([]);
+    setRevenue(null);
+    setLoginPassword("");
+  }
 
   async function loadCinemas() {
     setLoading(true);
@@ -94,8 +142,12 @@ export default function MasterAdminPage() {
   }
 
   useEffect(() => {
-    loadCinemas();
-    loadRevenue();
+    let active = true;
+    (async () => {
+      const allowed = await checkMasterAdmin();
+      if (active && allowed) await Promise.all([loadCinemas(), loadRevenue()]);
+    })();
+    return () => { active = false; };
   }, []);
 
   async function addCinema() {
@@ -392,6 +444,28 @@ export default function MasterAdminPage() {
     }
   }
 
+  if (!authReady) {
+    return <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", background: "#fff8f4", fontFamily: "Arial, sans-serif" }}><p>Checking Master Admin access…</p></main>;
+  }
+
+  if (!isMasterAdmin) {
+    return (
+      <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: "24px", background: "#fff8f4", fontFamily: "Arial, sans-serif" }}>
+        <form onSubmit={handleMasterAdminLogin} style={{ width: "100%", maxWidth: "420px", background: "#fff", padding: "30px", borderRadius: "16px", boxShadow: "0 8px 30px rgba(0,0,0,0.10)", boxSizing: "border-box" }}>
+          <div style={{ fontSize: "30px", fontWeight: 900, color: "#d92727" }}>🍿 seat bite</div>
+          <h1 style={{ margin: "18px 0 8px", color: "#171717" }}>Master Admin Login</h1>
+          <p style={{ color: "#666", marginBottom: "22px" }}>Sign in with your authorized Master Admin account.</p>
+          <label htmlFor="master-admin-email" style={{ display: "block", fontWeight: 700, marginBottom: "6px" }}>Email</label>
+          <input id="master-admin-email" type="email" autoComplete="username" required value={loginEmail} onChange={e => setLoginEmail(e.target.value)} style={{ width: "100%", boxSizing: "border-box", padding: "12px", border: "1px solid #ccc", borderRadius: "8px", marginBottom: "16px" }} />
+          <label htmlFor="master-admin-password" style={{ display: "block", fontWeight: 700, marginBottom: "6px" }}>Password</label>
+          <input id="master-admin-password" type="password" autoComplete="current-password" required value={loginPassword} onChange={e => setLoginPassword(e.target.value)} style={{ width: "100%", boxSizing: "border-box", padding: "12px", border: "1px solid #ccc", borderRadius: "8px", marginBottom: "16px" }} />
+          {authError && <p role="alert" style={{ color: "#b00020", background: "#fff0f0", padding: "10px", borderRadius: "8px" }}>{authError}</p>}
+          <button type="submit" disabled={signingIn} style={{ width: "100%", border: 0, borderRadius: "8px", padding: "13px", background: signingIn ? "#999" : "#d92727", color: "#fff", fontWeight: 800, cursor: signingIn ? "wait" : "pointer" }}>{signingIn ? "Signing in…" : "Sign In"}</button>
+        </form>
+      </main>
+    );
+  }
+
   return (
     <main
       style={{
@@ -421,6 +495,7 @@ export default function MasterAdminPage() {
             <span className="seatbite-dashboard-logo" aria-hidden="true">🍿</span>
             <span className="seatbite-dashboard-wordmark">seat bite</span>
           </div>
+          <button type="button" onClick={handleMasterAdminLogout} style={{ float: "right", border: "1px solid #777", borderRadius: "8px", padding: "9px 13px", background: "#333", color: "#fff", cursor: "pointer" }}>Sign Out</button>
           <h1 style={{ margin: "18px 0 0", fontSize: "30px" }}>
             🛡️ Master Admin
           </h1>

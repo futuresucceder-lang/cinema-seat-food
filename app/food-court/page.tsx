@@ -35,6 +35,11 @@ export default function FoodCourtPage() {
   const [cinemaId, setCinemaId] = useState<string | null>(null);
   const [authError, setAuthError] = useState("");
 
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    window.location.assign("/manager-login");
+  }
+
   async function getFoodCourtCinemaId() {
     const {
       data: { user },
@@ -280,6 +285,23 @@ export default function FoodCourtPage() {
         >
           Food Court Dashboard
         </h1>
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "14px" }}>
+          <button
+            type="button"
+            onClick={handleSignOut}
+            style={{
+              padding: "11px 20px",
+              border: "1px solid #f05236",
+              borderRadius: "9px",
+              background: "#fff",
+              color: "#b42318",
+              fontWeight: "700",
+              cursor: "pointer",
+            }}
+          >
+            ↪ Sign Out
+          </button>
+        </div>
       </header>
 
       <p

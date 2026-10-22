@@ -9,6 +9,7 @@ export default function ManagerLoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -168,26 +169,47 @@ router.refresh();
             Password
           </label>
 
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder="Enter password"
-            required
-            autoComplete="current-password"
-            style={{
-              width: "100%",
-              boxSizing: "border-box",
-              padding: "13px",
-              borderRadius: "8px",
-              border: "1px solid #444",
-              background: "#111",
-              color: "white",
-              marginBottom: "22px",
-              fontSize: "16px",
-            }}
-          />
+          <div style={{ position: "relative", marginBottom: "22px" }}>
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              placeholder="Enter password"
+              required
+              autoComplete="current-password"
+              style={{
+                width: "100%",
+                boxSizing: "border-box",
+                padding: "13px 76px 13px 13px",
+                borderRadius: "8px",
+                border: "1px solid #444",
+                background: "#111",
+                color: "white",
+                fontSize: "16px",
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((visible) => !visible)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-pressed={showPassword}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                border: "none",
+                background: "transparent",
+                color: "#f5a49b",
+                fontWeight: "700",
+                cursor: "pointer",
+                padding: "6px",
+              }}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
 
           <button
             type="submit"

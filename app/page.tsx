@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 type Category = "All" | "Snacks" | "Drinks" | "Meals";
-type SavedOrder = { order_code: string; status: string; screen: string; seat: string; created_at: string };
+type SavedOrder = { order_code: string; status: string; screen: string; seat: string; created_at: string; delivery_option?: string | null };
 type ShowSchedule = { id: string; show_end_at: string };
 type DeliveryOption = "NOW" | "INTERVAL";
 type FoodItem = {
@@ -127,7 +127,7 @@ function CustomerOrderPage() {
         }
         const { data, error } = await supabase
           .from("orders")
-          .select("order_code,status,screen,seat,created_at")
+          .select("order_code,status,screen,seat,created_at,delivery_option")
           .eq("cinema_id", cinemaId)
           .in("order_code", codes)
           .order("created_at", { ascending: false });
@@ -225,7 +225,7 @@ function CustomerOrderPage() {
     } catch (error) {
       console.warn("Could not save order code on this device:", error);
     }
-    setSavedOrders((previous) => [{ order_code: newOrderCode, status: "NEW", screen, seat, created_at: new Date().toISOString() }, ...previous.filter((item) => item.order_code !== newOrderCode)]);
+    setSavedOrders((previous) => [{ order_code: newOrderCode, status: "NEW", screen, seat, created_at: new Date().toISOString(), delivery_option: deliveryOption }, ...previous.filter((item) => item.order_code !== newOrderCode)]);
     setOrderCode(newOrderCode);
     setOrderPlaced(true);
     setIsSubmitting(false);
@@ -315,7 +315,7 @@ function CustomerOrderPage() {
               savedOrders.length === 0 ? <p className="seatbite-muted">No saved orders found on this device yet. After placing an order, you can come back here anytime to track it.</p> :
               <div className="seatbite-my-orders-list">{savedOrders.map((savedOrder) => (
                 <div className="seatbite-my-order-row" key={savedOrder.order_code}>
-                  <div><strong>{savedOrder.order_code}</strong><p>Screen {savedOrder.screen} · Seat {savedOrder.seat}</p><span className={"seatbite-status-badge status-" + (savedOrder.status || "NEW").toLowerCase()}>{(savedOrder.status || "NEW").replace("_", " ")}</span></div>
+                  <div><strong>{savedOrder.order_code}</strong><p>Screen {savedOrder.screen} · Seat {savedOrder.seat}</p><span style={{display:"inline-block",margin:"4px 6px 4px 0",padding:"5px 9px",borderRadius:20,background:savedOrder.delivery_option==="INTERVAL"?"#fff0d9":"#e4f6e9",color:savedOrder.delivery_option==="INTERVAL"?"#8a4b00":"#176534",fontSize:12,fontWeight:800}}>{savedOrder.delivery_option==="INTERVAL"?"⏱ Deliver During Interval":"⚡ Deliver Now"}</span><span className={"seatbite-status-badge status-" + (savedOrder.status || "NEW").toLowerCase()}>{(savedOrder.status || "NEW").replace("_", " ")}</span></div>
                   <button type="button" className="seatbite-primary-button" onClick={() => router.push("/order-status?order=" + encodeURIComponent(savedOrder.order_code))}>Track order <span>→</span></button>
                 </div>
               ))}</div>

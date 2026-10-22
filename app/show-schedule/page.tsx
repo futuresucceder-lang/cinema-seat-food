@@ -6,12 +6,6 @@ import { createClient } from "@/lib/supabase/client";
 
 type ShowSchedule = { id: string; screen: string; show_start_at: string; show_end_at: string };
 
-function localDateTimeValue(value: string) {
-  const date = new Date(value);
-  const offset = date.getTimezoneOffset();
-  return new Date(date.getTime() - offset * 60_000).toISOString().slice(0, 16);
-}
-
 export default function ShowSchedulePage() {
   const supabase = createClient();
   const [cinemaId, setCinemaId] = useState("");

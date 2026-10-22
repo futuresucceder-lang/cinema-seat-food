@@ -24,6 +24,7 @@ type Order = {
   status: string | null;
   created_at: string;
   cinema_id: string | null;
+  delivery_option?: string | null;
 };
 
 type FilterStatus = "ALL" | "NEW" | "PREPARING" | "READY";

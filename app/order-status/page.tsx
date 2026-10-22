@@ -7,7 +7,7 @@ import { createClient } from "../../lib/supabase/client";
 const supabase = createClient();
 
 type FoodItem = { id?: string; name: string; price?: number; emoji?: string; quantity?: number };
-type Order = { order_code: string; movie: string | null; cinema_id?: string | null; screen: string; seat: string; food_items: FoodItem[]; total: number; status: string; created_at: string };
+type Order = { order_code: string; movie: string | null; cinema_id?: string | null; screen: string; seat: string; food_items: FoodItem[]; total: number; status: string; created_at: string; delivery_option?: string | null };
 
 function OrderStatusContent() {
   const searchParams = useSearchParams();
@@ -49,7 +49,7 @@ function OrderStatusContent() {
         <section className="seatbite-status-hero"><p className="seatbite-eyebrow">YOUR MOVIE NIGHT, IN MOTION</p><h1>Track your <span>order.</span></h1><p>We'll keep you posted while your favourites make their way to you.</p></section>
         <section className="seatbite-status-card seatbite-order-summary">
           <div className="seatbite-status-card-heading"><div><p className="seatbite-eyebrow">ORDER NUMBER</p><h2>{order.order_code}</h2></div><span className={"seatbite-status-badge status-" + status.toLowerCase()}>{status.replace("_", " ")}</span></div>
-          <div className="seatbite-location-row"><div><span>SCREEN</span><strong>{order.screen}</strong></div><div><span>YOUR SEAT</span><strong>{order.seat}</strong></div></div>
+          <div className="seatbite-location-row"><div><span>SCREEN</span><strong>{order.screen}</strong></div><div><span>YOUR SEAT</span><strong>{order.seat}</strong></div></div><div style={{marginTop:16,padding:"12px 14px",borderRadius:12,background:order.delivery_option==="INTERVAL"?"#fff0d9":"#e4f6e9",color:order.delivery_option==="INTERVAL"?"#8a4b00":"#176534",fontWeight:800}}>{order.delivery_option==="INTERVAL"?"⏱ Deliver During Interval":"⚡ Deliver Now"}</div>
         </section>
         <section className="seatbite-status-card">
           <p className="seatbite-eyebrow">THE LATEST</p><h2 className="seatbite-section-title">Your snack journey</h2>

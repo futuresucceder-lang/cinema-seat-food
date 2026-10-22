@@ -468,6 +468,7 @@ export default function MasterAdminPage() {
 
   return (
     <main
+      className="seatbite-dashboard-page"
       style={{
         minHeight: "100vh",
         background: "#fff8f4",

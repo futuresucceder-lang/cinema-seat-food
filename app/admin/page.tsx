@@ -15,6 +15,11 @@ type Order = {
 export default function AdminDashboard() {
   const supabase = createClient();
 
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    window.location.assign("/manager-login");
+  }
+
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [cinemaName, setCinemaName] = useState("");
@@ -267,6 +272,22 @@ export default function AdminDashboard() {
               🎬 {cinemaName}
             </p>
           )}
+          <button
+            type="button"
+            onClick={handleSignOut}
+            style={{
+              marginTop: "18px",
+              padding: "11px 20px",
+              border: "1px solid #f05236",
+              borderRadius: "9px",
+              background: "transparent",
+              color: "#fff",
+              fontWeight: "700",
+              cursor: "pointer",
+            }}
+          >
+            ↪ Sign Out
+          </button>
         </header>
 
         {/* Error message */}

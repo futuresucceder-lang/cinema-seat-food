@@ -645,6 +645,10 @@ export default function FoodCourtPage() {
                 </p>
               </div>
 
+              <div style={{marginBottom:15,padding:"10px 12px",borderRadius:10,background:order.delivery_option==="INTERVAL"?"#fff0d9":"#e4f6e9",color:order.delivery_option==="INTERVAL"?"#8a4b00":"#176534",fontWeight:800}}>
+                {order.delivery_option==="INTERVAL" ? "⏱ Deliver during interval" : "⚡ Deliver now"}
+              </div>
+
               {/* Food Items */}
               <h3 style={{ marginBottom: "10px" }}>
                 🍴 Food Items

@@ -1092,6 +1092,33 @@ input:disabled, textarea:disabled, select:disabled {
   color: #777777 !important;
   -webkit-text-fill-color: #777777 !important;
 }
+/* Explicitly protect manager login fields from global light-input rules and browser autofill. */
+main.seatbite-manager-login input#email,
+main.seatbite-manager-login input#password {
+  background-color: #101010 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ff0038 !important;
+  border: 1px solid #777777 !important;
+  box-shadow: none !important;
+}
+main.seatbite-manager-login input#email::placeholder,
+main.seatbite-manager-login input#password::placeholder {
+  color: #c8c8c8 !important;
+  -webkit-text-fill-color: #c8c8c8 !important;
+  opacity: 1 !important;
+}
+main.seatbite-manager-login input#email:-webkit-autofill,
+main.seatbite-manager-login input#password:-webkit-autofill,
+main.seatbite-manager-login input#email:-webkit-autofill:hover,
+main.seatbite-manager-login input#password:-webkit-autofill:hover,
+main.seatbite-manager-login input#email:-webkit-autofill:focus,
+main.seatbite-manager-login input#password:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0 1000px #101010 inset !important;
+  caret-color: #ffffff !important;
+}
+
 /* Dark login panels retain dark fields, but entered text stays white and visible. */
 .seatbite-auth-page input,
 .seatbite-login-page input,

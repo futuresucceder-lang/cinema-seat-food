@@ -1872,3 +1872,28 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
     to { opacity: 1; transform: translateY(0); }
   }
 }
+
+
+/* Option B: use the complete uploaded cinema login artwork as the page background.
+   Place the uploaded image at public/seat-bite-login-background.jpg. */
+.seatbite-manager-login {
+  background-color: #071112 !important;
+  background-image:
+    linear-gradient(rgba(3, 8, 9, .24), rgba(3, 8, 9, .24)),
+    url("/seat-bite-login-background.svg") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-attachment: scroll !important;
+}
+.seatbite-manager-login > section {
+  background: rgba(7, 25, 27, .96) !important;
+  border: 2px solid #e50920 !important;
+  border-top: 7px solid #e50920 !important;
+  box-shadow: 0 0 0 3px rgba(255,245,223,.10), 0 0 26px rgba(229,9,32,.22), 0 24px 70px rgba(0,0,0,.62) !important;
+}
+@media (max-width: 520px) {
+  .seatbite-manager-login {
+    background-position: center center !important;
+  }
+}

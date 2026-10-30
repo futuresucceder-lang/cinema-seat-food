@@ -1739,3 +1739,136 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
   background:#050505 url('/seat-bite-logo.svg') center/contain no-repeat !important;
   color:transparent !important;font-size:0 !important;
 }
+
+
+/* Cinematic Manager / Food Court Login refresh — styling only.
+   Keep the existing authentication, form state, and role-based redirects unchanged. */
+.seatbite-manager-login {
+  position: relative !important;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 100svh !important;
+  padding: 28px 18px !important;
+  color: #f8f3e9 !important;
+  background:
+    radial-gradient(ellipse at 8% 18%, rgba(229, 9, 32, .34), transparent 27%),
+    radial-gradient(ellipse at 94% 25%, rgba(255, 75, 34, .22), transparent 26%),
+    radial-gradient(ellipse at 50% 110%, rgba(229, 9, 32, .22), transparent 38%),
+    linear-gradient(145deg, #050b0c 0%, #0a2022 45%, #071011 100%) !important;
+}
+.seatbite-manager-login::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .72;
+  background:
+    linear-gradient(112deg, transparent 0 11%, rgba(255, 39, 45, .5) 11.2%, transparent 12.2% 87%, rgba(255, 39, 45, .45) 88%, transparent 89%),
+    repeating-linear-gradient(90deg, transparent 0 68px, rgba(255, 49, 44, .055) 69px 71px, transparent 72px 136px),
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, .08), transparent 54%);
+}
+.seatbite-manager-login::after {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  z-index: -1;
+  pointer-events: none;
+  border: 1px solid rgba(255, 54, 54, .16);
+  border-radius: 18px;
+  box-shadow: inset 0 0 55px rgba(0, 0, 0, .28);
+}
+.seatbite-manager-login > section {
+  width: min(100%, 440px) !important;
+  padding: clamp(24px, 5vw, 38px) !important;
+  color: #f8f3e9 !important;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(229, 9, 32, .12), transparent 48%),
+    linear-gradient(160deg, #0b292b 0%, #071a1c 100%) !important;
+  border: 2px solid #e50920 !important;
+  border-top: 7px solid #e50920 !important;
+  border-radius: 18px !important;
+  box-shadow:
+    0 0 0 3px rgba(255, 245, 223, .08),
+    0 0 26px rgba(229, 9, 32, .18),
+    0 24px 70px rgba(0, 0, 0, .55) !important;
+}
+.seatbite-manager-login > section > header { margin-bottom: 26px !important; }
+.seatbite-manager-login > section > header > div:first-child {
+  width: 76px !important;
+  height: 76px !important;
+  margin-bottom: 14px !important;
+  background: #030708 url('/seat-bite-logo.svg') center/contain no-repeat !important;
+  border: 1px solid rgba(255, 36, 51, .9) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 0 0 4px rgba(229, 9, 32, .08), 0 8px 24px rgba(0, 0, 0, .3) !important;
+}
+.seatbite-manager-login > section > header > div:nth-child(2) {
+  color: #ff3949 !important;
+  letter-spacing: 3px !important;
+}
+.seatbite-manager-login > section h1 {
+  color: #fff8ed !important;
+  text-shadow: 0 2px 16px rgba(255, 255, 255, .06);
+}
+.seatbite-manager-login > section header p {
+  color: #b9cbca !important;
+}
+.seatbite-manager-login label {
+  color: #f7eee0 !important;
+}
+.seatbite-manager-login input {
+  background: #102f31 !important;
+  color: #fff8ed !important;
+  -webkit-text-fill-color: #fff8ed !important;
+  border: 1px solid #315456 !important;
+  border-radius: 10px !important;
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, .24);
+}
+.seatbite-manager-login input::placeholder {
+  color: #a8b9b8 !important;
+  -webkit-text-fill-color: #a8b9b8 !important;
+  opacity: 1;
+}
+.seatbite-manager-login input:focus {
+  border-color: #ff3949 !important;
+  outline: 3px solid rgba(229, 9, 32, .18) !important;
+}
+.seatbite-manager-login button[aria-label="Show password"],
+.seatbite-manager-login button[aria-label="Hide password"] {
+  color: #ff7481 !important;
+}
+.seatbite-manager-login button[type="submit"] {
+  min-height: 50px !important;
+  background: linear-gradient(100deg, #c90820, #f01631) !important;
+  color: #fff !important;
+  border: 1px solid #ff3347 !important;
+  border-radius: 999px !important;
+  box-shadow: 0 4px 0 #780817, 0 8px 22px rgba(229, 9, 32, .2) !important;
+  letter-spacing: .6px;
+}
+.seatbite-manager-login button[type="submit"]:hover:not(:disabled) {
+  filter: brightness(1.08);
+  box-shadow: 0 4px 0 #780817, 0 10px 28px rgba(229, 9, 32, .3) !important;
+}
+.seatbite-manager-login a {
+  color: #f4d9d6 !important;
+}
+.seatbite-manager-login a:hover { color: #ff6c79 !important; }
+.seatbite-manager-login [role="alert"] {
+  background: rgba(104, 14, 30, .42) !important;
+  color: #ffd9dc !important;
+  border: 1px solid #a92a3d !important;
+}
+@media (max-width: 520px) {
+  .seatbite-manager-login { padding: 20px 14px !important; }
+  .seatbite-manager-login::after { inset: 7px; }
+  .seatbite-manager-login > section { padding: 24px 20px !important; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .seatbite-manager-login > section { animation: seatbite-login-enter .42s ease-out both; }
+  @keyframes seatbite-login-enter {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}

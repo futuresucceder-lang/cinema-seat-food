@@ -1198,3 +1198,200 @@ form[data-theme="dark"] input::placeholder {
     grid-template-columns: 100px minmax(0, 1fr) !important;
   }
 }
+
+
+/* =========================================================
+   SEAT BITE — RETRO DINER THEME (site-wide)
+   Brand palette: diner red, warm cream, deep teal, checkerboard.
+   Styling only: preserves existing routes, forms and workflows.
+   ========================================================= */
+:root {
+  --background: #fff5df;
+  --foreground: #152f31;
+  --brand: #e50920;
+  --brand-hover: #b90719;
+  --surface: #fffaf0;
+  --muted: #536467;
+  --border: #ead8b8;
+  --success: #16865b;
+  --radius-card: 14px;
+}
+body {
+  background-color: #fff5df !important;
+  background-image:
+    linear-gradient(45deg, rgba(17,47,49,.035) 25%, transparent 25%, transparent 75%, rgba(17,47,49,.035) 75%),
+    linear-gradient(45deg, rgba(17,47,49,.035) 25%, transparent 25%, transparent 75%, rgba(17,47,49,.035) 75%) !important;
+  background-size: 24px 24px !important;
+  background-position: 0 0, 12px 12px !important;
+  color: #172f30 !important;
+}
+::selection { background:#e50920; color:#fff; }
+:focus-visible { outline-color:#e50920 !important; }
+button, input, select, textarea { border-radius: 9px; }
+button {
+  font-weight: 750;
+}
+button:not([class*="bg-"]):not([style*="background"]) {
+  border-color: #dfc9a4;
+}
+input, select, textarea {
+  color: #173437 !important;
+  background-color: #fffdf7;
+  border-color: #d9c5a0 !important;
+}
+input::placeholder, textarea::placeholder { color:#758184 !important; opacity:1; }
+header, nav {
+  --retro-red:#e50920;
+}
+.seatbite-page {
+  background: linear-gradient(180deg,#102e30 0,#173c3d 190px,#fff5df 190px,#fff5df 100%) !important;
+  color:#173437 !important;
+}
+.seatbite-shell { max-width:1160px !important; }
+.seatbite-header {
+  border:3px solid #e50920 !important;
+  border-bottom:8px solid transparent !important;
+  border-image: repeating-linear-gradient(90deg,#fff 0 16px,#142e30 16px 32px,#fff 32px 48px,#e50920 48px 64px) 1 !important;
+  border-radius:14px !important;
+  background:
+    linear-gradient(115deg,rgba(8,30,32,.97),rgba(18,61,62,.95)) !important;
+  box-shadow:0 12px 0 rgba(229,9,32,.10),0 18px 34px rgba(21,47,49,.18) !important;
+}
+.seatbite-header h1 {
+  font-family:var(--font-bangers), Impact, sans-serif !important;
+  letter-spacing:1px !important;
+  text-transform:uppercase;
+}
+.seatbite-logo-mark {
+  background:#050505 url('/seat-bite-logo.svg') center/contain no-repeat !important;
+  border:2px solid #e50920 !important;
+  border-radius:12px !important;
+  box-shadow:0 0 0 3px #fff5df,0 7px 0 #e50920 !important;
+  color:transparent !important;
+  font-size:0 !important;
+}
+.seatbite-categories button {
+  background:#fffaf0 !important;
+  border:2px solid #e7d2ab !important;
+  color:#173437 !important;
+  font-weight:800 !important;
+  text-transform:uppercase;
+  font-size:12px !important;
+  letter-spacing:.3px;
+}
+.seatbite-categories button.seatbite-category-active {
+  background:#e50920 !important;
+  color:#fff !important;
+  border-color:#e50920 !important;
+  box-shadow:0 3px 0 #9e0615 !important;
+}
+.seatbite-seat-card, .seatbite-food-card {
+  background:#fffaf0 !important;
+  border:2px solid #e8d5b1 !important;
+  border-radius:14px !important;
+  box-shadow:0 5px 0 rgba(20,47,49,.09),0 10px 22px rgba(20,47,49,.06) !important;
+}
+.seatbite-food-card:hover {
+  border-color:#e50920 !important;
+  box-shadow:0 5px 0 rgba(229,9,32,.13),0 12px 24px rgba(20,47,49,.12) !important;
+}
+.seatbite-food-card > div:first-child > div:first-child {
+  background:#f7e7c7 !important;
+  border:1px solid #ecd3a7;
+}
+.seatbite-food-price { color:#d80920 !important; }
+.seatbite-food-card button, .seatbite-cart button:last-child {
+  background:#e50920 !important;
+  color:#fff !important;
+  border:0 !important;
+  box-shadow:0 4px 0 #a90718 !important;
+}
+.seatbite-cart {
+  background:rgba(255,250,240,.96) !important;
+  border:2px solid #dfc9a4 !important;
+  border-top:4px solid #e50920 !important;
+}
+.seatbite-dashboard-header, .seatbite-dashboard-brand {
+  color:#fff;
+}
+.seatbite-dashboard-header {
+  background:#102f31 !important;
+  border:3px solid #e50920 !important;
+  border-bottom:8px solid #fff !important;
+  box-shadow:0 5px 0 #e50920 !important;
+  border-radius:14px !important;
+  padding:18px !important;
+}
+.seatbite-dashboard-logo {
+  display:inline-block !important;
+  width:54px !important;
+  height:54px !important;
+  background:#050505 url('/seat-bite-logo.svg') center/cover no-repeat !important;
+  border:2px solid #e50920 !important;
+  border-radius:10px !important;
+  color:transparent !important;
+  font-size:0 !important;
+  vertical-align:middle;
+}
+.seatbite-dashboard-wordmark {
+  font-family:var(--font-bangers),Impact,sans-serif !important;
+  text-transform:uppercase;
+  letter-spacing:1.5px !important;
+  color:#fff !important;
+}
+.seatbite-dashboard-wordmark span { color:#e50920 !important; }
+.seatbite-manager-page, .seatbite-food-court-page {
+  background:#fff5df !important;
+  color:#173437 !important;
+}
+.seatbite-manager-page h1, .seatbite-food-court-page h1,
+.seatbite-manager-page h2, .seatbite-food-court-page h2 {
+  color:#173437 !important;
+  font-family:var(--font-bangers),Impact,sans-serif !important;
+  letter-spacing:.5px;
+}
+.seatbite-manager-page button, .seatbite-food-court-page button {
+  border-radius:8px !important;
+  font-weight:800 !important;
+}
+.seatbite-manager-page button:not(:disabled), .seatbite-food-court-page button:not(:disabled) {
+  transition:transform .16s ease, box-shadow .16s ease;
+}
+.seatbite-manager-page button:hover:not(:disabled), .seatbite-food-court-page button:hover:not(:disabled) {
+  transform:translateY(-1px);
+}
+.seatbite-manager-page [style*="background: rgb(17, 17, 17)"],
+.seatbite-manager-page [style*="background: #111"] {
+  background:#102f31 !important;
+}
+.seatbite-manager-page [style*="background: white"],
+.seatbite-manager-page [style*="background: rgb(255, 255, 255)"],
+.seatbite-food-court-page [style*="background: white"] {
+  background:#fffaf0 !important;
+}
+.seatbite-manager-page [style*="color: white"],
+.seatbite-manager-page [style*="color: rgb(255, 255, 255)"] {
+  color:#fffaf0 !important;
+}
+.seatbite-manager-page table, .seatbite-food-court-page table {
+  border-collapse:separate !important;
+  border-spacing:0 6px !important;
+}
+.seatbite-manager-page th, .seatbite-food-court-page th {
+  background:#102f31 !important;
+  color:#fffaf0 !important;
+  text-transform:uppercase;
+  font-size:12px;
+  letter-spacing:.5px;
+}
+.seatbite-manager-page td, .seatbite-food-court-page td {
+  background:#fffaf0;
+  color:#173437;
+}
+a { text-underline-offset:3px; }
+a:hover { color:#e50920; }
+@media (max-width:680px) {
+  .seatbite-header { background:#102f31 !important; }
+  .seatbite-dashboard-logo { width:44px !important;height:44px !important; }
+  .seatbite-manager-page, .seatbite-food-court-page { padding-left:12px !important;padding-right:12px !important; }
+}

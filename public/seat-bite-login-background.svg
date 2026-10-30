@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1240" role="img" aria-label="Seat Bite retro cinema background">
+<defs>
+ <linearGradient id="wall" x2="0" y2="1"><stop stop-color="#081719"/><stop offset=".55" stop-color="#0b282a"/><stop offset="1" stop-color="#020708"/></linearGradient>
+ <linearGradient id="red" x2="1" y2="1"><stop stop-color="#ff6546"/><stop offset=".5" stop-color="#ff182f"/><stop offset="1" stop-color="#9b0719"/></linearGradient>
+ <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#182526"/><stop offset="1" stop-color="#050708"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="10"/></filter>
+ <pattern id="dots" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="#ff5543" opacity=".22"/></pattern>
+</defs>
+<rect width="900" height="1240" fill="url(#wall)"/>
+<rect width="900" height="1240" fill="url(#dots)"/>
+<path d="M0 0H900L760 300H140Z" fill="#122b2c" stroke="#ff402f" stroke-width="8"/>
+<path d="M0 0L140 300M110 0L210 300M220 0L280 300M900 0L760 300M790 0L690 300M680 0L620 300" stroke="#ff382e" stroke-width="8"/>
+<path d="M0 90L160 310M900 90L740 310" stroke="#ff9a55" stroke-width="3"/>
+<g opacity=".9"><path d="M24 160L120 190L120 270L24 238Z" fill="#f20e2b"/><path d="M876 160L780 190L780 270L876 238Z" fill="#f20e2b"/><path d="M40 180L104 200M40 202L104 222M796 200L860 180M796 222L860 202" stroke="#ffd3a2" stroke-width="5"/></g>
+<rect x="250" y="55" width="400" height="210" rx="26" fill="#02090a" stroke="#e50920" stroke-width="5"/>
+<g transform="translate(450 112)"><path d="M-55 22L-44 -36Q0 -60 44 -36L55 22Z" fill="#fff4d9" stroke="#ff1733" stroke-width="5"/><path d="M-25 -42V12M0 -49V15M25 -42V12" stroke="#ed102b" stroke-width="15"/><path d="M-58 25H58" stroke="#f5f0df" stroke-width="5"/></g>
+<text x="450" y="174" text-anchor="middle" fill="#fff9e9" font-family="Arial,sans-serif" font-size="40" font-weight="900" letter-spacing="2">SEAT BITE</text>
+<text x="450" y="205" text-anchor="middle" fill="#ffbca5" font-family="Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="4">FOOD AT YOUR SEAT</text>
+<path d="M40 320L860 320L820 860L80 860Z" fill="#061718" stroke="#ff182f" stroke-width="13"/>
+<path d="M55 340L845 340L808 840L92 840Z" fill="none" stroke="#ff9b57" stroke-width="3"/>
+<path d="M80 365L820 365M90 820L810 820" stroke="#ff172e" stroke-width="4"/>
+<circle cx="450" cy="435" r="47" fill="none" stroke="#f5f1e5" stroke-width="12"/>
+<circle cx="450" cy="435" r="15" fill="#f5f1e5"/>
+<g fill="#f5f1e5"><circle cx="450" cy="399" r="5"/><circle cx="476" cy="410" r="5"/><circle cx="486" cy="435" r="5"/><circle cx="476" cy="460" r="5"/><circle cx="450" cy="471" r="5"/><circle cx="424" cy="460" r="5"/><circle cx="414" cy="435" r="5"/><circle cx="424" cy="410" r="5"/></g>
+<text x="450" y="540" text-anchor="middle" fill="#fff7e9" font-family="Arial,sans-serif" font-size="46" font-weight="800">Manager Login</text>
+<text x="450" y="580" text-anchor="middle" fill="#b5ceca" font-family="Arial,sans-serif" font-size="21">Cinema food management portal</text>
+<rect x="145" y="615" width="610" height="68" rx="16" fill="#103638" stroke="#4a7371" stroke-width="3"/>
+<rect x="145" y="700" width="610" height="68" rx="16" fill="#103638" stroke="#4a7371" stroke-width="3"/>
+<rect x="145" y="790" width="610" height="62" rx="31" fill="url(#red)"/>
+<text x="450" y="830" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="28" font-weight="900">LOGIN</text>
+<g transform="translate(0 870)"><path d="M0 0H900L900 1240H0Z" fill="url(#floor)"/><path d="M0 0L450 180L900 0M0 0L320 370M900 0L580 370" fill="none" stroke="#ff352e" stroke-width="6"/><path d="M0 220L900 220M0 340L900 340" stroke="#ff4a35" stroke-width="3" opacity=".55"/></g>
+<g transform="translate(80 1045)"><path d="M0 0H130L114 140H20Z" fill="#f5eee0" stroke="#e50920" stroke-width="5"/><path d="M15 8L35 136M50 8L58 136M85 8L78 136M118 8L100 136" stroke="#e50920" stroke-width="18"/><g fill="#fff2c9" stroke="#e7bd73" stroke-width="2"><circle cx="18" cy="-8" r="19"/><circle cx="42" cy="-24" r="20"/><circle cx="65" cy="-15" r="22"/><circle cx="89" cy="-24" r="20"/><circle cx="112" cy="-7" r="18"/></g></g>
+<g transform="translate(760 1100)"><path d="M0 0H100L90 100H10Z" fill="#f5eee0" stroke="#e50920" stroke-width="4"/><path d="M20 5L30 98M50 5V98M80 5L70 98" stroke="#e50920" stroke-width="13"/><g fill="#fff2c9" stroke="#e7bd73" stroke-width="2"><circle cx="12" cy="-7" r="15"/><circle cx="32" cy="-19" r="16"/><circle cx="52" cy="-10" r="16"/><circle cx="72" cy="-19" r="16"/><circle cx="91" cy="-4" r="13"/></g></g>
+<g transform="translate(340 1135)"><circle r="60" fill="#111b1c" stroke="#d9d6c9" stroke-width="8"/><circle r="42" fill="#243234" stroke="#f3eee0" stroke-width="4"/><circle r="12" fill="#f3eee0"/><g fill="#f3eee0"><circle cy="-29" r="5"/><circle cx="25" cy="-15" r="5"/><circle cx="25" cy="15" r="5"/><circle cy="29" r="5"/><circle cx="-25" cy="15" r="5"/><circle cx="-25" cy="-15" r="5"/></g></g>
+<path d="M0 1200H900" stroke="#ff1b30" stroke-width="8"/>
+</svg>

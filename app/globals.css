@@ -1443,3 +1443,299 @@ a:hover { color:#e50920; }
   .seatbite-manager-login { padding:14px !important; }
   .seatbite-manager-login > section { padding:22px !important; }
 }
+
+
+/* ============================================================
+   RETRO CINEMA DINER — production visual pass
+   Target the current customer-menu class names (product-card,
+   hero, wordmark), not the retired food-card class names.
+   ============================================================ */
+:root {
+  --background:#fff3d9 !important;
+  --foreground:#173437 !important;
+  --brand:#e50920 !important;
+  --brand-hover:#b90719 !important;
+  --surface:#fffaf0 !important;
+  --muted:#40575a !important;
+  --border:#e5cda6 !important;
+}
+body {
+  color:#173437 !important;
+  background:#102b2d !important;
+}
+.seatbite-page {
+  position:relative;
+  isolation:isolate;
+  color:#173437 !important;
+  background:
+    radial-gradient(ellipse at 50% -10%,rgba(255,74,36,.34),transparent 38%),
+    linear-gradient(180deg,rgba(8,25,27,.98) 0%,rgba(15,45,47,.97) 260px,rgba(255,243,217,.98) 261px),
+    #fff3d9 !important;
+  min-height:100vh;
+}
+.seatbite-page::before {
+  content:"";
+  position:absolute;z-index:-1;pointer-events:none;inset:0 0 auto;height:270px;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 34px,rgba(229,9,32,.14) 35px 42px,transparent 43px 76px),
+    radial-gradient(ellipse at 50% 0,rgba(255,201,124,.18),transparent 65%);
+  border-bottom:7px solid transparent;
+  border-image:repeating-linear-gradient(90deg,#fff 0 18px,#142e30 18px 36px,#fff 36px 54px,#e50920 54px 72px) 1;
+}
+.seatbite-shell { position:relative;z-index:1;max-width:1160px !important; }
+.seatbite-topline {
+  padding:12px 16px;
+  border:2px solid #e50920;border-radius:12px;
+  background:linear-gradient(110deg,#07191a,#123638);
+  box-shadow:0 5px 0 #fff3d9,0 8px 0 #e50920;
+}
+.seatbite-wordmark { color:#fff !important;text-transform:uppercase;letter-spacing:1px !important;font-family:var(--font-bangers),Impact,sans-serif !important; }
+.seatbite-wordmark>span:last-child>span { color:#e50920 !important; }
+.seatbite-wordmark-icon {
+  background:#050505 url('/seat-bite-logo.svg') center/contain no-repeat !important;
+  border:1px solid #e50920 !important;border-radius:8px !important;
+  width:52px !important;height:52px !important;
+  color:transparent !important;font-size:0 !important;
+  box-shadow:0 0 0 2px #fff3d9 !important;
+}
+.seatbite-open-pill { background:#fff3d9 !important;color:#173437 !important;border-color:#e2c89e !important; }
+.seatbite-hero {
+  position:relative;
+  border:3px solid #e50920 !important;
+  border-radius:16px !important;
+  background:
+    radial-gradient(ellipse at 82% 40%,rgba(229,9,32,.26),transparent 36%),
+    repeating-linear-gradient(105deg,rgba(229,9,32,.12) 0 18px,transparent 18px 42px),
+    linear-gradient(115deg,#061718,#123638 60%,#071718) !important;
+  box-shadow:0 8px 0 #fff3d9,0 12px 0 #e50920,0 24px 42px rgba(5,18,19,.26) !important;
+}
+.seatbite-hero h1 { color:#fffaf0 !important;text-shadow:0 3px 0 rgba(0,0,0,.25);font-family:var(--font-bangers),Impact,sans-serif !important;letter-spacing:.2px !important; }
+.seatbite-hero h1 span { color:#ff263a !important; }
+.seatbite-hero .seatbite-eyebrow { color:#ffdca6 !important; }
+.seatbite-hero-copy>p:not(.seatbite-eyebrow) { color:#f8edda !important; }
+.seatbite-hero-tags span { background:rgba(255,250,240,.08);border-color:#e50920 !important;color:#fffaf0 !important; }
+.seatbite-popcorn-illustration {
+  background:radial-gradient(circle at 35% 25%,#fff6df,#ffc67e 72%) !important;
+  box-shadow:0 0 0 8px #e50920,0 0 0 12px #fff3d9,0 16px 0 #9e0615 !important;
+}
+.seatbite-primary-button,.seatbite-add-button {
+  background:#e50920 !important;color:#fff !important;border:0 !important;
+  box-shadow:0 4px 0 #a90718 !important;font-weight:900 !important;
+}
+.seatbite-secondary-button {
+  background:#fffaf0 !important;color:#173437 !important;
+  border:2px solid #dfc9a4 !important;font-weight:800 !important;
+}
+.seatbite-seat-strip,.seatbite-menu-heading,.seatbite-cart,.seatbite-confirm-card,
+.seatbite-cart.seatbite-my-orders-panel {
+  background:#fffaf0 !important;color:#173437 !important;
+  border:2px solid #e5cda6 !important;border-radius:14px !important;
+  box-shadow:0 5px 0 rgba(18,48,50,.09),0 12px 25px rgba(18,48,50,.07) !important;
+}
+.seatbite-seat-strip strong,.seatbite-seat-strip div,.seatbite-menu-heading h2,
+.seatbite-menu-heading p:not(.seatbite-eyebrow),.seatbite-cart h2,
+.seatbite-cart p,.seatbite-cart-total,.seatbite-cart-lines,
+.seatbite-confirm-card h1,.seatbite-confirm-card .seatbite-muted {
+  color:#173437 !important;
+}
+.seatbite-eyebrow { color:#b90719 !important;font-weight:900 !important;letter-spacing:1.5px !important; }
+.seatbite-menu-heading h2 { font-family:var(--font-bangers),Impact,sans-serif !important;font-size:clamp(27px,3vw,36px) !important;letter-spacing:.3px !important; }
+.seatbite-menu-count { color:#173437 !important;background:#f7e7c7 !important;border:1px solid #e5cda6 !important;border-radius:99px;padding:8px 12px; }
+.seatbite-categories button {
+  background:#fffaf0 !important;color:#173437 !important;border:2px solid #e5cda6 !important;
+  border-radius:8px !important;text-transform:uppercase;font-weight:900 !important;
+  box-shadow:0 3px 0 rgba(18,48,50,.09) !important;
+}
+.seatbite-categories button.seatbite-category-active {
+  background:#e50920 !important;color:#fff !important;border-color:#e50920 !important;
+  box-shadow:0 3px 0 #a90718 !important;
+}
+.seatbite-food-grid { gap:14px !important; }
+.seatbite-product-card {
+  background:#fffaf0 !important;color:#173437 !important;
+  border:2px solid #e5cda6 !important;border-radius:12px !important;
+  box-shadow:0 4px 0 rgba(18,48,50,.08),0 9px 20px rgba(18,48,50,.06) !important;
+  overflow:hidden;
+}
+.seatbite-product-card:hover { border-color:#e50920 !important;transform:translateY(-2px); }
+.seatbite-product-image-wrap { background:#f7e7c7 !important; }
+.seatbite-product-image { border-radius:0 !important; }
+.seatbite-product-content h3 { color:#173437 !important;font-weight:900 !important; }
+.seatbite-product-content p,.seatbite-product-category { color:#43575a !important; }
+.seatbite-product-category { font-weight:900 !important;text-transform:uppercase;letter-spacing:.7px; }
+.seatbite-product-bottom strong { color:#b90719 !important;font-size:20px !important; }
+.seatbite-quantity { background:#f7e7c7 !important;border:1px solid #e5cda6 !important;border-radius:8px; }
+.seatbite-quantity button { color:#173437 !important; }
+.seatbite-cart { border-top:6px solid #e50920 !important; }
+.seatbite-cart-icon { background:#102f31 !important;color:#fff !important;border-radius:8px !important; }
+.seatbite-cart-count { background:#e50920 !important;color:#fff !important; }
+.seatbite-cart-line,.seatbite-cart-total { color:#173437 !important; }
+.seatbite-secure-note,.seatbite-muted { color:#40575a !important; }
+.seatbite-footer {
+  color:#fffaf0 !important;background:#102f31 !important;
+  border-top:6px solid transparent !important;
+  border-image:repeating-linear-gradient(90deg,#fff 0 16px,#102f31 16px 32px,#fff 32px 48px,#e50920 48px 64px) 1 !important;
+}
+.seatbite-gate { background:linear-gradient(180deg,#071819,#123638 65%,#fff3d9 65%) !important; }
+.seatbite-gate-card {
+  background:#fffaf0 !important;color:#173437 !important;border:3px solid #e50920 !important;
+  border-radius:14px !important;box-shadow:0 0 0 4px #fff3d9,0 12px 0 #e50920 !important;
+}
+.seatbite-gate-card h1 { color:#173437 !important;font-family:var(--font-bangers),Impact,sans-serif !important; }
+.seatbite-brand-small { color:#173437 !important;font-family:var(--font-bangers),Impact,sans-serif !important; }
+.seatbite-brand-small span,.seatbite-gate-icon {
+  display:inline-grid;place-items:center;
+  width:58px;height:58px;
+  background:#050505 url('/seat-bite-logo.svg') center/contain no-repeat !important;
+  border:2px solid #e50920;border-radius:8px;color:transparent !important;font-size:0 !important;
+}
+.seatbite-status-message { background:#fff0ef !important;color:#9f0719 !important;border:1px solid #e50920 !important; }
+.seatbite-my-order-row,.seatbite-location-row>div,.seatbite-order-code,.seatbite-confirm-total {
+  background:#fff3d9 !important;color:#173437 !important;border-color:#e5cda6 !important;
+}
+.seatbite-status-badge { font-weight:900 !important; }
+.seatbite-manager-page,.seatbite-food-court-page {
+  background:
+    radial-gradient(ellipse at 50% 0,rgba(229,9,32,.15),transparent 36%),
+    repeating-linear-gradient(90deg,rgba(229,9,32,.035) 0 18px,transparent 18px 42px),
+    #fff3d9 !important;
+  color:#173437 !important;
+}
+.seatbite-manager-page > div > header,
+.seatbite-food-court-page > div > header {
+  background:#102f31 !important;border:3px solid #e50920 !important;
+  border-radius:14px !important;padding:20px !important;
+  box-shadow:0 6px 0 #e50920 !important;
+}
+.seatbite-manager-page p,.seatbite-food-court-page p,
+.seatbite-manager-page label,.seatbite-food-court-page label,
+.seatbite-manager-page td,.seatbite-food-court-page td {
+  color:#173437;
+}
+.seatbite-manager-page input,.seatbite-food-court-page input,
+.seatbite-manager-page select,.seatbite-food-court-page select,
+.seatbite-manager-page textarea,.seatbite-food-court-page textarea {
+  background:#fffdf7 !important;color:#173437 !important;-webkit-text-fill-color:#173437 !important;
+  border:1px solid #d9c5a0 !important;
+}
+.seatbite-manager-page table,.seatbite-food-court-page table { background:#fffaf0 !important; }
+.seatbite-manager-page th,.seatbite-food-court-page th { background:#102f31 !important;color:#fffaf0 !important; }
+.seatbite-manager-page td,.seatbite-food-court-page td { background:#fffaf0 !important;color:#173437 !important; }
+.seatbite-dashboard-logo {
+  background:#050505 url('/seat-bite-logo.svg') center/contain no-repeat !important;
+  border:2px solid #e50920 !important;border-radius:8px !important;
+  color:transparent !important;font-size:0 !important;
+}
+.seatbite-dashboard-brand { background:#102f31 !important;border:2px solid #e50920 !important;border-radius:10px;padding:10px !important; }
+.seatbite-dashboard-wordmark { font-family:var(--font-bangers),Impact,sans-serif !important;color:#fff !important;text-transform:uppercase !important; }
+.seatbite-dashboard-wordmark span { color:#e50920 !important; }
+.seatbite-manager-login {
+  background:
+    radial-gradient(ellipse at 50% 0,rgba(229,9,32,.3),transparent 42%),
+    repeating-linear-gradient(90deg,rgba(229,9,32,.12) 0 24px,transparent 24px 52px),
+    linear-gradient(180deg,#050e0f,#123638 70%,#071718) !important;
+}
+.seatbite-manager-login::before {
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at 50% 30%,transparent 20%,rgba(0,0,0,.35) 100%),
+    repeating-linear-gradient(45deg,transparent 0 18px,rgba(255,255,255,.025) 18px 36px);
+}
+.seatbite-manager-login > section { position:relative;z-index:1; }
+.seatbite-manager-login > section > header > div:first-child {
+  background:#050505 url('/seat-bite-logo.svg') center/contain no-repeat !important;
+}
+.seatbite-manager-login > section h1 { color:#173437 !important; }
+.seatbite-manager-login label { color:#173437 !important; }
+.seatbite-manager-login input { color:#173437 !important;-webkit-text-fill-color:#173437 !important;background:#fffdf7 !important; }
+main:not(.seatbite-page):not(.seatbite-manager-login) {
+  background-color:#fff3d9;
+}
+main:not(.seatbite-page):not(.seatbite-manager-login) h1,
+main:not(.seatbite-page):not(.seatbite-manager-login) h2,
+main:not(.seatbite-page):not(.seatbite-manager-login) h3 { color:#173437; }
+main:not(.seatbite-page):not(.seatbite-manager-login) label { color:#173437; }
+main:not(.seatbite-page):not(.seatbite-manager-login) input,
+main:not(.seatbite-page):not(.seatbite-manager-login) select,
+main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
+  background:#fffdf7 !important;color:#173437 !important;-webkit-text-fill-color:#173437 !important;
+  border-color:#d9c5a0 !important;
+}
+@media(max-width:680px) {
+  .seatbite-page { padding:0 12px 26px !important; }
+  .seatbite-topline { align-items:center;gap:10px;padding:9px; }
+  .seatbite-wordmark { font-size:20px !important; }
+  .seatbite-wordmark-icon { width:42px !important;height:42px !important; }
+  .seatbite-hero { grid-template-columns:1fr !important; }
+  .seatbite-hero-copy { padding:28px 22px 12px !important; }
+  .seatbite-hero-art { min-height:170px !important; }
+  .seatbite-product-card { display:grid !important;grid-template-columns:96px minmax(0,1fr) !important; }
+  .seatbite-product-image-wrap { min-height:100% !important; }
+  .seatbite-product-image { width:100% !important;height:100% !important;object-fit:cover !important; }
+  .seatbite-product-content { padding:12px !important; }
+  .seatbite-product-content h3 { font-size:15px !important; }
+  .seatbite-cart { bottom:8px !important; }
+}
+
+
+/* Master Admin (including its login state) uses this same page root. */
+.seatbite-dashboard-page {
+  min-height:100vh !important;
+  color:#173437 !important;
+  background:
+    radial-gradient(ellipse at 50% 0,rgba(229,9,32,.24),transparent 38%),
+    repeating-linear-gradient(90deg,rgba(229,9,32,.06) 0 22px,transparent 22px 48px),
+    linear-gradient(180deg,#071819 0,#123638 240px,#fff3d9 241px,#fff3d9 100%) !important;
+}
+.seatbite-dashboard-page h1,.seatbite-dashboard-page h2,.seatbite-dashboard-page h3,
+.seatbite-dashboard-page h4,.seatbite-dashboard-page p,.seatbite-dashboard-page label,
+.seatbite-dashboard-page strong,.seatbite-dashboard-page span:not(.seatbite-dashboard-logo):not(.seatbite-dashboard-wordmark) {
+  color:#173437;
+}
+.seatbite-dashboard-page .seatbite-dashboard-brand {
+  background:#071819 !important;border:3px solid #e50920 !important;
+  border-radius:12px !important;box-shadow:0 5px 0 #fff3d9,0 9px 0 #e50920 !important;
+  max-width:380px;margin:0 auto 20px !important;padding:12px !important;
+}
+.seatbite-dashboard-page .seatbite-dashboard-wordmark { color:#fff !important; }
+.seatbite-dashboard-page .seatbite-dashboard-wordmark span { color:#e50920 !important; }
+.seatbite-dashboard-page .seatbite-dashboard-logo {
+  width:62px !important;height:62px !important;
+  background:#050505 url('/seat-bite-logo.svg') center/contain no-repeat !important;
+  border:2px solid #e50920 !important;border-radius:8px !important;
+  color:transparent !important;font-size:0 !important;
+}
+.seatbite-dashboard-page input,.seatbite-dashboard-page select,.seatbite-dashboard-page textarea {
+  background:#fffdf7 !important;color:#173437 !important;-webkit-text-fill-color:#173437 !important;
+  border:1px solid #d9c5a0 !important;
+}
+.seatbite-dashboard-page button {
+  border-radius:8px !important;font-weight:850 !important;
+}
+.seatbite-dashboard-page table { background:#fffaf0 !important; }
+.seatbite-dashboard-page th { background:#102f31 !important;color:#fffaf0 !important; }
+.seatbite-dashboard-page td { background:#fffaf0 !important;color:#173437 !important; }
+.seatbite-status-page .seatbite-status-topline {
+  background:#071819 !important;border:2px solid #e50920 !important;border-radius:12px !important;
+  padding:12px 16px !important;box-shadow:0 5px 0 #e50920 !important;
+}
+.seatbite-status-page .seatbite-status-hero {
+  background:
+    radial-gradient(ellipse at 80% 30%,rgba(229,9,32,.28),transparent 35%),
+    repeating-linear-gradient(105deg,rgba(229,9,32,.10) 0 18px,transparent 18px 40px),
+    linear-gradient(115deg,#071819,#123638) !important;
+  border:3px solid #e50920 !important;border-radius:14px !important;
+}
+.seatbite-status-page .seatbite-status-hero h1,
+.seatbite-status-page .seatbite-status-hero p:not(.seatbite-eyebrow) { color:#fffaf0 !important; }
+.seatbite-status-page .seatbite-status-card {
+  background:#fffaf0 !important;color:#173437 !important;border:2px solid #e5cda6 !important;
+  border-radius:12px !important;box-shadow:0 5px 0 rgba(18,48,50,.08) !important;
+}
+.seatbite-status-page .seatbite-status-card h2,
+.seatbite-status-page .seatbite-status-card h3,
+.seatbite-status-page .seatbite-status-food-name,
+.seatbite-status-page .seatbite-status-total { color:#173437 !important; }
+.seatbite-status-page .seatbite-wordmark-icon {
+  background:#050505 url('/seat-bite-logo.svg') center/contain no-repeat !important;
+  color:transparent !important;font-size:0 !important;
+}

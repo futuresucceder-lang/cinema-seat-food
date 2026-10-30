@@ -1395,3 +1395,51 @@ a:hover { color:#e50920; }
   .seatbite-dashboard-logo { width:44px !important;height:44px !important; }
   .seatbite-manager-page, .seatbite-food-court-page { padding-left:12px !important;padding-right:12px !important; }
 }
+
+
+/* Retro diner treatment for login, scheduling, QR and remaining tools */
+.seatbite-manager-login {
+  background-color:#102f31 !important;
+  background-image:
+    linear-gradient(135deg,rgba(229,9,32,.14),transparent 40%),
+    repeating-linear-gradient(45deg,rgba(255,255,255,.035) 0 10px,transparent 10px 20px) !important;
+}
+.seatbite-manager-login > section {
+  background:#fff5df !important;
+  color:#173437 !important;
+  border:3px solid #e50920 !important;
+  border-radius:12px !important;
+  border-top:10px solid #e50920 !important;
+  box-shadow:0 0 0 4px #fffaf0,0 12px 0 #102f31,0 22px 42px rgba(0,0,0,.28) !important;
+}
+.seatbite-manager-login > section > header > div:first-child {
+  background:#050505 url('/seat-bite-logo.svg') center/cover no-repeat !important;
+  width:84px !important;height:84px !important;
+  border:2px solid #e50920 !important;border-radius:10px !important;
+  color:transparent !important;font-size:0 !important;
+}
+.seatbite-manager-login > section > header > div:nth-child(2) {
+  color:#e50920 !important;
+  font-family:var(--font-bangers),Impact,sans-serif !important;
+  font-size:18px !important;letter-spacing:3px !important;
+}
+.seatbite-manager-login > section h1 { color:#173437 !important;font-family:var(--font-bangers),Impact,sans-serif !important;text-transform:uppercase; }
+.seatbite-manager-login label { color:#173437 !important; }
+.seatbite-manager-login input {
+  background:#fffdf7 !important;color:#173437 !important;-webkit-text-fill-color:#173437 !important;
+  border:1px solid #d9c5a0 !important;
+}
+.seatbite-manager-login button[type="submit"] {
+  background:#e50920 !important;border:0 !important;
+  box-shadow:0 4px 0 #a90718 !important;text-transform:uppercase;letter-spacing:.5px;
+}
+.seatbite-manager-login a { color:#b90719 !important; }
+.seatbite-manager-login [role="alert"] { background:#fff0ef !important;color:#a90718 !important;border-color:#e50920 !important; }
+.seatbite-page button, .seatbite-manager-login button,
+.seatbite-manager-page button, .seatbite-food-court-page button {
+  min-height:38px;
+}
+@media (max-width:520px) {
+  .seatbite-manager-login { padding:14px !important; }
+  .seatbite-manager-login > section { padding:22px !important; }
+}

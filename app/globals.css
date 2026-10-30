@@ -1880,7 +1880,7 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
   background-color: #071112 !important;
   background-image:
     linear-gradient(rgba(3, 8, 9, .24), rgba(3, 8, 9, .24)),
-    url("/seat-bite-login-background.jpg") !important;
+    url("/seat-bite-login-background.svg") !important;
   background-size: cover !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;

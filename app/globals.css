@@ -1675,3 +1675,67 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
   .seatbite-product-content h3 { font-size:15px !important; }
   .seatbite-cart { bottom:8px !important; }
 }
+
+
+/* Master Admin (including its login state) uses this same page root. */
+.seatbite-dashboard-page {
+  min-height:100vh !important;
+  color:#173437 !important;
+  background:
+    radial-gradient(ellipse at 50% 0,rgba(229,9,32,.24),transparent 38%),
+    repeating-linear-gradient(90deg,rgba(229,9,32,.06) 0 22px,transparent 22px 48px),
+    linear-gradient(180deg,#071819 0,#123638 240px,#fff3d9 241px,#fff3d9 100%) !important;
+}
+.seatbite-dashboard-page h1,.seatbite-dashboard-page h2,.seatbite-dashboard-page h3,
+.seatbite-dashboard-page h4,.seatbite-dashboard-page p,.seatbite-dashboard-page label,
+.seatbite-dashboard-page strong,.seatbite-dashboard-page span:not(.seatbite-dashboard-logo):not(.seatbite-dashboard-wordmark) {
+  color:#173437;
+}
+.seatbite-dashboard-page .seatbite-dashboard-brand {
+  background:#071819 !important;border:3px solid #e50920 !important;
+  border-radius:12px !important;box-shadow:0 5px 0 #fff3d9,0 9px 0 #e50920 !important;
+  max-width:380px;margin:0 auto 20px !important;padding:12px !important;
+}
+.seatbite-dashboard-page .seatbite-dashboard-wordmark { color:#fff !important; }
+.seatbite-dashboard-page .seatbite-dashboard-wordmark span { color:#e50920 !important; }
+.seatbite-dashboard-page .seatbite-dashboard-logo {
+  width:62px !important;height:62px !important;
+  background:#050505 url('/seat-bite-logo.svg') center/contain no-repeat !important;
+  border:2px solid #e50920 !important;border-radius:8px !important;
+  color:transparent !important;font-size:0 !important;
+}
+.seatbite-dashboard-page input,.seatbite-dashboard-page select,.seatbite-dashboard-page textarea {
+  background:#fffdf7 !important;color:#173437 !important;-webkit-text-fill-color:#173437 !important;
+  border:1px solid #d9c5a0 !important;
+}
+.seatbite-dashboard-page button {
+  border-radius:8px !important;font-weight:850 !important;
+}
+.seatbite-dashboard-page table { background:#fffaf0 !important; }
+.seatbite-dashboard-page th { background:#102f31 !important;color:#fffaf0 !important; }
+.seatbite-dashboard-page td { background:#fffaf0 !important;color:#173437 !important; }
+.seatbite-status-page .seatbite-status-topline {
+  background:#071819 !important;border:2px solid #e50920 !important;border-radius:12px !important;
+  padding:12px 16px !important;box-shadow:0 5px 0 #e50920 !important;
+}
+.seatbite-status-page .seatbite-status-hero {
+  background:
+    radial-gradient(ellipse at 80% 30%,rgba(229,9,32,.28),transparent 35%),
+    repeating-linear-gradient(105deg,rgba(229,9,32,.10) 0 18px,transparent 18px 40px),
+    linear-gradient(115deg,#071819,#123638) !important;
+  border:3px solid #e50920 !important;border-radius:14px !important;
+}
+.seatbite-status-page .seatbite-status-hero h1,
+.seatbite-status-page .seatbite-status-hero p:not(.seatbite-eyebrow) { color:#fffaf0 !important; }
+.seatbite-status-page .seatbite-status-card {
+  background:#fffaf0 !important;color:#173437 !important;border:2px solid #e5cda6 !important;
+  border-radius:12px !important;box-shadow:0 5px 0 rgba(18,48,50,.08) !important;
+}
+.seatbite-status-page .seatbite-status-card h2,
+.seatbite-status-page .seatbite-status-card h3,
+.seatbite-status-page .seatbite-status-food-name,
+.seatbite-status-page .seatbite-status-total { color:#173437 !important; }
+.seatbite-status-page .seatbite-wordmark-icon {
+  background:#050505 url('/seat-bite-logo.svg') center/contain no-repeat !important;
+  color:transparent !important;font-size:0 !important;
+}

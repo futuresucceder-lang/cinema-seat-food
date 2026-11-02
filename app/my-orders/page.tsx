@@ -11,7 +11,9 @@ type FoodItem = {
 };
 
 type Order = {
-  id: number;
+  id?: number;
+  cinema_id?: string | null;
+  delivery_option?: string | null;
   order_code: string;
   movie: string | null;
   screen: string | null;
@@ -41,7 +43,7 @@ export default function MyOrdersPage() {
           return;
         }
 
-        const validCodes = savedCodes.filter((code): code is string => typeof code === "string");
+        const validCodes = savedCodes.filter((code): code is string => typeof code === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(code));
         const response = await fetch("/api/customer/orders?codes=" + encodeURIComponent(validCodes.join(",")), { cache: "no-store" });
         const result = await response.json();
         if (!response.ok) {
@@ -165,7 +167,7 @@ export default function MyOrdersPage() {
         <div style={{ display: "grid", gap: "18px" }}>
           {orders.map((order) => (
             <div
-              key={order.id}
+              key={order.order_code}
               style={{
                 border: "1px solid #ddd",
                 borderRadius: "14px",

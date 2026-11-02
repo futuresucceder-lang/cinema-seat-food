@@ -44,6 +44,11 @@ export default function MyOrdersPage() {
         }
 
         const validCodes = savedCodes.filter((code): code is string => typeof code === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(code));
+        if (validCodes.length === 0) {
+          setOrders([]);
+          setLoading(false);
+          return;
+        }
         const response = await fetch("/api/customer/orders?codes=" + encodeURIComponent(validCodes.join(",")), { cache: "no-store" });
         const result = await response.json();
         if (!response.ok) {

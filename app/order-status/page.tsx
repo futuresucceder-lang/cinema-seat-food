@@ -14,10 +14,11 @@ function OrderStatusContent() {
 
   useEffect(() => {
     if (!orderCode) { setError("Order ID is missing."); setLoading(false); return; }
+    const requestedOrderCode = orderCode;
     let cancelled = false;
     async function loadOrder() {
       try {
-        const response = await fetch("/api/customer/orders?code=" + encodeURIComponent(orderCode), { cache: "no-store" });
+        const response = await fetch("/api/customer/orders?code=" + encodeURIComponent(requestedOrderCode), { cache: "no-store" });
         const result = await response.json();
         if (cancelled) return;
         if (!response.ok || !result.orders?.[0]) {

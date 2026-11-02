@@ -68,12 +68,14 @@ export async function POST(request: Request) {
       cleanItems.set(item.id, (cleanItems.get(item.id) || 0) + item.quantity);
     }
 
-    const [{ data: screenRow, error: screenError }, { data: cinema, error: cinemaError }] = await Promise.all([
-      adminSupabase.from("screens").select("id").eq("cinema_id", cinemaId).eq("name", screen).maybeSingle(),
+    const [{ data: screenRows, error: screenError }, { data: cinema, error: cinemaError }] = await Promise.all([
+      adminSupabase.from("screens").select("id,name").eq("cinema_id", cinemaId),
       adminSupabase.from("cinemas").select("id").eq("id", cinemaId).maybeSingle(),
     ]);
 
     if (cinemaError || screenError) throw new Error("Could not validate cinema and screen.");
+    const normalizeScreen = (value: string) => value.toLowerCase().replace(/^screen\\s*/i, "").trim();
+    const screenRow = (screenRows || []).find((row) => normalizeScreen(row.name) === normalizeScreen(screen));
     if (!cinema || !screenRow) return NextResponse.json({ error: "Cinema or screen not found." }, { status: 400 });
 
     const { data: seatRow, error: seatError } = await adminSupabase

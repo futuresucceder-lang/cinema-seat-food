@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 type Category = "All" | "Snacks" | "Drinks" | "Meals";
-type SavedOrder = { order_code: string; status: string; screen: string; seat: string; created_at: string; delivery_option?: string | null };
+type SavedOrder = { order_code: string; status: string; screen: string; seat: string; created_at: string; delivery_option?: string | null; cinema_id?: string | null };
 type ShowSchedule = { id: string; show_end_at: string };
 type DeliveryOption = "NOW" | "INTERVAL";
 type FoodItem = {
@@ -119,7 +119,7 @@ function CustomerOrderPage() {
       try {
         const stored = JSON.parse(localStorage.getItem("cinema_order_codes") || "[]");
         const codes = Array.isArray(stored)
-          ? [...new Set(stored.filter((code): code is string => typeof code === "string" && code.length > 0))]
+          ? [...new Set(stored.filter((code): code is string => typeof code === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(code)))]
           : [];
         if (codes.length === 0) {
           if (!cancelled) setSavedOrders([]);

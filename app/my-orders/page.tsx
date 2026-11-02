@@ -2,10 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-
-const supabase = createClient();
-
 type FoodItem = {
   id: string | number;
   name: string;
@@ -45,17 +41,14 @@ export default function MyOrdersPage() {
           return;
         }
 
-        const { data, error } = await supabase
-          .from("orders")
-          .select("*")
-          .in("order_code", savedCodes)
-          .order("created_at", { ascending: false });
-
-        if (error) {
-          console.error("Error loading orders:", error);
+        const validCodes = savedCodes.filter((code): code is string => typeof code === "string");
+        const response = await fetch("/api/customer/orders?codes=" + encodeURIComponent(validCodes.join(",")), { cache: "no-store" });
+        const result = await response.json();
+        if (!response.ok) {
+          console.error("Error loading orders:", result.error);
           setOrders([]);
         } else {
-          setOrders((data || []) as Order[]);
+          setOrders((result.orders || []) as Order[]);
         }
       } catch (error) {
         console.error("Error reading saved orders:", error);

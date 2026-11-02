@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { adminSupabase } from "@/lib/supabase/admin";
+import { getAdminSupabase } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +16,7 @@ function emojiFor(category: string | null) {
 // Public access is limited to high-entropy order codes created by this endpoint.
 // Never return the full orders table or accept a partial order-code search.
 export async function GET(request: Request) {
+  const adminSupabase = getAdminSupabase();
   const url = new URL(request.url);
   const singleCode = url.searchParams.get("code");
   const codesParam = url.searchParams.get("codes");
@@ -47,6 +48,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const adminSupabase = getAdminSupabase();
     const body = await request.json();
     const cinemaId = String(body.cinemaId || "");
     const screen = String(body.screen || "").trim();

@@ -506,10 +506,11 @@ export default function MasterAdminPage() {
               alt="SeatBite logo"
               style={{
                 display: "block",
-                width: "min(240px, 70vw)",
-                height: "100px",
+                width: "min(420px, 90vw)",
+                height: "160px",
                 objectFit: "contain",
                 objectPosition: "center",
+                mixBlendMode: "multiply",
               }}
             />
           </div>

@@ -43,7 +43,7 @@ export default function SeatBiteStaffLogin({ mode }: { mode: LoginMode }) {
         <h1>Run venue<br/>service<br/>with clear<br/>control.</h1>
         <p>Manage venues, screens, seats, catalog, orders, and delivery from one place.</p>
       </div>
-      <div className="sb-login-story-bottom"><strong>{isAdmin?"Master Admin":"Manager"}</strong><span>sign in with your {isAdmin?"master admin":"staff"} account</span></div>
+      <div className="sb-login-story-bottom"><strong>{isAdmin?"Master Admin":"Manager"}</strong><span>{isAdmin?"sign in with your Master Admin account":"sign in with your Manager staff account"}</span></div>
     </section>
     <section className="sb-login-form-side">
       <div className="sb-login-form-wrap">

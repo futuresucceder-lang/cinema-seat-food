@@ -7,7 +7,7 @@ export default function SeatBiteLanding() {
     <main className="sb-landing">
       <div className="sb-landing-wrap">
         <header className="sb-nav">
-          <Link href="/" className="sb-brand sb-brand-reference" aria-label="SeatBite home"><span className="sb-brand-mark" aria-hidden="true"><i /><i /><i /></span><span className="sb-brand-name">SeatBite</span></Link>
+          <Link href="/" className="sb-brand" aria-label="SeatBite home"><img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="seatbite-official-logo" /></Link>
           <span className="sb-platform-pill">VENUE ORDERING PLATFORM</span>
         </header>
 

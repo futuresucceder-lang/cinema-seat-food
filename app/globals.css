@@ -1950,3 +1950,37 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
 .sb-login-error{background:#fff0ed;border:1px solid #ffd0c7;color:#a82d1c;padding:12px;border-radius:10px;margin-bottom:18px;font-size:13px}
 @media(max-width:760px){.sb-landing-wrap{max-width:560px}.sb-hero{grid-template-columns:1fr;gap:8px;padding-top:38px}.sb-hero-art{height:300px}.sb-popcorn-photo{height:285px;width:225px}.sb-qr-float{left:calc(50% - 145px)}.sb-shortcuts{grid-template-columns:1fr}.sb-shortcuts>a{border-right:0;border-bottom:1px solid #e7dfd5}.sb-shortcuts>a:last-child{border-bottom:0}.sb-staff-login{grid-template-columns:1fr}.sb-login-story{min-height:330px;padding:28px}.sb-login-story h1{font-size:42px;margin:22px 0 10px}.sb-login-story p{font-size:13px}.sb-login-story-bottom{padding-top:12px}.sb-login-form-side{padding:38px 24px}.sb-login-brand{margin-bottom:45px}}
 @media(max-width:430px){.sb-landing{padding:0 18px 30px!important}.sb-platform-pill{font-size:7px;padding:6px 9px}.sb-hero-copy h1{font-size:49px}.sb-hero-actions{align-items:flex-start;flex-direction:column}.sb-text-link{max-width:260px}.sb-trust-row{gap:12px}.sb-login-story{min-height:300px}.sb-login-form-wrap h2{font-size:33px}}
+
+
+/* Final landing-page viewport fit and requested content refinements */
+.sb-landing{min-height:100svh!important;height:100svh;overflow:hidden;padding:0 24px 12px!important}
+.sb-landing-wrap{height:100%;min-height:0;display:flex;flex-direction:column}
+.sb-nav{height:62px;flex:0 0 62px}
+.sb-hero{flex:1 1 auto;min-height:0;padding:8px 0 12px;grid-template-columns:1fr .88fr;gap:28px}
+.sb-hero-copy h1{font-size:clamp(44px,5.3vw,60px);margin-bottom:15px}
+.sb-hero-description{margin-bottom:19px;line-height:1.55}
+.sb-hero-art{height:min(44vh,330px);min-height:250px}
+.sb-popcorn-photo{height:min(42vh,315px);width:min(34vw,260px)}
+.sb-popcorn-overlay strong{font-size:29px}
+.sb-popcorn-overlay small{display:none}
+.sb-shortcuts{flex:0 0 70px;min-height:70px}
+.sb-shortcuts>a{padding:10px 13px;gap:10px}
+.sb-shortcuts strong{font-size:9px}
+.sb-landing-footer{flex:0 0 26px;padding-top:9px}
+@media(max-height:700px) and (min-width:761px){
+ .sb-nav{height:52px;flex-basis:52px}
+ .sb-hero{padding:2px 0 7px}
+ .sb-hero-copy h1{font-size:48px;margin-bottom:10px}
+ .sb-hero-description{font-size:12px;margin-bottom:12px}
+ .sb-hero-art{height:275px;min-height:220px}
+ .sb-popcorn-photo{height:260px;width:220px}
+ .sb-shortcuts{flex-basis:62px;min-height:62px}
+ .sb-landing-footer{display:none}
+}
+@media(max-width:760px){
+ .sb-landing{height:auto;min-height:100svh;overflow:visible;padding:0 18px 22px!important}
+ .sb-landing-wrap{height:auto;min-height:100svh}
+ .sb-hero{flex:initial;min-height:0}
+ .sb-shortcuts{flex:initial}
+ .sb-landing-footer{flex:initial}
+}

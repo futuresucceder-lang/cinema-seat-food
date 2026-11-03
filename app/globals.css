@@ -2496,3 +2496,8 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
   position: relative;
   top: -28px;
 }
+
+/* Lower only the uploaded logo a little; leave all login content and spacing untouched. */
+.sb-staff-login .sb-login-brand .seatbite-official-logo {
+  transform: translateY(22px) !important;
+}

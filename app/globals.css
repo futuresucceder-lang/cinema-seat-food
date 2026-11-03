@@ -234,21 +234,21 @@ img { max-width: 100%; }
 /* Seat Bite brand mark and consistent dashboard design */
 .seatbite-logo-mark { padding: 0 !important; background: #fff !important; }
 .seatbite-logo-mark svg { display:block; width:100%; height:100%; filter: drop-shadow(0 4px 8px rgba(232,61,43,.16)); }
-main:not(.seatbite-page) {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) {
   color: var(--foreground);
 }
-main:not(.seatbite-page) h1,
-main:not(.seatbite-page) h2,
-main:not(.seatbite-page) h3 {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) h1,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) h2,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) h3 {
   letter-spacing: -.035em;
 }
-main:not(.seatbite-page) button {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) button {
   border-radius: 12px;
   font-weight: 650;
 }
-main:not(.seatbite-page) input,
-main:not(.seatbite-page) select,
-main:not(.seatbite-page) textarea {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) input,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) select,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) textarea {
   min-height: 42px;
   border: 1px solid #e9dcd5;
   border-radius: 11px;
@@ -256,13 +256,13 @@ main:not(.seatbite-page) textarea {
   color: #202124;
   padding: 10px 12px;
 }
-main:not(.seatbite-page) input:focus,
-main:not(.seatbite-page) select:focus,
-main:not(.seatbite-page) textarea:focus {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) input:focus,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) select:focus,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) textarea:focus {
   border-color: #f45135;
   outline: 3px solid rgba(244,81,53,.13);
 }
-main:not(.seatbite-page) table {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -271,21 +271,21 @@ main:not(.seatbite-page) table {
   border-radius: 16px;
   overflow: hidden;
 }
-main:not(.seatbite-page) th {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) th {
   background: #fff0e9;
   color: #59473f;
   text-align: left;
   font-weight: 750;
 }
-main:not(.seatbite-page) th,
-main:not(.seatbite-page) td {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) th,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) td {
   padding: 12px 14px;
   border-bottom: 1px solid #f3e9e4;
 }
-main:not(.seatbite-page) tr:last-child td { border-bottom: 0; }
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) tr:last-child td { border-bottom: 0; }
 @media (max-width: 640px) {
-  main:not(.seatbite-page) { overflow-wrap: anywhere; }
-  main:not(.seatbite-page) table { display:block; overflow-x:auto; white-space:nowrap; }
+  main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) { overflow-wrap: anywhere; }
+  main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) table { display:block; overflow-x:auto; white-space:nowrap; }
 }
 
 
@@ -788,20 +788,20 @@ button:not(:disabled):hover { transform: translateY(-2px); }
 .seatbite-dashboard-wordmark { color: #fff !important; }
 .seatbite-manager-page button,
 .seatbite-manager-page a,
-main:not(.seatbite-page) button {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) button {
   border-radius: 12px;
 }
 .seatbite-manager-page input,
 .seatbite-manager-page select,
 .seatbite-manager-page textarea,
-main:not(.seatbite-page) input,
-main:not(.seatbite-page) select,
-main:not(.seatbite-page) textarea {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) input,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) select,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) textarea {
   border-radius: 12px !important;
 }
 .seatbite-manager-page button:not([data-variant="secondary"]),
 .seatbite-manager-page .primary,
-main:not(.seatbite-page) button[type="submit"] {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) button[type="submit"] {
   border-color: #ff1744;
 }
 main[style*="background: rgb(17, 17, 17)"],
@@ -851,7 +851,7 @@ button, input, select, textarea, label, p, td, th {
   font-family: var(--font-oswald), Arial, sans-serif;
 }
 .seatbite-page, .seatbite-manager-page, .seatbite-status-page,
-main:not(.seatbite-page) {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) {
   background-color: #f4f1ee !important;
   background-image:
     radial-gradient(circle at 12px 12px,rgba(242,13,47,.075) 1.5px,transparent 2px) !important;
@@ -889,7 +889,7 @@ main:not(.seatbite-page) {
 .seatbite-food-card, .seatbite-product-card, .seatbite-cart,
 .seatbite-status-card, .seatbite-order-card, .seatbite-my-orders-panel,
 .seatbite-manager-page section, .seatbite-manager-page article,
-.seatbite-manager-page [class*="card"], main:not(.seatbite-page) table {
+.seatbite-manager-page [class*="card"], main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) table {
   border: 2px solid var(--seatbite-ink) !important;
   border-radius: 18px 18px 6px 18px !important;
   background: var(--seatbite-paper) !important;
@@ -897,7 +897,7 @@ main:not(.seatbite-page) {
 }
 .seatbite-categories button, .seatbite-my-orders-button,
 .seatbite-secondary-button, .seatbite-manager-page button,
-main:not(.seatbite-page) button {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) button {
   border: 2px solid var(--seatbite-ink) !important;
   border-radius: 10px 10px 4px 10px !important;
   box-shadow: 3px 3px 0 var(--seatbite-ink) !important;
@@ -906,7 +906,7 @@ main:not(.seatbite-page) button {
 .seatbite-categories button.seatbite-category-active,
 .seatbite-primary-button, .seatbite-add-button, .seatbite-food-card button,
 .seatbite-cart button:last-child, .seatbite-manager-page button[type="submit"],
-main:not(.seatbite-page) button[type="submit"] {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) button[type="submit"] {
   background: var(--seatbite-red) !important;
   color: white !important;
   border-color: var(--seatbite-ink) !important;
@@ -914,8 +914,8 @@ main:not(.seatbite-page) button[type="submit"] {
 .seatbite-product-content h3 { font-size: 23px !important; }
 .seatbite-product-bottom>strong, .seatbite-cart-total strong { color: var(--seatbite-red) !important; }
 .seatbite-manager-page input, .seatbite-manager-page select,
-.seatbite-manager-page textarea, main:not(.seatbite-page) input,
-main:not(.seatbite-page) select, main:not(.seatbite-page) textarea {
+.seatbite-manager-page textarea, main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) input,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) select, main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) textarea {
   border: 2px solid #d5d0cd !important;
   border-radius: 8px !important;
   background: #fff !important;
@@ -1647,16 +1647,16 @@ body {
 .seatbite-manager-login > section h1 { color:#173437 !important; }
 .seatbite-manager-login label { color:#173437 !important; }
 .seatbite-manager-login input { color:#173437 !important;-webkit-text-fill-color:#173437 !important;background:#fffdf7 !important; }
-main:not(.seatbite-page):not(.seatbite-manager-login) {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login):not(.seatbite-manager-login) {
   background-color:#fff3d9;
 }
-main:not(.seatbite-page):not(.seatbite-manager-login) h1,
-main:not(.seatbite-page):not(.seatbite-manager-login) h2,
-main:not(.seatbite-page):not(.seatbite-manager-login) h3 { color:#173437; }
-main:not(.seatbite-page):not(.seatbite-manager-login) label { color:#173437; }
-main:not(.seatbite-page):not(.seatbite-manager-login) input,
-main:not(.seatbite-page):not(.seatbite-manager-login) select,
-main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login):not(.seatbite-manager-login) h1,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login):not(.seatbite-manager-login) h2,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login):not(.seatbite-manager-login) h3 { color:#173437; }
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login):not(.seatbite-manager-login) label { color:#173437; }
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login):not(.seatbite-manager-login) input,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login):not(.seatbite-manager-login) select,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login):not(.seatbite-manager-login) textarea {
   background:#fffdf7 !important;color:#173437 !important;-webkit-text-fill-color:#173437 !important;
   border-color:#d9c5a0 !important;
 }
@@ -2531,7 +2531,7 @@ body {
   color: var(--sb-ink);
   font-family: var(--font-inter), Inter, Arial, sans-serif !important;
 }
-body > main:not(.seatbite-page):not(.sb-staff-login),
+body > main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login):not(.sb-staff-login),
 main.seatbite-manager-page,
 main.seatbite-food-court-page,
 main.seatbite-dashboard-page {
@@ -2546,7 +2546,7 @@ main.seatbite-dashboard-page {
 main.seatbite-manager-page::before,
 main.seatbite-food-court-page::before,
 main.seatbite-dashboard-page::before,
-main:not(.seatbite-page):not(.sb-staff-login)::before {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login):not(.sb-staff-login)::before {
   content: "";
   display: block;
   width: min(248px, 62vw);
@@ -2566,94 +2566,113 @@ main.seatbite-food-court-page > div,
 main.seatbite-dashboard-page > div {
   max-width: 1240px;
 }
-main:not(.seatbite-page) h1,
-main:not(.seatbite-page) h2,
-main:not(.seatbite-page) h3,
-main:not(.seatbite-page) h4 {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) h1,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) h2,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) h3,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) h4 {
   color: var(--sb-ink);
   font-family: var(--font-inter), Inter, Arial, sans-serif !important;
   font-weight: 800;
   letter-spacing: -.045em;
 }
-main:not(.seatbite-page) p,
-main:not(.seatbite-page) label,
-main:not(.seatbite-page) td,
-main:not(.seatbite-page) th,
-main:not(.seatbite-page) span {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) p,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) label,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) td,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) th,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) span {
   font-family: var(--font-inter), Inter, Arial, sans-serif;
 }
-main:not(.seatbite-page) a {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) a {
   color: var(--sb-red);
 }
-main:not(.seatbite-page) button {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) button {
   border-radius: 12px !important;
   font-weight: 750;
   transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
 }
-main:not(.seatbite-page) button:not(:disabled):hover {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) button:not(:disabled):hover {
   box-shadow: 0 7px 18px rgba(68,35,22,.10);
 }
-main:not(.seatbite-page) input,
-main:not(.seatbite-page) select,
-main:not(.seatbite-page) textarea {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) input,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) select,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) textarea {
   color: var(--sb-ink) !important;
   background: #fff !important;
   border: 1px solid var(--sb-line) !important;
   border-radius: 12px !important;
 }
-main:not(.seatbite-page) input::placeholder,
-main:not(.seatbite-page) textarea::placeholder { color: #a18e84 !important; }
-main:not(.seatbite-page) article,
-main:not(.seatbite-page) section,
-main:not(.seatbite-page) form,
-main:not(.seatbite-page) .qr-card {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) input::placeholder,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) textarea::placeholder { color: #a18e84 !important; }
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) article,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) section,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) form,
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) .qr-card {
   border-radius: 18px;
 }
-main:not(.seatbite-page) table {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) table {
   border: 1px solid var(--sb-line);
   border-radius: 16px;
   background: #fff;
 }
-main:not(.seatbite-page) th {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) th {
   background: var(--sb-peach) !important;
   color: #59473f !important;
 }
-main:not(.seatbite-page) td { color: #433832; }
-main:not(.seatbite-page) [style*="background: #111"],
-main:not(.seatbite-page) [style*="background:#111"],
-main:not(.seatbite-page) [style*="background: \"#111\""],
-main:not(.seatbite-page) [style*="background: #050505"],
-main:not(.seatbite-page) [style*="background:#050505"],
-main:not(.seatbite-page) [style*="background: #222"],
-main:not(.seatbite-page) [style*="background:#222"],
-main:not(.seatbite-page) [style*="background: #333"],
-main:not(.seatbite-page) [style*="background:#333"],
-main:not(.seatbite-page) [class*="bg-slate-950"],
-main:not(.seatbite-page) [class*="bg-slate-900"] {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) td { color: #433832; }
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="background: #111"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="background:#111"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="background: \"#111\""],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="background: #050505"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="background:#050505"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="background: #222"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="background:#222"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="background: #333"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="background:#333"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [class*="bg-slate-950"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [class*="bg-slate-900"] {
   background: #fff !important;
   color: var(--sb-ink) !important;
   border-color: var(--sb-line) !important;
 }
-main:not(.seatbite-page) [style*="color: white"],
-main:not(.seatbite-page) [style*="color: \"white\""],
-main:not(.seatbite-page) [class*="text-white"],
-main:not(.seatbite-page) [class*="text-slate-"] {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="color: white"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="color: \"white\""],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [class*="text-white"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [class*="text-slate-"] {
   color: var(--sb-ink) !important;
 }
-main:not(.seatbite-page) [style*="#ff0038"],
-main:not(.seatbite-page) [style*="#f45135"],
-main:not(.seatbite-page) [style*="#e83d2b"] {
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="#ff0038"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="#f45135"],
+main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login) [style*="#e83d2b"] {
   border-color: var(--sb-red) !important;
 }
 @media (max-width: 640px) {
   main.seatbite-manager-page::before,
   main.seatbite-food-court-page::before,
   main.seatbite-dashboard-page::before,
-  main:not(.seatbite-page):not(.sb-staff-login)::before {
+  main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login):not(.sb-staff-login)::before {
     height: 54px;
     margin-bottom: 12px;
   }
 }
 @media print {
-  main:not(.seatbite-page)::before { display: none !important; }
+  main:not(.seatbite-page):not(.sb-landing):not(.sb-staff-login)::before { display: none !important; }
+}
+
+
+/* Explicitly protect the approved homepage and every staff login page from
+   the internal-dashboard redesign layer above. */
+body:has(main.sb-landing),
+body:has(main.sb-staff-login) {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+main.sb-landing,
+main.sb-staff-login {
+  background: unset;
+}
+main.sb-landing::before,
+main.sb-staff-login::before {
+  content: none !important;
+  display: none !important;
 }

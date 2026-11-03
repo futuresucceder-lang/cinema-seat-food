@@ -2387,21 +2387,21 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
   box-shadow: 0 5px 18px rgba(0, 0, 0, .16);
 }
 .sb-brand .seatbite-official-logo {
-  width: 190px;
-  max-width: min(42vw, 190px);
+  width: 270px;
+  max-width: min(58vw, 270px);
 }
 .sb-login-brand .seatbite-official-logo {
-  width: 210px;
-  max-width: min(65vw, 210px);
+  width: 300px;
+  max-width: min(72vw, 300px);
 }
 .seatbite-wordmark .seatbite-official-logo,
 .seatbite-dashboard-brand .seatbite-official-logo {
-  width: 190px;
-  max-width: min(48vw, 190px);
+  width: 260px;
+  max-width: min(60vw, 260px);
 }
 @media (max-width: 760px) {
-  .sb-brand .seatbite-official-logo { width: 154px; padding: 6px 9px; }
-  .sb-login-brand .seatbite-official-logo { width: 180px; }
+  .sb-brand .seatbite-official-logo { width: 210px; max-width: 62vw; padding: 7px 10px; }
+  .sb-login-brand .seatbite-official-logo { width: 230px; max-width: 72vw; }
   .seatbite-wordmark .seatbite-official-logo,
-  .seatbite-dashboard-brand .seatbite-official-logo { width: 154px; padding: 6px 9px; }
+  .seatbite-dashboard-brand .seatbite-official-logo { width: 210px; max-width: 64vw; padding: 7px 10px; }
 }

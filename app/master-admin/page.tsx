@@ -1091,6 +1091,7 @@ export default function MasterAdminPage() {
                           </button>
 
                           <button
+                            className="seatbite-master-admin-close-button"
                             onClick={() =>
                               setOpenCinemaId(null)
                             }

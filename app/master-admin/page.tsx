@@ -445,7 +445,7 @@ export default function MasterAdminPage() {
   }
 
   if (!authReady) {
-    return <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", background: "#fff8f4", fontFamily: "Arial, sans-serif" }}><p>Checking Master Admin access…</p></main>;
+    return <main className="seatbite-master-admin-page" style={{ minHeight: "100vh", display: "grid", placeItems: "center", background: "#fff8f4", fontFamily: "Arial, sans-serif" }}><p>Checking Master Admin access…</p></main>;
   }
 
   if (!isMasterAdmin) {

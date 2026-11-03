@@ -248,7 +248,7 @@ export default function AdminDashboard() {
             🎬
           </div>
 
-          <div className="seatbite-dashboard-brand"><span className="seatbite-dashboard-logo">🍿</span><span className="seatbite-dashboard-wordmark">seat<span style={{color:"#f05236"}}>bite</span></span></div>
+          <div className="seatbite-dashboard-brand"><img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="seatbite-official-logo" style={{display:"block",width:190,height:"auto",maxHeight:58,objectFit:"contain"}} /></div>
           <h1 className="seatbite-manager-title">Manager Dashboard</h1>
 
           <p

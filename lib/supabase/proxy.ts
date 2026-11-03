@@ -38,17 +38,17 @@ export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   const managerRoutes =
-    pathname.startsWith("/admin") ||
+    (pathname === "/admin" || pathname.startsWith("/admin/")) ||
     pathname.startsWith("/order-history") ||
     pathname.startsWith("/screens-seats") ||
     pathname.startsWith("/qr-generator");
 
-  const foodCourtRoute = pathname.startsWith("/food-court");
+  const foodCourtRoute = pathname === "/food-court" || pathname.startsWith("/food-court/");
 
   // Any protected page requires login.
   if ((managerRoutes || foodCourtRoute) && !claims) {
     const url = request.nextUrl.clone();
-    url.pathname = "/manager-login";
+    url.pathname = foodCourtRoute ? "/food-court-login" : "/manager-login";
     url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }

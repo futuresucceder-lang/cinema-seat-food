@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import SeatBiteLanding from "@/app/components/SeatBiteLanding";
 
 type Category = "All" | "Snacks" | "Drinks" | "Meals";
 type SavedOrder = { order_code: string; status: string; screen: string; seat: string; created_at: string; delivery_option?: string | null; cinema_id?: string | null };
@@ -227,17 +228,7 @@ function CustomerOrderPage() {
   }
 
   if (!cinemaId || !screen || !seat) {
-    return (
-      <main className="seatbite-page seatbite-gate">
-        <section className="seatbite-gate-card">
-          <div className="seatbite-gate-icon">🎬</div>
-          <div className="seatbite-brand-small"><span>🍿</span> SEAT BITE</div>
-          <p className="seatbite-eyebrow">CINEMA, MADE DELICIOUS</p>
-          <h1>Your movie night,<br />with better bites.</h1>
-          <p className="seatbite-muted">Please scan the QR code at your cinema seat to load the correct cinema menu.</p>
-        </section>
-      </main>
-    );
+    return <SeatBiteLanding />;
   }
 
   if (orderPlaced) {
@@ -267,7 +258,7 @@ function CustomerOrderPage() {
     <main className="seatbite-page">
       <div className="seatbite-shell">
         <div className="seatbite-topline">
-          <div className="seatbite-wordmark"><span className="seatbite-wordmark-icon">🍿</span><span>seat<span>bite</span></span></div>
+          <div className="seatbite-wordmark"><img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="seatbite-official-logo" style={{display:"block",width:190,height:"auto",maxHeight:58,objectFit:"contain"}} /></div>
           <div className="seatbite-top-actions"><div className="seatbite-open-pill"><span></span> SERVING YOUR SCREEN</div><button type="button" className="seatbite-secondary-button seatbite-my-orders-button" onClick={() => setShowMyOrders((open) => !open)} aria-expanded={showMyOrders}>My Orders <span>↗</span></button></div>
         </div>
         <header className="seatbite-hero">

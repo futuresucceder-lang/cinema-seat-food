@@ -452,7 +452,7 @@ export default function MasterAdminPage() {
     return (
       <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: "24px", background: "#fff8f4", fontFamily: "Arial, sans-serif" }}>
         <form onSubmit={handleMasterAdminLogin} style={{ width: "100%", maxWidth: "420px", background: "#fff", padding: "30px", borderRadius: "16px", boxShadow: "0 8px 30px rgba(0,0,0,0.10)", boxSizing: "border-box" }}>
-          <div style={{ fontSize: "30px", fontWeight: 900, color: "#d92727" }}> seat bite</div>
+          <div style={{ display: "flex", justifyContent: "center", margin: "0 auto 18px" }}><img src="/seatbite-logo.webp.jpg" alt="SeatBite logo" style={{ display: "block", width: "min(240px, 70vw)", height: "100px", objectFit: "contain", objectPosition: "center" }} /></div>
           <h1 style={{ margin: "18px 0 8px", color: "#171717" }}>Master Admin Login</h1>
           <p style={{ color: "#666", marginBottom: "22px" }}>Sign in with your authorized Master Admin account.</p>
           <label htmlFor="master-admin-email" style={{ display: "block", fontWeight: 700, marginBottom: "6px" }}>Email</label>
@@ -502,7 +502,7 @@ export default function MasterAdminPage() {
             }}
           >
             <img
-              src="/seat-bite-logo.svg"
+              src="/seatbite-logo.webp.jpg"
               alt="SeatBite logo"
               style={{
                 display: "block",

@@ -24,7 +24,8 @@ export default function SeatBiteStaffLogin({ mode }: { mode: LoginMode }) {
     const {data:{user}}=await supabase.auth.getUser();
     const role=user?.app_metadata?.role;
     if(isAdmin){
-      if(role==="master_admin"){router.push("/master-admin");router.refresh();return;}
+      const {data:profile}=user?await supabase.from("profiles").select("role").eq("id",user.id).maybeSingle():{data:null};
+      if(role==="master_admin"||profile?.role==="master_admin"){router.push("/master-admin");router.refresh();return;}
     }else{
       if(role==="manager"){router.push("/admin");router.refresh();return;}
       if(role==="food_court"){router.push("/food-court");router.refresh();return;}

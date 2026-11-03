@@ -54,7 +54,7 @@ function OrderStatusContent() {
   return (
     <main className="seatbite-page seatbite-status-page">
       <div className="seatbite-status-shell">
-        <header className="seatbite-status-topline"><a href="/" className="seatbite-wordmark"><span className="seatbite-wordmark-icon">🍿</span><span>seat<span>bite</span></span></a><span className="seatbite-open-pill"><span></span> LIVE ORDER UPDATES</span></header>
+        <header className="seatbite-status-topline"><a href="/" className="seatbite-wordmark" aria-label="SeatBite home"><img src="/seatbite-logo.webp.jpg" alt="SeatBite" style={{display:"block",width:190,height:"auto",maxHeight:58,objectFit:"contain"}} /></a><span className="seatbite-open-pill"><span></span> LIVE ORDER UPDATES</span></header>
         <section className="seatbite-status-hero"><p className="seatbite-eyebrow">YOUR MOVIE NIGHT, IN MOTION</p><h1>Track your <span>order.</span></h1><p>We'll keep you posted while your favourites make their way to you.</p></section>
         <section className="seatbite-status-card seatbite-order-summary">
           <div className="seatbite-status-card-heading"><div><p className="seatbite-eyebrow">ORDER NUMBER</p><h2>{order.order_code}</h2></div><span className={"seatbite-status-badge status-" + status.toLowerCase()}>{status.replace("_", " ")}</span></div>
@@ -67,7 +67,7 @@ function OrderStatusContent() {
         </section>
         <section className="seatbite-status-card"><p className="seatbite-eyebrow">IN YOUR SNACK BOX</p><h2 className="seatbite-section-title">Your order</h2><div className="seatbite-status-food-list">{order.food_items?.map((item, index) => <div className="seatbite-status-food" key={item.id ?? index}><span className="seatbite-status-food-icon">{item.emoji ?? "🍿"}</span><span className="seatbite-status-food-name">{item.name}<small>Quantity: {item.quantity ?? 1}</small></span><strong>₹{(item.price ?? 0) * (item.quantity ?? 1)}</strong></div>)}</div><div className="seatbite-status-total"><span>Total</span><strong>₹{order.total}</strong></div></section>
         <a href={order.cinema_id ? `/?cinema=${encodeURIComponent(order.cinema_id)}&screen=${encodeURIComponent(order.screen)}&seat=${encodeURIComponent(order.seat)}` : "/"} className="seatbite-secondary-button seatbite-status-back">← Back to menu</a>
-        <footer className="seatbite-footer"><span>🍿 seatbite</span><span>Good food. Great movies.</span></footer>
+        <footer className="seatbite-footer"><img src="/seatbite-logo.webp.jpg" alt="SeatBite" style={{display:"inline-block",width:140,height:"auto",maxHeight:42,objectFit:"contain",verticalAlign:"middle"}} /><span>Good food. Great movies.</span></footer>
       </div>
     </main>
   );

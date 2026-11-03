@@ -258,7 +258,7 @@ function CustomerOrderPage() {
     <main className="seatbite-page">
       <div className="seatbite-shell">
         <div className="seatbite-topline">
-          <div className="seatbite-wordmark"><img src="/seatbite-logo.webp.jpg" alt="SeatBite" style={{display:"block",width:190,height:"auto",maxHeight:58,objectFit:"contain"}} /></div>
+          <div className="seatbite-wordmark"><img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="seatbite-official-logo" style={{display:"block",width:190,height:"auto",maxHeight:58,objectFit:"contain"}} /></div>
           <div className="seatbite-top-actions"><div className="seatbite-open-pill"><span></span> SERVING YOUR SCREEN</div><button type="button" className="seatbite-secondary-button seatbite-my-orders-button" onClick={() => setShowMyOrders((open) => !open)} aria-expanded={showMyOrders}>My Orders <span>↗</span></button></div>
         </div>
         <header className="seatbite-hero">

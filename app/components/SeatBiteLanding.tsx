@@ -7,7 +7,7 @@ export default function SeatBiteLanding() {
     <main className="sb-landing">
       <div className="sb-landing-wrap">
         <header className="sb-nav">
-          <Link href="/" className="sb-brand" aria-label="SeatBite home"><img src="/seatbite-logo.webp.jpg" alt="SeatBite" style={{display:"block",width:190,height:"auto",maxHeight:58,objectFit:"contain"}} /></Link>
+          <Link href="/" className="sb-brand" aria-label="SeatBite home"><img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="seatbite-official-logo" style={{display:"block",width:190,height:"auto",maxHeight:58,objectFit:"contain"}} /></Link>
           <span className="sb-platform-pill">VENUE ORDERING PLATFORM</span>
         </header>
 

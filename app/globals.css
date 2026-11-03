@@ -2335,3 +2335,27 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
 }
 .sb-staff-login .sb-login-story-bottom strong{color:#ffb52e!important}
 .sb-staff-login .sb-login-story-bottom span{color:#ffffff!important}
+
+
+/* Login form controls match the supplied button and eye-toggle reference */
+.sb-staff-login .sb-login-form-wrap .sb-password-toggle{
+  position:absolute!important;right:12px!important;top:50%!important;
+  transform:translateY(-50%)!important;width:28px!important;height:28px!important;
+  padding:4px!important;display:inline-flex!important;align-items:center!important;
+  justify-content:center!important;border:0!important;border-radius:50%!important;
+  background:transparent!important;color:#929797!important;cursor:pointer!important;
+}
+.sb-staff-login .sb-password-toggle svg{
+  display:block!important;width:18px!important;height:18px!important;fill:none!important;
+  stroke:currentColor!important;stroke-width:1.7!important;stroke-linecap:round!important;stroke-linejoin:round!important;
+}
+.sb-staff-login .sb-login-form-wrap input#staff-password{padding-right:52px!important}
+.sb-staff-login .sb-login-form-wrap .sb-login-submit{
+  display:flex!important;width:100%!important;min-height:51px!important;height:51px!important;
+  align-items:center!important;justify-content:center!important;gap:9px!important;
+  margin-top:18px!important;padding:0 22px!important;border:0!important;border-radius:13px!important;
+  background:#f43d27!important;color:#fff!important;font-size:14px!important;font-weight:800!important;
+  line-height:1!important;box-shadow:none!important;transition:background .18s ease,transform .18s ease!important;
+}
+.sb-staff-login .sb-login-form-wrap .sb-login-submit:hover:not(:disabled){background:#df321f!important;transform:translateY(-1px)!important}
+.sb-staff-login .sb-login-form-wrap .sb-login-submit:disabled{opacity:.72!important;cursor:wait!important}

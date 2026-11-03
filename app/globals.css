@@ -2326,3 +2326,12 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
  .sb-login-brand{margin-bottom:48px!important}
  .sb-login-story h1{font-size:46px!important}
 }
+
+
+/* Keep the large cinema-story headline white on both role login pages */
+.sb-staff-login .sb-login-story .sb-login-story-copy h1{
+  color:#ffffff!important;
+  -webkit-text-fill-color:#ffffff!important;
+}
+.sb-staff-login .sb-login-story-bottom strong{color:#ffb52e!important}
+.sb-staff-login .sb-login-story-bottom span{color:#ffffff!important}

@@ -2129,3 +2129,71 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
  .sb-shortcuts>a{min-height:68px!important;border-right:0!important;border-bottom:1px solid #e7dfd5!important}
  .sb-shortcuts>a:last-child{border-bottom:0!important}
 }
+
+
+/* Latest requested reference details */
+.sb-landing,.sb-landing *{font-family:var(--font-geist-sans),Arial,sans-serif}
+.sb-hero-copy h1,.sb-popcorn-overlay strong,.sb-brand,.sb-shortcuts strong{
+  font-weight:850;
+  letter-spacing:-.065em;
+}
+.sb-hero-copy h1{letter-spacing:-.075em!important}
+.sb-popcorn-overlay strong{letter-spacing:-.055em!important}
+.sb-qr-float{
+  z-index:5!important;
+  left:-22px!important;
+  top:18%!important;
+  bottom:auto!important;
+  width:clamp(145px,14vw,190px)!important;
+  min-height:138px!important;
+  height:auto!important;
+  padding:20px 15px!important;
+  border-radius:12px!important;
+  transform:rotate(-7deg)!important;
+  box-shadow:0 18px 38px rgba(32,28,22,.2)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+}
+.sb-qr-float small{
+  display:block!important;
+  font-size:9px!important;
+  font-weight:850!important;
+  letter-spacing:1.5px!important;
+  color:#202526!important;
+}
+.sb-qr-float strong{
+  display:block!important;
+  font-size:clamp(18px,1.9vw,25px)!important;
+  line-height:1!important;
+  letter-spacing:-1.3px!important;
+  font-weight:900!important;
+  color:#202526!important;
+  text-align:center!important;
+}
+.sb-qr-float span{
+  display:block!important;
+  font-size:9px!important;
+  font-weight:850!important;
+  letter-spacing:1.2px!important;
+  color:#202526!important;
+}
+.sb-shortcuts>a b{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin-left:auto!important;
+  font-size:21px!important;
+  font-weight:400!important;
+}
+.sb-shortcuts>a:first-child b{display:none!important}
+.sb-shortcuts>a:nth-child(2) b,.sb-shortcuts>a:nth-child(3) b{display:inline-flex!important}
+.sb-shortcuts>a:nth-child(2),.sb-shortcuts>a:nth-child(3){cursor:pointer}
+@media(max-width:900px){
+ .sb-qr-float{left:-12px!important;top:20%!important;width:145px!important;min-height:125px!important}
+}
+@media(max-width:650px){
+ .sb-qr-float{left:calc(50% - 150px)!important;top:18px!important;width:132px!important;min-height:116px!important}
+}

@@ -2405,3 +2405,13 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
   .seatbite-wordmark .seatbite-official-logo,
   .seatbite-dashboard-brand .seatbite-official-logo { width: 210px; max-width: 64vw; padding: 7px 10px; }
 }
+
+/* Landing-page brand lockup styled to match the supplied SeatBite reference. */
+.sb-brand-reference{display:inline-flex!important;align-items:center!important;gap:11px!important;text-decoration:none!important;}
+.sb-brand-reference .sb-brand-mark{width:38px!important;height:38px!important;min-width:38px!important;border-radius:11px!important;transform:none!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:3px!important;background:#fa4029!important;}
+.sb-brand-reference .sb-brand-mark i{display:block;width:4px;border-radius:4px;background:#fff;}
+.sb-brand-reference .sb-brand-mark i:nth-child(1){height:13px;}
+.sb-brand-reference .sb-brand-mark i:nth-child(2){height:21px;}
+.sb-brand-reference .sb-brand-mark i:nth-child(3){height:16px;}
+.sb-brand-reference .sb-brand-name{font-size:25px!important;line-height:1!important;font-weight:950!important;letter-spacing:-1.2px!important;color:#202526!important;}
+@media(max-width:760px){.sb-brand-reference .sb-brand-mark{width:34px!important;height:34px!important;min-width:34px!important;}.sb-brand-reference .sb-brand-name{font-size:23px!important;}}

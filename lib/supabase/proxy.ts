@@ -38,7 +38,7 @@ export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   const managerRoutes =
-    pathname.startsWith("/admin") ||
+    (pathname === "/admin" || pathname.startsWith("/admin/")) ||
     pathname.startsWith("/order-history") ||
     pathname.startsWith("/screens-seats") ||
     pathname.startsWith("/qr-generator");

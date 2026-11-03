@@ -2375,3 +2375,33 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
 .sb-brand-word{display:inline-flex;align-items:baseline;gap:0}
 .sb-brand-seat{color:#fa4029!important}
 .sb-brand-bite{color:inherit!important}
+
+/* Official SeatBite logo treatment: clean contrast on dark and light sections. */
+.seatbite-official-logo {
+  background: #fff;
+  border: 1px solid rgba(18, 25, 38, .08);
+  border-radius: 12px;
+  padding: 7px 12px;
+  box-sizing: border-box;
+  object-fit: contain;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, .16);
+}
+.sb-brand .seatbite-official-logo {
+  width: 190px;
+  max-width: min(42vw, 190px);
+}
+.sb-login-brand .seatbite-official-logo {
+  width: 210px;
+  max-width: min(65vw, 210px);
+}
+.seatbite-wordmark .seatbite-official-logo,
+.seatbite-dashboard-brand .seatbite-official-logo {
+  width: 190px;
+  max-width: min(48vw, 190px);
+}
+@media (max-width: 760px) {
+  .sb-brand .seatbite-official-logo { width: 154px; padding: 6px 9px; }
+  .sb-login-brand .seatbite-official-logo { width: 180px; }
+  .seatbite-wordmark .seatbite-official-logo,
+  .seatbite-dashboard-brand .seatbite-official-logo { width: 154px; padding: 6px 9px; }
+}

@@ -9,8 +9,8 @@ const marker = Permanent_Marker({ weight: "400", variable: "--font-marker", subs
 const oswald = Oswald({ variable: "--font-oswald", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Seat Bite | Movie Snacks to Your Seat",
-  description: "Order your favourite cinema snacks directly from your seat with Seat Bite.",
+  title: "SeatBite | Venue Ordering Platform",
+  description: "A venue ordering platform for seat-based food ordering, staff operations, and cinema management.",
   applicationName: "Seat Bite",
 };
 

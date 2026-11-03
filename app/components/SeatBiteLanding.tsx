@@ -15,23 +15,23 @@ export default function SeatBiteLanding() {
           <div className="sb-hero-copy">
             <p className="sb-eyebrow">ORDER. WATCH. ENJOY.</p>
             <h1>Great food.<br /><em>Zero<br />intermission.</em></h1>
-            <p className="sb-hero-description">Guests scan their seat QR, place orders, and get food delivered without leaving the show. Staff manage the full workflow from one operations console.</p>
+            <p className="sb-hero-description">Scan the QR code on your seat, order your favourites, and enjoy your snacks without missing the show.</p>
             <div className="sb-hero-actions">
               <Link href="/manager-login" className="sb-primary-link">Manager<br />Login <span>→</span></Link>
-              <a href="#customer-flow" className="sb-text-link">Customer ordering begins from a live seat QR <span>↗</span></a>
+              <a href="#customer-flow" className="sb-text-link">Scan the QR on your seat <span>↗</span></a>
             </div>
-            <div className="sb-trust-row"><span>♧ Secure seat QR</span><span>10 min average prep</span></div>
+            <div className="sb-trust-row"><span>♧ Scan. Order. Enjoy.</span></div>
           </div>
           <div className="sb-hero-art" aria-label="Caramel popcorn served to your seat">
-            <div className="sb-popcorn-photo"><div className="sb-popcorn-overlay"><small>NOW SERVING</small><strong>Caramel<br />Popcorn</strong><span>delivered to your seat</span></div></div>
+            <div className="sb-popcorn-photo"><div className="sb-popcorn-overlay"><strong>Enjoy<br />your snacks</strong><span>delivered to your seat</span></div></div>
             <div className="sb-qr-float"><small>SCAN QR</small><strong>SEAT</strong><span>ORDER HERE</span></div>
           </div>
         </section>
 
         <nav className="sb-shortcuts" aria-label="Platform shortcuts">
-          <a id="customer-flow" href="#customer-flow"><span className="sb-shortcut-icon">▯</span><span><small>CUSTOMER FLOW</small><strong>Use live seat QR codes inside the venue</strong></span><b>↗</b></a>
+          <a id="customer-flow" href="#customer-flow"><span className="sb-shortcut-icon">▯</span><span><small>CUSTOMER</small><strong>Scan the QR on your seat</strong></span><b>↗</b></a>
           <Link href="/manager-login"><span className="sb-shortcut-icon">◉</span><span><small>STAFF ACCESS</small><strong>Manager Login</strong></span><b>→</b></Link>
-          <Link href="/admin-login"><span className="sb-shortcut-icon">◉</span><span><small>VENUE CONTROL</small><strong>Admin Login</strong></span><b>→</b></Link>
+          <Link href="/admin-login"><span className="sb-shortcut-icon">◉</span><span><small>MASTER ADMIN</small><strong>Master Admin Login</strong></span><b>→</b></Link>
         </nav>
         <footer className="sb-landing-footer">SeatBite <span>Good food. Great movies.</span></footer>
       </div>

@@ -2426,3 +2426,13 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
   box-shadow: none !important;
   mix-blend-mode: multiply;
 }
+
+/* Apply the same seamless uploaded-logo treatment to every staff login role. */
+.sb-login-brand .seatbite-official-logo {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  mix-blend-mode: multiply;
+}

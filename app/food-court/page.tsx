@@ -276,8 +276,7 @@ export default function FoodCourtPage() {
       {/* Seat Bite brand header */}
       <header className="seatbite-dashboard-header">
         <div className="seatbite-dashboard-brand">
-          <span className="seatbite-dashboard-logo" aria-hidden="true">🍿</span>
-          <span className="seatbite-dashboard-wordmark">seat bite</span>
+          <img src="/seatbite-logo.webp.jpg" alt="SeatBite" style={{display:"block",width:190,height:"auto",maxHeight:58,objectFit:"contain"}} />
         </div>
         <h1
           style={{

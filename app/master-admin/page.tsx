@@ -485,8 +485,8 @@ export default function MasterAdminPage() {
         {/* HEADER */}
         <div
           style={{
-            background: "#202124",
-            color: "white",
+            background: "#FCE9E1",
+            color: "#292323",
             padding: "28px",
             borderRadius: "16px",
             marginBottom: "25px",
@@ -522,7 +522,7 @@ export default function MasterAdminPage() {
             style={{
               marginTop: "8px",
               marginBottom: 0,
-              color: "#ccc",
+              color: "#665653",
             }}
           >
             Manage cinemas, managers and food court staff

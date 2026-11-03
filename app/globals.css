@@ -2371,3 +2371,7 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
  .sb-shortcuts>a{border-right:0!important;border-bottom:1px solid #e7dfd5!important}
  .sb-shortcuts>a:last-child{border-bottom:0!important}
 }
+
+.sb-brand-word{display:inline-flex;align-items:baseline;gap:0}
+.sb-brand-seat{color:#fa4029!important}
+.sb-brand-bite{color:inherit!important}

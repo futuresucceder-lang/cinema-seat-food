@@ -452,7 +452,7 @@ export default function MasterAdminPage() {
     return (
       <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: "24px", background: "#fff8f4", fontFamily: "Arial, sans-serif" }}>
         <form onSubmit={handleMasterAdminLogin} style={{ width: "100%", maxWidth: "420px", background: "#fff", padding: "30px", borderRadius: "16px", boxShadow: "0 8px 30px rgba(0,0,0,0.10)", boxSizing: "border-box" }}>
-          <div style={{ fontSize: "30px", fontWeight: 900, color: "#d92727" }}> seat bite</div>
+          <img src="/seatbite-logo.webp.jpg" alt="SeatBite" style={{display:"block",width:210,height:"auto",maxHeight:64,objectFit:"contain"}} />
           <h1 style={{ margin: "18px 0 8px", color: "#171717" }}>Master Admin Login</h1>
           <p style={{ color: "#666", marginBottom: "22px" }}>Sign in with your authorized Master Admin account.</p>
           <label htmlFor="master-admin-email" style={{ display: "block", fontWeight: 700, marginBottom: "6px" }}>Email</label>
@@ -493,8 +493,7 @@ export default function MasterAdminPage() {
           }}
         >
           <div className="seatbite-dashboard-brand seatbite-dashboard-brand-dark">
-            <span className="seatbite-dashboard-logo" aria-hidden="true">🍿</span>
-            <span className="seatbite-dashboard-wordmark">seat bite</span>
+            <img src="/seatbite-logo.webp.jpg" alt="SeatBite" style={{display:"block",width:190,height:"auto",maxHeight:58,objectFit:"contain"}} />
           </div>
           <button type="button" onClick={handleMasterAdminLogout} style={{ float: "right", border: "1px solid #777", borderRadius: "8px", padding: "9px 13px", background: "#333", color: "#fff", cursor: "pointer" }}>Sign Out</button>
           <h1 style={{ margin: "18px 0 0", fontSize: "30px" }}>

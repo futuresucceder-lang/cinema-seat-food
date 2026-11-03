@@ -2359,3 +2359,15 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
 }
 .sb-staff-login .sb-login-form-wrap .sb-login-submit:hover:not(:disabled){background:#df321f!important;transform:translateY(-1px)!important}
 .sb-staff-login .sb-login-form-wrap .sb-login-submit:disabled{opacity:.72!important;cursor:wait!important}
+
+
+/* Four homepage entry points including dedicated Food Court access */
+.sb-shortcuts{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.sb-shortcuts>a:nth-child(2) b,
+.sb-shortcuts>a:nth-child(3) b,
+.sb-shortcuts>a:nth-child(4) b{display:inline-flex!important}
+@media(max-width:760px){
+ .sb-shortcuts{grid-template-columns:1fr!important}
+ .sb-shortcuts>a{border-right:0!important;border-bottom:1px solid #e7dfd5!important}
+ .sb-shortcuts>a:last-child{border-bottom:0!important}
+}

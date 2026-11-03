@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-type LoginMode = "manager" | "master_admin";
+type LoginMode = "manager" | "master_admin" | "food_court";
 
 export default function SeatBiteStaffLogin({ mode }: { mode: LoginMode }) {
   const router = useRouter();
@@ -15,6 +15,8 @@ export default function SeatBiteStaffLogin({ mode }: { mode: LoginMode }) {
   const [error,setError]=useState("");
   const [loading,setLoading]=useState(false);
   const isAdmin=mode==="master_admin";
+  const isFoodCourt=mode==="food_court";
+  const roleLabel=isAdmin?"Master Admin":isFoodCourt?"Food Court":"Manager";
 
   async function handleLogin(event:FormEvent<HTMLFormElement>){
     event.preventDefault(); setError(""); setLoading(true);
@@ -26,12 +28,15 @@ export default function SeatBiteStaffLogin({ mode }: { mode: LoginMode }) {
     if(isAdmin){
       const {data:profile}=user?await supabase.from("profiles").select("role").eq("id",user.id).maybeSingle():{data:null};
       if(role==="master_admin"||profile?.role==="master_admin"){router.push("/master-admin");router.refresh();return;}
+    }else if(isFoodCourt){
+      if(role==="food_court" && (user?.app_metadata?.cinema_id || user?.user_metadata?.cinema_id)){
+        router.push("/food-court");router.refresh();return;
+      }
     }else{
       if(role==="manager"){router.push("/admin");router.refresh();return;}
-      if(role==="food_court"){router.push("/food-court");router.refresh();return;}
     }
     await supabase.auth.signOut();
-    setError(isAdmin?"This account does not have Master Admin access.":"This account does not have Manager or Food Court access.");
+    setError(isAdmin?"This account does not have Master Admin access.":isFoodCourt?"This account is not assigned to a cinema Food Court.":"This account does not have Manager access.");
     setLoading(false);
   }
 
@@ -41,16 +46,16 @@ export default function SeatBiteStaffLogin({ mode }: { mode: LoginMode }) {
       <div className="sb-login-story-copy">
         <p className="sb-eyebrow">SEATBITE OPERATIONS</p>
         <h1>Run venue<br/>service<br/>with clear<br/>control.</h1>
-        <p>Manage venues, screens, seats, catalog, orders, and delivery from one place.</p>
+        <p>{isFoodCourt?"Receive customer orders and manage food preparation and delivery for your assigned cinema.":"Manage venues, screens, seats, catalog, orders, and delivery from one place."}</p>
       </div>
-      <div className="sb-login-story-bottom"><strong>{isAdmin?"Master Admin":"Manager"}</strong><span>{isAdmin?"sign in with your Master Admin account":"sign in with your Manager staff account"}</span></div>
+      <div className="sb-login-story-bottom"><strong>{roleLabel}</strong><span>{isAdmin?"sign in with your Master Admin account":isFoodCourt?"sign in with your Food Court staff account":"sign in with your Manager staff account"}</span></div>
     </section>
     <section className="sb-login-form-side">
       <div className="sb-login-form-wrap">
         <div className="sb-login-brand"><span>▥</span> SeatBite</div>
-        <p className="sb-eyebrow">{isAdmin?"MASTER ADMIN ACCESS":"MANAGER ACCESS"}</p>
-        <h2>{isAdmin?"Master Admin Login":"Manager Login"}</h2>
-        <p className="sb-login-subtitle">{isAdmin?"Sign in with your Master Admin account.":"Sign in with your Manager staff account."}</p>
+        <p className="sb-eyebrow">{isAdmin?"MASTER ADMIN ACCESS":isFoodCourt?"FOOD COURT ACCESS":"MANAGER ACCESS"}</p>
+        <h2>{isAdmin?"Master Admin Login":isFoodCourt?"Food Court Login":"Manager Login"}</h2>
+        <p className="sb-login-subtitle">{isAdmin?"Sign in with your Master Admin account.":isFoodCourt?"Sign in with your Food Court staff account.":"Sign in with your Manager staff account."}</p>
         {error&&<div className="sb-login-error" role="alert">{error}</div>}
         <form onSubmit={handleLogin}>
           <label htmlFor="staff-email"><span style={{color:"#fa4029"}}>*</span> Username
@@ -68,7 +73,7 @@ export default function SeatBiteStaffLogin({ mode }: { mode: LoginMode }) {
               </button>
             </div>
           </label>
-          <button className="sb-login-submit" type="submit" disabled={loading}>{loading?"Signing in…":isAdmin?"Enter admin dashboard  →":"Enter manager dashboard  →"}</button>
+          <button className="sb-login-submit" type="submit" disabled={loading}>{loading?"Signing in…":isAdmin?"Enter admin dashboard  →":isFoodCourt?"Enter Food Court  →":"Enter manager dashboard  →"}</button>
         </form>
       </div>
     </section>

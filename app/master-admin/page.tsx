@@ -485,8 +485,8 @@ export default function MasterAdminPage() {
         {/* HEADER */}
         <div
           style={{
-            background: "#FCE9E1",
-            color: "#292323",
+            background: "#D1D5DB",
+            color: "#000000",
             padding: "28px",
             borderRadius: "16px",
             marginBottom: "25px",
@@ -515,7 +515,7 @@ export default function MasterAdminPage() {
             />
           </div>
           <button type="button" onClick={handleMasterAdminLogout} style={{ float: "right", border: "1px solid #777", borderRadius: "8px", padding: "9px 13px", background: "#333", color: "#fff", cursor: "pointer" }}>Sign Out</button>
-          <h1 style={{ margin: "18px 0 0", fontSize: "30px" }}>
+          <h1 style={{ margin: "18px 0 0", fontSize: "30px", color: "#000000" }}>
             🛡️ Master Admin
           </h1>
 
@@ -523,7 +523,7 @@ export default function MasterAdminPage() {
             style={{
               marginTop: "8px",
               marginBottom: 0,
-              color: "#665653",
+              color: "#000000",
             }}
           >
             Manage cinemas, managers and food court staff

@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   title: "SeatBite | Venue Ordering Platform",
   description: "A venue ordering platform for seat-based food ordering, staff operations, and cinema management.",
   applicationName: "Seat Bite",
+  icons: { icon: "/seatbite-logo.webp.jpg", shortcut: "/seatbite-logo.webp.jpg", apple: "/seatbite-logo.webp.jpg" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

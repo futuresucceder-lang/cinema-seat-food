@@ -1,6 +1,5 @@
-import { redirect } from "next/navigation";
+import SeatBiteStaffLogin from "@/app/components/SeatBiteStaffLogin";
 
 export default function AdminLoginPage() {
-  // The Master Admin page contains the protected sign-in form.
-  redirect("/master-admin");
+  return <SeatBiteStaffLogin mode="master_admin" />;
 }

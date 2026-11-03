@@ -48,7 +48,7 @@ export async function updateSession(request: NextRequest) {
   // Any protected page requires login.
   if ((managerRoutes || foodCourtRoute) && !claims) {
     const url = request.nextUrl.clone();
-    url.pathname = "/manager-login";
+    url.pathname = foodCourtRoute ? "/food-court-login" : "/manager-login";
     url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }

@@ -2444,3 +2444,26 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
 .sb-login-brand .seatbite-official-logo {
   transform: translateY(16px);
 }
+
+/* Login panel fit: lower the logo slightly, while pulling the credentials and
+   submit button upward so the complete form fits in a standard laptop viewport. */
+.sb-staff-login .sb-login-brand {
+  margin-bottom: 34px !important;
+}
+.sb-staff-login .sb-login-brand .seatbite-official-logo {
+  transform: translateY(14px) !important;
+}
+.sb-staff-login .sb-login-form-wrap .sb-eyebrow {
+  margin-bottom: 11px !important;
+}
+.sb-staff-login .sb-login-subtitle {
+  margin-bottom: 22px !important;
+}
+.sb-staff-login .sb-login-form-wrap label {
+  margin-bottom: 14px !important;
+}
+@media (max-width: 760px) {
+  .sb-staff-login .sb-login-brand {
+    margin-bottom: 28px !important;
+  }
+}

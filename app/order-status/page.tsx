@@ -2,10 +2,6 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { createClient } from "../../lib/supabase/client";
-
-const supabase = createClient();
-
 type FoodItem = { id?: string; name: string; price?: number; emoji?: string; quantity?: number };
 type Order = { order_code: string; movie: string | null; cinema_id?: string | null; screen: string; seat: string; food_items: FoodItem[]; total: number; status: string; created_at: string; delivery_option?: string | null };
 
@@ -18,16 +14,29 @@ function OrderStatusContent() {
 
   useEffect(() => {
     if (!orderCode) { setError("Order ID is missing."); setLoading(false); return; }
+    const requestedOrderCode = orderCode;
+    let cancelled = false;
     async function loadOrder() {
-      const { data, error } = await supabase.from("orders").select("*").eq("order_code", orderCode).single();
-      if (error) { console.error(error); setError("Order not found."); } else { setOrder(data); }
-      setLoading(false);
+      try {
+        const response = await fetch("/api/customer/orders?code=" + encodeURIComponent(requestedOrderCode), { cache: "no-store" });
+        const result = await response.json();
+        if (cancelled) return;
+        if (!response.ok || !result.orders?.[0]) {
+          setError(result.error || "Order not found.");
+        } else {
+          setOrder(result.orders[0] as Order);
+          setError("");
+        }
+      } catch (loadError) {
+        console.error("Order lookup failed:", loadError);
+        if (!cancelled) setError("We couldn't load this order. Please try again.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
     }
     loadOrder();
-    const channel = supabase.channel(`order-status-${orderCode}`).on("postgres_changes", {
-      event: "UPDATE", schema: "public", table: "orders", filter: `order_code=eq.${orderCode}`,
-    }, (payload) => setOrder(payload.new as Order)).subscribe();
-    return () => { supabase.removeChannel(channel); };
+    const refresh = window.setInterval(loadOrder, 5000);
+    return () => { cancelled = true; window.clearInterval(refresh); };
   }, [orderCode]);
 
   if (loading) return <main className="seatbite-page seatbite-status-page"><div className="seatbite-status-card"><div className="seatbite-loader">🍿</div><p>Getting your order update…</p></div></main>;

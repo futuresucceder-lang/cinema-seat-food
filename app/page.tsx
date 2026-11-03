@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 type Category = "All" | "Snacks" | "Drinks" | "Meals";
-type SavedOrder = { order_code: string; status: string; screen: string; seat: string; created_at: string; delivery_option?: string | null };
+type SavedOrder = { order_code: string; status: string; screen: string; seat: string; created_at: string; delivery_option?: string | null; cinema_id?: string | null };
 type ShowSchedule = { id: string; show_end_at: string };
 type DeliveryOption = "NOW" | "INTERVAL";
 type FoodItem = {
@@ -119,25 +119,21 @@ function CustomerOrderPage() {
       try {
         const stored = JSON.parse(localStorage.getItem("cinema_order_codes") || "[]");
         const codes = Array.isArray(stored)
-          ? [...new Set(stored.filter((code): code is string => typeof code === "string" && code.length > 0))]
+          ? [...new Set(stored.filter((code): code is string => typeof code === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(code)))]
           : [];
         if (codes.length === 0) {
           if (!cancelled) setSavedOrders([]);
           return;
         }
-        const { data, error } = await supabase
-          .from("orders")
-          .select("order_code,status,screen,seat,created_at,delivery_option")
-          .eq("cinema_id", cinemaId)
-          .in("order_code", codes)
-          .order("created_at", { ascending: false });
+        const response = await fetch("/api/customer/orders?codes=" + encodeURIComponent(codes.join(",")), { cache: "no-store" });
+        const result = await response.json();
         if (cancelled) return;
-        if (error) {
-          console.error("Could not load saved orders:", error);
+        if (!response.ok) {
+          console.error("Could not load saved orders:", result.error);
           setOrdersError("We couldn't load your previous orders. Please try again.");
           return;
         }
-        setSavedOrders((data || []) as SavedOrder[]);
+        setSavedOrders((result.orders || []).filter((order: SavedOrder) => order.cinema_id === cinemaId) as SavedOrder[]);
       } catch (error) {
         console.warn("Could not read saved order codes:", error);
         if (!cancelled) setSavedOrders([]);
@@ -189,33 +185,22 @@ function CustomerOrderPage() {
       return;
     }
     setIsSubmitting(true);
-    const newOrderCode = "CINEMA-" + crypto.randomUUID().slice(0, 8).toUpperCase();
-    const orderedFoodItems = Object.entries(cart).flatMap(([id, quantity]) => {
-      const item = foodItems.find((food) => food.id === id);
-      return item ? [{
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        emoji: item.emoji,
-        category: item.category,
-        quantity,
-      }] : [];
-    });
-
-    const { error } = await supabase.from("orders").insert({
-      order_code: newOrderCode,
-      movie: null,
-      cinema_id: cinemaId,
-      screen,
-      seat,
-      food_items: orderedFoodItems,
-      total,
-      status: "NEW",
-      delivery_option: deliveryOption,
-    });
-    if (error) {
+    const requestedItems = Object.entries(cart).map(([id, quantity]) => ({ id, quantity }));
+    let newOrderCode = "";
+    let placedOrder: any = null;
+    try {
+      const response = await fetch("/api/customer/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cinemaId, screen, seat, items: requestedItems, deliveryOption }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Your order could not be submitted.");
+      placedOrder = result.order;
+      newOrderCode = placedOrder.order_code;
+    } catch (error) {
       console.error("Order error:", error);
-      alert("Your order could not be submitted. Please try again.");
+      alert(error instanceof Error ? error.message : "Your order could not be submitted. Please try again.");
       setIsSubmitting(false);
       return;
     }
@@ -225,7 +210,7 @@ function CustomerOrderPage() {
     } catch (error) {
       console.warn("Could not save order code on this device:", error);
     }
-    setSavedOrders((previous) => [{ order_code: newOrderCode, status: "NEW", screen, seat, created_at: new Date().toISOString(), delivery_option: deliveryOption }, ...previous.filter((item) => item.order_code !== newOrderCode)]);
+    setSavedOrders((previous) => [{ order_code: newOrderCode, status: placedOrder.status || "NEW", screen: placedOrder.screen, seat: placedOrder.seat, created_at: placedOrder.created_at, delivery_option: placedOrder.delivery_option }, ...previous.filter((item) => item.order_code !== newOrderCode)]);
     setOrderCode(newOrderCode);
     setOrderPlaced(true);
     setIsSubmitting(false);

@@ -2,10 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-
-const supabase = createClient();
-
 type FoodItem = {
   id: string | number;
   name: string;
@@ -15,7 +11,9 @@ type FoodItem = {
 };
 
 type Order = {
-  id: number;
+  id?: number;
+  cinema_id?: string | null;
+  delivery_option?: string | null;
   order_code: string;
   movie: string | null;
   screen: string | null;
@@ -45,17 +43,19 @@ export default function MyOrdersPage() {
           return;
         }
 
-        const { data, error } = await supabase
-          .from("orders")
-          .select("*")
-          .in("order_code", savedCodes)
-          .order("created_at", { ascending: false });
-
-        if (error) {
-          console.error("Error loading orders:", error);
+        const validCodes = savedCodes.filter((code): code is string => typeof code === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(code));
+        if (validCodes.length === 0) {
+          setOrders([]);
+          setLoading(false);
+          return;
+        }
+        const response = await fetch("/api/customer/orders?codes=" + encodeURIComponent(validCodes.join(",")), { cache: "no-store" });
+        const result = await response.json();
+        if (!response.ok) {
+          console.error("Error loading orders:", result.error);
           setOrders([]);
         } else {
-          setOrders((data || []) as Order[]);
+          setOrders((result.orders || []) as Order[]);
         }
       } catch (error) {
         console.error("Error reading saved orders:", error);
@@ -172,7 +172,7 @@ export default function MyOrdersPage() {
         <div style={{ display: "grid", gap: "18px" }}>
           {orders.map((order) => (
             <div
-              key={order.id}
+              key={order.order_code}
               style={{
                 border: "1px solid #ddd",
                 borderRadius: "14px",

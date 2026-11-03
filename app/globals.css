@@ -2415,3 +2415,14 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
 .sb-brand-reference .sb-brand-mark i:nth-child(3){height:16px;}
 .sb-brand-reference .sb-brand-name{font-size:25px!important;line-height:1!important;font-weight:950!important;letter-spacing:-1.2px!important;color:#202526!important;}
 @media(max-width:760px){.sb-brand-reference .sb-brand-mark{width:34px!important;height:34px!important;min-width:34px!important;}.sb-brand-reference .sb-brand-name{font-size:23px!important;}}
+
+/* Blend the uploaded horizontal logo into the existing warm landing-page canvas.
+   Keep its current dimensions; remove the white badge, border and shadow. */
+.sb-brand .seatbite-official-logo {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  mix-blend-mode: multiply;
+}

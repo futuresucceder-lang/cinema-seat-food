@@ -2052,3 +2052,80 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
  .sb-shortcuts>a:last-child{border-bottom:0}
  .sb-landing-footer{display:flex}
 }
+
+
+/* Screenshot-matched full-browser landing layout */
+.sb-landing{
+  width:100%!important;
+  min-height:100svh!important;
+  height:auto!important;
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+  padding:0 clamp(24px,6.4vw,104px) 24px!important;
+}
+.sb-landing-wrap{
+  width:100%!important;
+  max-width:1600px!important;
+  min-height:100svh!important;
+  height:auto!important;
+  margin:0 auto!important;
+}
+.sb-nav{
+  height:82px!important;
+  flex:0 0 82px!important;
+  padding:0!important;
+}
+.sb-brand{gap:12px!important;font-size:clamp(22px,2vw,30px)!important;letter-spacing:-1.1px!important}
+.sb-brand-mark{width:34px!important;height:34px!important;border-radius:10px!important;font-size:25px!important}
+.sb-platform-pill{font-size:10px!important;padding:9px 16px!important}
+.sb-hero{
+  width:100%!important;
+  height:auto!important;
+  min-height:clamp(530px,calc(100svh - 190px),760px)!important;
+  max-height:none!important;
+  grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr)!important;
+  gap:clamp(30px,5vw,90px)!important;
+  padding:28px 0 34px!important;
+  align-items:center!important;
+}
+.sb-hero-copy{max-width:720px!important}
+.sb-hero-copy h1{font-size:clamp(64px,7.2vw,112px)!important;line-height:.88!important;letter-spacing:-.068em!important;margin-bottom:24px!important}
+.sb-hero-description{max-width:620px!important;font-size:clamp(15px,1.3vw,19px)!important;line-height:1.65!important;margin-bottom:30px!important}
+.sb-hero-actions{gap:24px!important}
+.sb-primary-link{min-width:190px!important;min-height:68px!important;font-size:15px!important;padding:17px 22px!important}
+.sb-text-link{font-size:14px!important;max-width:300px!important}
+.sb-trust-row{font-size:11px!important;margin-top:28px!important}
+.sb-hero-art{height:clamp(390px,53vw,570px)!important;min-height:390px!important}
+.sb-popcorn-photo{width:clamp(320px,31vw,460px)!important;height:clamp(390px,53vw,550px)!important;min-height:0!important;border-radius:150px 150px 24px 24px!important}
+.sb-popcorn-overlay strong{font-size:clamp(34px,3.5vw,52px)!important;max-width:260px!important;line-height:.98!important}
+.sb-popcorn-overlay small{display:none!important}
+.sb-qr-float{width:130px!important;height:115px!important;left:-18px!important;bottom:90px!important}
+.sb-shortcuts{width:100%!important;min-height:92px!important;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.sb-shortcuts>a{padding:18px clamp(14px,2vw,30px)!important;gap:14px!important}
+.sb-shortcuts strong{font-size:clamp(11px,1.05vw,15px)!important}
+.sb-shortcuts small{font-size:9px!important}
+.sb-shortcuts>a b{display:none!important}
+.sb-landing-footer{padding-top:18px!important;font-size:11px!important}
+@media(min-width:1100px) and (min-height:750px){
+ .sb-hero{min-height:calc(100svh - 270px)!important}
+}
+@media(max-width:900px){
+ .sb-landing{padding:0 28px 24px!important}
+ .sb-hero{min-height:0!important;grid-template-columns:minmax(0,1fr) minmax(270px,.8fr)!important;gap:24px!important}
+ .sb-hero-copy h1{font-size:clamp(54px,7vw,76px)!important}
+ .sb-popcorn-photo{width:clamp(250px,34vw,330px)!important;height:380px!important}
+}
+@media(max-width:650px){
+ .sb-landing{padding:0 18px 24px!important}
+ .sb-nav{height:70px!important;flex-basis:70px!important}
+ .sb-brand{font-size:22px!important}
+ .sb-brand-mark{width:30px!important;height:30px!important}
+ .sb-hero{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:16px!important;padding:26px 0!important}
+ .sb-hero-copy h1{font-size:clamp(52px,13vw,74px)!important}
+ .sb-hero-description{font-size:14px!important}
+ .sb-hero-art{height:340px!important;min-height:0!important}
+ .sb-popcorn-photo{width:245px!important;height:320px!important}
+ .sb-shortcuts{grid-template-columns:1fr!important}
+ .sb-shortcuts>a{min-height:68px!important;border-right:0!important;border-bottom:1px solid #e7dfd5!important}
+ .sb-shortcuts>a:last-child{border-bottom:0!important}
+}

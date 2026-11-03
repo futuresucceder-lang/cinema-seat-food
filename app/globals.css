@@ -2504,7 +2504,7 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
 
 /* Correct logo placement: lower the homepage logo only; keep login logos unchanged. */
 .sb-brand .seatbite-official-logo {
-  transform: translateY(8px) !important;
+  transform: translateY(16px) !important;
 }
 .sb-staff-login .sb-login-brand .seatbite-official-logo {
   transform: none !important;

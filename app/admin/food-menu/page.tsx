@@ -471,7 +471,7 @@ export default function FoodMenuPage() {
   // --------------------------------------------------
 
   return (
-    <main
+    <main className="seatbite-food-menu-page"
       style={{
         minHeight: "100vh",
         background: "#111",

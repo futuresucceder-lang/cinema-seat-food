@@ -1890,3 +1890,155 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
   box-shadow: 0 0 0 3px rgba(255,245,223,.10), 0 0 26px rgba(229,9,32,.22), 0 24px 70px rgba(0,0,0,.62) !important;
 }
 @media (max-width: 520px) { .seatbite-manager-login { background-position: center center !important; } }
+
+
+/* SeatBite internal operations theme. Intentionally scoped to staff dashboards;
+   customer homepage and every login route remain untouched. */
+:root {
+  --sb-ops-ink: #29211e;
+  --sb-ops-muted: #806f66;
+  --sb-ops-paper: #fffaf6;
+  --sb-ops-card: #ffffff;
+  --sb-ops-line: #efdfd6;
+  --sb-ops-red: #f05236;
+  --sb-ops-red-dark: #dc432b;
+  --sb-ops-peach: #fff0e8;
+}
+:is(
+  .seatbite-manager-page,
+  .seatbite-food-court-page,
+  .seatbite-master-admin-page,
+  .seatbite-food-menu-page,
+  .seatbite-revenue-page,
+  .seatbite-screens-seats-page,
+  .seatbite-show-schedule-page,
+  .seatbite-qr-generator-page
+) {
+  min-height: 100vh !important;
+  color: var(--sb-ops-ink) !important;
+  background:
+    radial-gradient(ellipse at 8% 0%, rgba(240,82,54,.09), transparent 34%),
+    linear-gradient(180deg, #fff5ef 0%, #fffaf6 260px, #fffaf6 100%) !important;
+  font-family: Inter, Arial, sans-serif !important;
+  padding: 30px 20px 60px;
+}
+:is(
+  .seatbite-manager-page,
+  .seatbite-food-court-page,
+  .seatbite-master-admin-page,
+  .seatbite-food-menu-page,
+  .seatbite-revenue-page,
+  .seatbite-screens-seats-page,
+  .seatbite-show-schedule-page,
+  .seatbite-qr-generator-page
+)::before {
+  content: "";
+  display: block;
+  width: min(248px, 62vw);
+  height: 66px;
+  margin: 0 auto 18px;
+  background: url("/seatbite-logo.webp.jpg") center / contain no-repeat;
+  mix-blend-mode: multiply;
+}
+:is(
+  .seatbite-manager-page,
+  .seatbite-food-court-page,
+  .seatbite-master-admin-page,
+  .seatbite-food-menu-page,
+  .seatbite-revenue-page,
+  .seatbite-screens-seats-page,
+  .seatbite-show-schedule-page,
+  .seatbite-qr-generator-page
+) :is(h1,h2,h3,h4) {
+  color: var(--sb-ops-ink) !important;
+  font-family: Inter, Arial, sans-serif !important;
+  font-weight: 800;
+  letter-spacing: -.04em;
+}
+:is(
+  .seatbite-manager-page,
+  .seatbite-food-court-page,
+  .seatbite-master-admin-page,
+  .seatbite-food-menu-page,
+  .seatbite-revenue-page,
+  .seatbite-screens-seats-page,
+  .seatbite-show-schedule-page,
+  .seatbite-qr-generator-page
+) :is(p,label,td,th,span) {
+  font-family: Inter, Arial, sans-serif;
+}
+:is(
+  .seatbite-manager-page,
+  .seatbite-food-court-page,
+  .seatbite-master-admin-page,
+  .seatbite-food-menu-page,
+  .seatbite-revenue-page,
+  .seatbite-screens-seats-page,
+  .seatbite-show-schedule-page,
+  .seatbite-qr-generator-page
+) :is(input,select,textarea) {
+  color: var(--sb-ops-ink) !important;
+  background: #fff !important;
+  border: 1px solid var(--sb-ops-line) !important;
+  border-radius: 12px !important;
+}
+:is(
+  .seatbite-manager-page,
+  .seatbite-food-court-page,
+  .seatbite-master-admin-page,
+  .seatbite-food-menu-page,
+  .seatbite-revenue-page,
+  .seatbite-screens-seats-page,
+  .seatbite-show-schedule-page,
+  .seatbite-qr-generator-page
+) button {
+  border-radius: 12px !important;
+  font-weight: 750;
+}
+:is(
+  .seatbite-manager-page,
+  .seatbite-food-court-page,
+  .seatbite-master-admin-page,
+  .seatbite-food-menu-page,
+  .seatbite-revenue-page,
+  .seatbite-screens-seats-page,
+  .seatbite-show-schedule-page,
+  .seatbite-qr-generator-page
+) :is(article,section,form,.qr-card) {
+  border-radius: 18px;
+}
+:is(
+  .seatbite-manager-page,
+  .seatbite-food-court-page,
+  .seatbite-master-admin-page,
+  .seatbite-food-menu-page,
+  .seatbite-revenue-page,
+  .seatbite-screens-seats-page,
+  .seatbite-show-schedule-page,
+  .seatbite-qr-generator-page
+) table {
+  border: 1px solid var(--sb-ops-line);
+  border-radius: 16px;
+  background: #fff;
+}
+:is(
+  .seatbite-manager-page,
+  .seatbite-food-court-page,
+  .seatbite-master-admin-page,
+  .seatbite-food-menu-page,
+  .seatbite-revenue-page,
+  .seatbite-screens-seats-page,
+  .seatbite-show-schedule-page,
+  .seatbite-qr-generator-page
+) th {
+  background: var(--sb-ops-peach) !important;
+  color: #59473f !important;
+}
+@media(max-width:640px) {
+  :is(.seatbite-manager-page,.seatbite-food-court-page,.seatbite-master-admin-page,
+  .seatbite-food-menu-page,.seatbite-revenue-page,.seatbite-screens-seats-page,
+  .seatbite-show-schedule-page,.seatbite-qr-generator-page)::before {
+    height: 54px;
+    margin-bottom: 12px;
+  }
+}

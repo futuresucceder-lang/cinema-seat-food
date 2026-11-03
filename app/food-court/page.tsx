@@ -265,7 +265,7 @@ export default function FoodCourtPage() {
 
   return (
     <main
-      className="seatbite-food-court-page"
+      className="seatbite-food-court-page seatbite-food-court-page"
       style={{
         minHeight: "100vh",
         background: "#fff8f4",

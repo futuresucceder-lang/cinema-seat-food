@@ -86,7 +86,7 @@ export default function ShowSchedulePage() {
     }
   }
 
-  return <main className="seatbite-dashboard-page" style={{minHeight:"100vh",padding:"28px 20px",background:"#f2f1ee",color:"#111"}}>
+  return <main className="seatbite-show-schedule-page seatbite-dashboard-page" style={{minHeight:"100vh",padding:"28px 20px",background:"#f2f1ee",color:"#111"}}>
     <div style={{maxWidth:980,margin:"0 auto"}}>
       <Link href="/admin" style={{color:"#ff0038",fontWeight:800}}>← Back to Manager Dashboard</Link>
       <div style={{marginTop:22,borderRadius:12,background:"#050505",color:"#fff",padding:"24px",borderBottom:"4px solid #ff0038"}}>

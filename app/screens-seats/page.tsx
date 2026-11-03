@@ -802,7 +802,7 @@ export default function ScreensSeatsPage() {
 
   if (loading) {
     return (
-      <main
+      <main className="seatbite-screens-seats-page"
         style={{
           minHeight: "100vh",
           background: "#111",

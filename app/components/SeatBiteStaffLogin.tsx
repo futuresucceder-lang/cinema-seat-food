@@ -52,7 +52,7 @@ export default function SeatBiteStaffLogin({ mode }: { mode: LoginMode }) {
     </section>
     <section className="sb-login-form-side">
       <div className="sb-login-form-wrap">
-        <div className="sb-login-brand"><span>▥</span> SeatBite</div>
+        <div className="sb-login-brand"><img src="/seatbite-logo.webp.jpg" alt="SeatBite" style={{display:"block",width:210,height:"auto",maxHeight:64,objectFit:"contain"}} /></div>
         <p className="sb-eyebrow">{isAdmin?"MASTER ADMIN ACCESS":isFoodCourt?"FOOD COURT ACCESS":"MANAGER ACCESS"}</p>
         <h2>{isAdmin?"Master Admin Login":isFoodCourt?"Food Court Login":"Manager Login"}</h2>
         <p className="sb-login-subtitle">{isAdmin?"Sign in with your Master Admin account.":isFoodCourt?"Sign in with your Food Court staff account.":"Sign in with your Manager staff account."}</p>

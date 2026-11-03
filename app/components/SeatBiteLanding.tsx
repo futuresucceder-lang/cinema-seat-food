@@ -31,7 +31,7 @@ export default function SeatBiteLanding() {
         <nav className="sb-shortcuts" aria-label="Platform shortcuts">
           <a id="customer-flow" href="#customer-flow"><span className="sb-shortcut-icon">▯</span><span><small>CUSTOMER</small><strong>Scan the QR on your seat</strong></span></a>
           <Link href="/manager-login"><span className="sb-shortcut-icon">◉</span><span><small>STAFF ACCESS</small><strong>Manager Login</strong></span><b>→</b></Link>
-          <Link href="/admin-login"><span className="sb-shortcut-icon">◉</span><span><small>MASTER ADMIN</small><strong>Master Admin Login</strong></span><b>→</b></Link>
+          <Link href="/master-admin-login"><span className="sb-shortcut-icon">◉</span><span><small>MASTER ADMIN</small><strong>Master Admin Login</strong></span><b>→</b></Link>
         </nav>
         <footer className="sb-landing-footer">SeatBite <span>Good food. Great movies.</span></footer>
       </div>

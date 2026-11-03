@@ -17,7 +17,7 @@ export default function SeatBiteLanding() {
             <h1>Great food.<br /><em>Zero<br />intermission.</em></h1>
             <p className="sb-hero-description">Guests scan their seat QR, place orders, and get food delivered without leaving the show. Staff manage the full workflow from one operations console.</p>
             <div className="sb-hero-actions">
-              <Link href="/manager-login" className="sb-primary-link">Open<br />operations <span>→</span></Link>
+              <Link href="/manager-login" className="sb-primary-link">Manager<br />Login <span>→</span></Link>
               <a href="#customer-flow" className="sb-text-link">Customer ordering begins from a live seat QR <span>↗</span></a>
             </div>
             <div className="sb-trust-row"><span>♧ Secure seat QR</span><span>10 min average prep</span></div>
@@ -30,8 +30,8 @@ export default function SeatBiteLanding() {
 
         <nav className="sb-shortcuts" aria-label="Platform shortcuts">
           <a id="customer-flow" href="#customer-flow"><span className="sb-shortcut-icon">▯</span><span><small>CUSTOMER FLOW</small><strong>Use live seat QR codes inside the venue</strong></span><b>↗</b></a>
-          <Link href="/manager-login"><span className="sb-shortcut-icon">◉</span><span><small>LIVE ORDER BOARD</small><strong>Staff dashboard</strong></span><b>→</b></Link>
-          <Link href="/master-admin"><span className="sb-shortcut-icon">◉</span><span><small>VENUE CONTROL</small><strong>Admin dashboard</strong></span><b>→</b></Link>
+          <Link href="/manager-login"><span className="sb-shortcut-icon">◉</span><span><small>STAFF ACCESS</small><strong>Manager Login</strong></span><b>→</b></Link>
+          <Link href="/admin-login"><span className="sb-shortcut-icon">◉</span><span><small>VENUE CONTROL</small><strong>Admin Login</strong></span><b>→</b></Link>
         </nav>
         <footer className="sb-landing-footer">SeatBite <span>Good food. Great movies.</span></footer>
       </div>

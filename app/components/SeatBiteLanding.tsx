@@ -24,7 +24,7 @@ export default function SeatBiteLanding() {
           </div>
           <div className="sb-hero-art" aria-label="Enjoy your snacks">
             <div className="sb-popcorn-photo"><div className="sb-popcorn-overlay"><strong>Enjoy your snacks</strong><span>delivered to your seat</span></div></div>
-            <div className="sb-qr-float"><small>SCAN QR</small><strong>AND ORDER</strong><span>YOUR SNACK</span></div>
+            <div className="sb-qr-float"><small>SCAN QR</small><strong>ORDER YOUR SNACKS</strong></div>
           </div>
         </section>
 

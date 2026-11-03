@@ -502,7 +502,7 @@ export default function MasterAdminPage() {
             }}
           >
             <img
-              src="/seatbite-logo.webp.jpg"
+              src="/seat-bite-logo.svg"
               alt="SeatBite logo"
               style={{
                 display: "block",

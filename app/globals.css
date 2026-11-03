@@ -2467,3 +2467,25 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
     margin-bottom: 28px !important;
   }
 }
+
+/* Slightly tighten the login form's vertical spacing once more. */
+.sb-staff-login .sb-login-brand {
+  margin-bottom: 26px !important;
+}
+.sb-staff-login .sb-login-form-wrap .sb-eyebrow {
+  margin-bottom: 8px !important;
+}
+.sb-staff-login .sb-login-form-wrap h2 {
+  margin-bottom: 6px !important;
+}
+.sb-staff-login .sb-login-subtitle {
+  margin-bottom: 17px !important;
+}
+.sb-staff-login .sb-login-form-wrap label {
+  margin-bottom: 11px !important;
+}
+@media (max-width: 760px) {
+  .sb-staff-login .sb-login-brand {
+    margin-bottom: 22px !important;
+  }
+}

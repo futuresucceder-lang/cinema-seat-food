@@ -2509,3 +2509,151 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
 .sb-staff-login .sb-login-brand .seatbite-official-logo {
   transform: none !important;
 }
+
+
+/* =========================================================
+   SEATBITE STAFF & ADMIN DESIGN SYSTEM — shared brand layer
+   Applies consistently to manager, food court, admin tools,
+   schedules, QR tools and operational pages.
+   ========================================================= */
+:root {
+  --sb-ink: #29211e;
+  --sb-muted: #806f66;
+  --sb-paper: #fffaf6;
+  --sb-card: #ffffff;
+  --sb-line: #efdfd6;
+  --sb-red: #f05236;
+  --sb-red-dark: #dc432b;
+  --sb-peach: #fff0e8;
+}
+body {
+  background: var(--sb-paper) !important;
+  color: var(--sb-ink);
+  font-family: var(--font-inter), Inter, Arial, sans-serif !important;
+}
+body > main:not(.seatbite-page):not(.sb-staff-login),
+main.seatbite-manager-page,
+main.seatbite-food-court-page,
+main.seatbite-dashboard-page {
+  min-height: 100vh;
+  color: var(--sb-ink) !important;
+  background:
+    radial-gradient(ellipse at 8% 0%, rgba(240,82,54,.09), transparent 34%),
+    linear-gradient(180deg, #fff5ef 0%, #fffaf6 260px, #fffaf6 100%) !important;
+  font-family: var(--font-inter), Inter, Arial, sans-serif !important;
+}
+/* The real horizontal logo is blended directly into the page canvas. */
+main.seatbite-manager-page::before,
+main.seatbite-food-court-page::before,
+main.seatbite-dashboard-page::before,
+main:not(.seatbite-page):not(.sb-staff-login)::before {
+  content: "";
+  display: block;
+  width: min(248px, 62vw);
+  height: 66px;
+  margin: 0 auto 18px;
+  background-image: url("/seatbite-logo.webp.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  mix-blend-mode: multiply;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+main.seatbite-manager-page > div,
+main.seatbite-food-court-page > div,
+main.seatbite-dashboard-page > div {
+  max-width: 1240px;
+}
+main:not(.seatbite-page) h1,
+main:not(.seatbite-page) h2,
+main:not(.seatbite-page) h3,
+main:not(.seatbite-page) h4 {
+  color: var(--sb-ink);
+  font-family: var(--font-inter), Inter, Arial, sans-serif !important;
+  font-weight: 800;
+  letter-spacing: -.045em;
+}
+main:not(.seatbite-page) p,
+main:not(.seatbite-page) label,
+main:not(.seatbite-page) td,
+main:not(.seatbite-page) th,
+main:not(.seatbite-page) span {
+  font-family: var(--font-inter), Inter, Arial, sans-serif;
+}
+main:not(.seatbite-page) a {
+  color: var(--sb-red);
+}
+main:not(.seatbite-page) button {
+  border-radius: 12px !important;
+  font-weight: 750;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+main:not(.seatbite-page) button:not(:disabled):hover {
+  box-shadow: 0 7px 18px rgba(68,35,22,.10);
+}
+main:not(.seatbite-page) input,
+main:not(.seatbite-page) select,
+main:not(.seatbite-page) textarea {
+  color: var(--sb-ink) !important;
+  background: #fff !important;
+  border: 1px solid var(--sb-line) !important;
+  border-radius: 12px !important;
+}
+main:not(.seatbite-page) input::placeholder,
+main:not(.seatbite-page) textarea::placeholder { color: #a18e84 !important; }
+main:not(.seatbite-page) article,
+main:not(.seatbite-page) section,
+main:not(.seatbite-page) form,
+main:not(.seatbite-page) .qr-card {
+  border-radius: 18px;
+}
+main:not(.seatbite-page) table {
+  border: 1px solid var(--sb-line);
+  border-radius: 16px;
+  background: #fff;
+}
+main:not(.seatbite-page) th {
+  background: var(--sb-peach) !important;
+  color: #59473f !important;
+}
+main:not(.seatbite-page) td { color: #433832; }
+main:not(.seatbite-page) [style*="background: #111"],
+main:not(.seatbite-page) [style*="background:#111"],
+main:not(.seatbite-page) [style*="background: \"#111\""],
+main:not(.seatbite-page) [style*="background: #050505"],
+main:not(.seatbite-page) [style*="background:#050505"],
+main:not(.seatbite-page) [style*="background: #222"],
+main:not(.seatbite-page) [style*="background:#222"],
+main:not(.seatbite-page) [style*="background: #333"],
+main:not(.seatbite-page) [style*="background:#333"],
+main:not(.seatbite-page) [class*="bg-slate-950"],
+main:not(.seatbite-page) [class*="bg-slate-900"] {
+  background: #fff !important;
+  color: var(--sb-ink) !important;
+  border-color: var(--sb-line) !important;
+}
+main:not(.seatbite-page) [style*="color: white"],
+main:not(.seatbite-page) [style*="color: \"white\""],
+main:not(.seatbite-page) [class*="text-white"],
+main:not(.seatbite-page) [class*="text-slate-"] {
+  color: var(--sb-ink) !important;
+}
+main:not(.seatbite-page) [style*="#ff0038"],
+main:not(.seatbite-page) [style*="#f45135"],
+main:not(.seatbite-page) [style*="#e83d2b"] {
+  border-color: var(--sb-red) !important;
+}
+@media (max-width: 640px) {
+  main.seatbite-manager-page::before,
+  main.seatbite-food-court-page::before,
+  main.seatbite-dashboard-page::before,
+  main:not(.seatbite-page):not(.sb-staff-login)::before {
+    height: 54px;
+    margin-bottom: 12px;
+  }
+}
+@media print {
+  main:not(.seatbite-page)::before { display: none !important; }
+}

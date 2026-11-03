@@ -2077,3 +2077,29 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
     padding: 10px 14px !important;
   }
 }
+
+
+/* Master Admin: keep every action label white except the Close control. */
+.seatbite-dashboard-page > div > div:first-child > h1,
+.seatbite-dashboard-page > div > div:first-child > p {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+.seatbite-dashboard-page .seatbite-dashboard-brand {
+  background-color: transparent !important;
+  background-image: url("/seatbite-logo.webp.jpg") !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  mix-blend-mode: normal !important;
+}
+.seatbite-dashboard-page .seatbite-dashboard-brand > .seatbite-dashboard-logo,
+.seatbite-dashboard-page .seatbite-dashboard-brand > .seatbite-dashboard-wordmark {
+  display: none !important;
+}
+.seatbite-dashboard-page button.seatbite-master-admin-close-button {
+  color: #111 !important;
+  -webkit-text-fill-color: #111 !important;
+}

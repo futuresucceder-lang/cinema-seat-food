@@ -1,5 +1,5 @@
-import SeatBiteStaffLogin from "@/app/components/SeatBiteStaffLogin";
+import { redirect } from "next/navigation";
 
-export default function AdminLoginPage() {
-  return <SeatBiteStaffLogin mode="master_admin" />;
+export default function LegacyAdminLoginRoute() {
+  redirect("/master-admin-login");
 }

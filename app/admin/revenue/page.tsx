@@ -150,7 +150,7 @@ export default function RevenueDashboard() {
   }, [orders]);
 
   return (
-    <main
+    <main className="seatbite-revenue-page"
       style={{
         minHeight: "100vh",
         background: "#111",

@@ -43,7 +43,7 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith("/screens-seats") ||
     pathname.startsWith("/qr-generator");
 
-  const foodCourtRoute = pathname.startsWith("/food-court");
+  const foodCourtRoute = pathname === "/food-court" || pathname.startsWith("/food-court/");
 
   // Any protected page requires login.
   if ((managerRoutes || foodCourtRoute) && !claims) {

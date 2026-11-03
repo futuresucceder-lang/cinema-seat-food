@@ -2489,3 +2489,10 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
     margin-bottom: 22px !important;
   }
 }
+
+/* Match the supplied login reference: keep the logo where it is and lift
+   the access heading, username, password and submit button together. */
+.sb-staff-login .sb-login-form-wrap > :not(.sb-login-brand) {
+  position: relative;
+  top: -28px;
+}

@@ -2269,3 +2269,24 @@ main:not(.seatbite-page):has(form) button {
   main:not(.seatbite-page) { padding: 16px !important; }
   main:not(.seatbite-page) table { font-size: 13px; }
 }
+
+
+/* Exact SeatBite homepage typography carried across staff/admin surfaces.
+   Homepage uses Geist for body copy, Bangers for display headings,
+   Oswald for section labels and Permanent Marker for brand wordmarks. */
+body,
+main:not(.seatbite-page),
+main:not(.seatbite-page) :is(p,span,label,small,strong,button,input,select,textarea,table,th,td,li,a,div) {
+  font-family: var(--font-geist-sans), Arial, sans-serif !important;
+}
+main:not(.seatbite-page) :is(h1,h2,h3,h4,h5,h6) {
+  font-family: var(--font-bangers), Impact, sans-serif !important;
+  letter-spacing: .2px !important;
+}
+main:not(.seatbite-page) :is(.seatbite-dashboard-wordmark,.seatbite-wordmark) {
+  font-family: var(--font-marker), cursive !important;
+}
+main:not(.seatbite-page) :is(.eyebrow,.section-label,[data-role="eyebrow"]) {
+  font-family: var(--font-oswald), Arial, sans-serif !important;
+  letter-spacing: .12em !important;
+}

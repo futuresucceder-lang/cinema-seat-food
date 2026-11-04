@@ -473,12 +473,12 @@ export default function MasterAdminPage() {
         minHeight: "100vh",
         background: "#fff8f4",
         padding: "40px 20px",
-        fontFamily: "Arial, sans-serif",
+        fontFamily: "var(--font-geist-sans), Arial, sans-serif",
       }}
     >
       <div
         style={{
-          maxWidth: "1000px",
+          maxWidth: "1200px",
           margin: "0 auto",
         }}
       >
@@ -506,8 +506,8 @@ export default function MasterAdminPage() {
               alt="SeatBite logo"
               style={{
                 display: "block",
-                width: "min(420px, 90vw)",
-                height: "160px",
+                width: "min(600px, 100%)",
+                height: "190px",
                 objectFit: "contain",
                 objectPosition: "center",
                 mixBlendMode: "multiply",

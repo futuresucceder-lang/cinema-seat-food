@@ -2103,3 +2103,45 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
   color: #111 !important;
   -webkit-text-fill-color: #111 !important;
 }
+
+
+/* Master Admin typography and header polish: match the SeatBite customer homepage. */
+.seatbite-dashboard-page {
+  font-family: var(--font-geist-sans), Arial, sans-serif !important;
+}
+.seatbite-dashboard-page :is(h1,h2,h3,h4,h5,h6,p,label,span,strong,small,button,input,select,textarea,th,td) {
+  font-family: var(--font-geist-sans), Arial, sans-serif !important;
+}
+.seatbite-dashboard-page > div > div:first-child {
+  background: linear-gradient(120deg, #101719 0%, #183437 58%, #202426 100%) !important;
+  padding: 30px clamp(20px, 4vw, 44px) !important;
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 16px 36px rgba(20, 27, 28, .18);
+}
+.seatbite-dashboard-page > div > div:first-child img[alt="SeatBite logo"] {
+  width: min(600px, 100%) !important;
+  height: 190px !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  mix-blend-mode: normal !important;
+}
+.seatbite-dashboard-page > div > div:first-child h1,
+.seatbite-dashboard-page > div > div:first-child p {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+.seatbite-dashboard-page > div > div:first-child h1 {
+  font-size: clamp(27px, 3vw, 36px) !important;
+  font-weight: 850 !important;
+  letter-spacing: -.035em !important;
+}
+.seatbite-dashboard-page > div > div:first-child p {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+@media (max-width: 640px) {
+  .seatbite-dashboard-page > div > div:first-child img[alt="SeatBite logo"] {
+    height: 130px !important;
+  }
+}

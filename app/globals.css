@@ -2105,48 +2105,6 @@ main:not(.seatbite-page):not(.seatbite-manager-login) textarea {
 }
 
 
-/* Master Admin typography and header polish: match the SeatBite customer homepage. */
-.seatbite-dashboard-page {
-  font-family: var(--font-geist-sans), Arial, sans-serif !important;
-}
-.seatbite-dashboard-page :is(h1,h2,h3,h4,h5,h6,p,label,span,strong,small,button,input,select,textarea,th,td) {
-  font-family: var(--font-geist-sans), Arial, sans-serif !important;
-}
-.seatbite-dashboard-page > div > div:first-child {
-  background: linear-gradient(120deg, #101719 0%, #183437 58%, #202426 100%) !important;
-  padding: 30px clamp(20px, 4vw, 44px) !important;
-  border: 1px solid rgba(255,255,255,.10);
-  box-shadow: 0 16px 36px rgba(20, 27, 28, .18);
-}
-.seatbite-dashboard-page > div > div:first-child img[alt="SeatBite logo"] {
-  width: min(600px, 100%) !important;
-  height: 190px !important;
-  max-width: 100% !important;
-  object-fit: contain !important;
-  object-position: center !important;
-  mix-blend-mode: normal !important;
-}
-.seatbite-dashboard-page > div > div:first-child h1,
-.seatbite-dashboard-page > div > div:first-child p {
-  color: #fff !important;
-  -webkit-text-fill-color: #fff !important;
-}
-.seatbite-dashboard-page > div > div:first-child h1 {
-  font-size: clamp(27px, 3vw, 36px) !important;
-  font-weight: 850 !important;
-  letter-spacing: -.035em !important;
-}
-.seatbite-dashboard-page > div > div:first-child p {
-  font-size: 15px !important;
-  font-weight: 500 !important;
-}
-@media (max-width: 640px) {
-  .seatbite-dashboard-page > div > div:first-child img[alt="SeatBite logo"] {
-    height: 130px !important;
-  }
-}
-
-
 /* =========================================================
    SEATBITE SWIGGY-INSPIRED DESIGN SYSTEM
    Shared by customer menu, manager, food court and login pages.
@@ -2271,22 +2229,72 @@ main:not(.seatbite-page):has(form) button {
 }
 
 
-/* Exact SeatBite homepage typography carried across staff/admin surfaces.
-   Homepage uses Geist for body copy, Bangers for display headings,
-   Oswald for section labels and Permanent Marker for brand wordmarks. */
-body,
-main:not(.seatbite-page),
-main:not(.seatbite-page) :is(p,span,label,small,strong,button,input,select,textarea,table,th,td,li,a,div) {
+/* Homepage typography is applied only to the Manager and Food Court dashboards.
+   Master Admin keeps its original styling. */
+.seatbite-manager-page,
+.seatbite-food-court-page {
   font-family: var(--font-geist-sans), Arial, sans-serif !important;
 }
-main:not(.seatbite-page) :is(h1,h2,h3,h4,h5,h6) {
+.seatbite-manager-page :is(p,span,label,small,strong,button,input,select,textarea,table,th,td,li,a,div),
+.seatbite-food-court-page :is(p,span,label,small,strong,button,input,select,textarea,table,th,td,li,a,div) {
+  font-family: var(--font-geist-sans), Arial, sans-serif !important;
+}
+.seatbite-manager-page :is(h1,h2,h3,h4,h5,h6),
+.seatbite-food-court-page :is(h1,h2,h3,h4,h5,h6) {
   font-family: var(--font-bangers), Impact, sans-serif !important;
   letter-spacing: .2px !important;
 }
-main:not(.seatbite-page) :is(.seatbite-dashboard-wordmark,.seatbite-wordmark) {
-  font-family: var(--font-marker), cursive !important;
-}
-main:not(.seatbite-page) :is(.eyebrow,.section-label,[data-role="eyebrow"]) {
+.seatbite-manager-page :is(.eyebrow,.section-label,[data-role="eyebrow"]),
+.seatbite-food-court-page :is(.eyebrow,.section-label,[data-role="eyebrow"]) {
   font-family: var(--font-oswald), Arial, sans-serif !important;
   letter-spacing: .12em !important;
+}
+.seatbite-manager-page :is(.seatbite-dashboard-wordmark,.seatbite-wordmark),
+.seatbite-food-court-page :is(.seatbite-dashboard-wordmark,.seatbite-wordmark) {
+  font-family: var(--font-marker), cursive !important;
+}
+
+/* Manager dashboard: clean Swiggy-inspired orange and white surfaces. */
+.seatbite-manager-page {
+  background: #f7f7f7 !important;
+  color: #282c3f !important;
+}
+.seatbite-manager-page .seatbite-dashboard-header {
+  background: #fff !important;
+  color: #282c3f !important;
+  border: 1px solid #eee !important;
+  border-left: 5px solid #fc8019 !important;
+  border-radius: 18px !important;
+  padding: 24px !important;
+  box-shadow: 0 8px 28px rgba(40,44,63,.07) !important;
+}
+.seatbite-manager-page :is(section > div, a > div) {
+  border-radius: 16px !important;
+}
+.seatbite-manager-page button {
+  border-radius: 10px !important;
+}
+
+/* Food Court: high-contrast kitchen order cards and orange action accents. */
+.seatbite-food-court-page {
+  background: #f7f7f7 !important;
+  color: #282c3f !important;
+}
+.seatbite-food-court-page .seatbite-dashboard-header {
+  background: #fff !important;
+  color: #282c3f !important;
+  border: 1px solid #eee !important;
+  border-left: 5px solid #fc8019 !important;
+  border-radius: 18px !important;
+  box-shadow: 0 8px 28px rgba(40,44,63,.07) !important;
+}
+.seatbite-food-court-page :is(h1,h2,h3,p,span,strong) {
+  color: #282c3f;
+}
+.seatbite-food-court-page button {
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+}
+.seatbite-food-court-page button:hover:not(:disabled) {
+  filter: brightness(.96);
 }

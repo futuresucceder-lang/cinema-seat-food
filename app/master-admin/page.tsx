@@ -501,18 +501,29 @@ export default function MasterAdminPage() {
               margin: "0 auto 14px",
             }}
           >
-            <img
-              src="/seatbite-logo.webp.jpg"
-              alt="SeatBite logo"
+            <div
               style={{
-                display: "block",
-                width: "min(420px, 90vw)",
-                height: "160px",
-                objectFit: "contain",
-                objectPosition: "center",
-                mixBlendMode: "multiply",
+                display: "inline-flex",
+                justifyContent: "center",
+                alignItems: "center",
+                background: "#ffffff",
+                borderRadius: "14px",
+                padding: "10px 18px",
+                boxShadow: "0 3px 12px rgba(0,0,0,0.22)",
               }}
-            />
+            >
+              <img
+                src="/seatbite-logo.webp.jpg"
+                alt="SeatBite logo"
+                style={{
+                  display: "block",
+                  width: "min(420px, 80vw)",
+                  height: "140px",
+                  objectFit: "contain",
+                  objectPosition: "center",
+                }}
+              />
+            </div>
           </div>
           <button type="button" onClick={handleMasterAdminLogout} style={{ float: "right", border: "1px solid #777", borderRadius: "8px", padding: "9px 13px", background: "#333", color: "#fff", cursor: "pointer" }}>Sign Out</button>
           <h1 style={{ margin: "18px 0 0", fontSize: "30px", color: "#ffffff" }}>

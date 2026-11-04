@@ -269,7 +269,7 @@ export default function AdminDashboard() {
                 fontWeight: "bold",
               }}
             >
-              🎬 {cinemaName}
+               {cinemaName}
             </p>
           )}
           <button

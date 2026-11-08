@@ -290,15 +290,15 @@ function CustomerOrderPage() {
         </div>
         <header className="seatbite-hero">
           <div className="seatbite-hero-copy">
-            <p className="seatbite-eyebrow">YOUR SEAT. YOUR SNACKS.</p>
-            <h1>Movie magic.<br /><span>Made tastier.</span></h1>
-            <p>Order your favourites and choose delivery now or during the interval.</p>
-            <div className="seatbite-hero-tags"><span>✦ Freshly prepared</span><span>✦ Delivered to your seat</span></div>
+            <p className="seatbite-eyebrow">SPECIAL FOR YOUR SHOW</p>
+            <h1>Delicious snacks.<br /><span>Big-screen moments.</span></h1>
+            <p>Freshly prepared favourites delivered straight to your cinema seat.</p>
+            <div className="seatbite-hero-tags"><span>✦ Order in seconds</span><span>✦ Delivered to your seat</span></div>
           </div>
           <div className="seatbite-hero-art" aria-hidden="true">
-            <div className="seatbite-hero-glow"></div><div className="seatbite-popcorn-illustration">🍿</div>
+            <div className="seatbite-hero-glow"></div><div className="seatbite-popcorn-illustration">🍔</div>
             <span className="seatbite-art-spark spark-one">✦</span><span className="seatbite-art-spark spark-two">✧</span>
-            <div className="seatbite-art-caption">THE PERFECT<br />MOVIE SIDEKICK</div>
+            <div className="seatbite-art-caption">MADE FOR<br />MOVIE TIME</div>
           </div>
         </header>
         <section className="seatbite-seat-strip">

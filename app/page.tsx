@@ -18,6 +18,9 @@ type FoodItem = {
   image_url: string | null;
 };
 const categories: Category[] = ["All", "Snacks", "Drinks", "Meals"];
+const formatINR = (amount: number) => new Intl.NumberFormat("en-IN", {
+  style: "currency", currency: "INR", maximumFractionDigits: 0,
+}).format(amount);
 
 function CustomerOrderPage() {
   const searchParams = useSearchParams();
@@ -269,7 +272,7 @@ function CustomerOrderPage() {
               <div><span>YOUR SEAT</span><strong>{seat}</strong></div>
             </div>
             <div className="seatbite-order-code"><span>YOUR ORDER NUMBER</span><strong>{orderCode}</strong></div>
-            <div className="seatbite-confirm-total"><span>Order total</span><strong>₹{total}</strong></div>
+            <div className="seatbite-confirm-total"><span>Order total</span><strong>{formatINR(total)}</strong></div>
             <button className="seatbite-primary-button seatbite-full-button" onClick={trackOrder}>Track my order <span>→</span></button>
             <button className="seatbite-secondary-button seatbite-full-button" onClick={backToMenu}>Back to menu</button>
           </header>
@@ -283,19 +286,19 @@ function CustomerOrderPage() {
       <div className="seatbite-shell">
         <div className="seatbite-topline">
           <div className="seatbite-wordmark"><span className="seatbite-wordmark-icon">🍿</span><span>seat<span>bite</span></span></div>
-          <div className="seatbite-top-actions"><div className="seatbite-open-pill"><span></span> SERVING YOUR SCREEN</div><button type="button" className="seatbite-secondary-button seatbite-my-orders-button" onClick={() => setShowMyOrders((open) => !open)} aria-expanded={showMyOrders}>My Orders <span>↗</span></button></div>
+          <div className="seatbite-top-actions"><div className="seatbite-open-pill"><span></span> SERVING YOUR SCREEN</div><button type="button" className="seatbite-primary-button seatbite-my-orders-button" onClick={() => setShowMyOrders((open) => !open)} aria-expanded={showMyOrders}>Track My Order <span>→</span></button></div>
         </div>
         <header className="seatbite-hero">
           <div className="seatbite-hero-copy">
-            <p className="seatbite-eyebrow">YOUR SEAT. YOUR SNACKS.</p>
-            <h1>Movie magic.<br /><span>Made tastier.</span></h1>
-            <p>Order your favourites and choose delivery now or during the interval.</p>
-            <div className="seatbite-hero-tags"><span>✦ Freshly prepared</span><span>✦ Delivered to your seat</span></div>
+            <p className="seatbite-eyebrow">SPECIAL FOR YOUR SHOW</p>
+            <h1>Delicious snacks.<br /><span>Big-screen moments.</span></h1>
+            <p>Freshly prepared favourites delivered straight to your cinema seat.</p>
+            <div className="seatbite-hero-tags"><span>✦ Order in seconds</span><span>✦ Delivered to your seat</span></div>
           </div>
           <div className="seatbite-hero-art" aria-hidden="true">
-            <div className="seatbite-hero-glow"></div><div className="seatbite-popcorn-illustration">🍿</div>
+            <div className="seatbite-hero-glow"></div><div className="seatbite-popcorn-illustration">🍔</div>
             <span className="seatbite-art-spark spark-one">✦</span><span className="seatbite-art-spark spark-two">✧</span>
-            <div className="seatbite-art-caption">THE PERFECT<br />MOVIE SIDEKICK</div>
+            <div className="seatbite-art-caption">MADE FOR<br />MOVIE TIME</div>
           </div>
         </header>
         <section className="seatbite-seat-strip">
@@ -339,7 +342,7 @@ function CustomerOrderPage() {
           {!scheduleChecked && <p style={{margin:"8px 0 0",fontSize:12,color:"#756b66"}}>Checking show ordering time…</p>}
         </section>
         <section className="seatbite-menu-heading">
-          <div><p className="seatbite-eyebrow">THE GOOD STUFF</p><h2>What are you craving?</h2><p>Little treats for your big-screen moments.</p></div>
+          <div><p className="seatbite-eyebrow">FRESH FROM THE COUNTER</p><h2>Popular dishes</h2><p>Pick your favourites and enjoy them at your seat.</p></div>
           <span className="seatbite-menu-count">{menuLoading ? "Loading menu…" : filteredFoodItems.length + " delicious picks"}</span>
         </section>
         <nav className="seatbite-categories" aria-label="Food categories">
@@ -367,7 +370,7 @@ function CustomerOrderPage() {
                   <span className="seatbite-product-category">{item.category}</span>
                   <h3>{item.name}</h3>
                   {item.description && <p>{item.description}</p>}
-                  <div className="seatbite-product-bottom"><strong>₹{item.price}</strong>
+                  <div className="seatbite-product-bottom"><strong>{formatINR(item.price)}</strong>
                     {quantity === 0 ? <button className="seatbite-add-button" onClick={() => addToCart(item.id)}><span>＋</span> Add</button> :
                       <div className="seatbite-quantity"><button aria-label={"Remove one " + item.name} onClick={() => removeFromCart(item.id)}>−</button><strong>{quantity}</strong><button aria-label={"Add one " + item.name} onClick={() => addToCart(item.id)}>＋</button></div>}
                   </div>
@@ -378,8 +381,8 @@ function CustomerOrderPage() {
         </section>
         <section className="seatbite-cart">
           <div className="seatbite-cart-heading"><div className="seatbite-cart-icon">🛍️</div><div><h2>Your snack box</h2><p>{itemCount === 0 ? "Your movie treats will show up here." : itemCount + " item" + (itemCount !== 1 ? "s" : "") + " selected for your show"}</p></div><span className="seatbite-cart-count">{itemCount}</span></div>
-          {itemCount > 0 && <div className="seatbite-cart-lines">{Object.entries(cart).map(([id, quantity]) => { const item = foodItems.find((food) => food.id === id); if (!item) return null; return <div className="seatbite-cart-line" key={id}><span>{item.emoji} {item.name} <small>× {quantity}</small></span><strong>₹{item.price * quantity}</strong></div>; })}</div>}
-          <div className="seatbite-cart-total"><span>Order total</span><strong>₹{total}</strong></div>
+          {itemCount > 0 && <div className="seatbite-cart-lines">{Object.entries(cart).map(([id, quantity]) => { const item = foodItems.find((food) => food.id === id); if (!item) return null; return <div className="seatbite-cart-line" key={id}><span>{item.emoji} {item.name} <small>× {quantity}</small></span><strong>{formatINR(item.price * quantity)}</strong></div>; })}</div>}
+          <div className="seatbite-cart-total"><span>Order total</span><strong>{formatINR(total)}</strong></div>
           <button className="seatbite-primary-button seatbite-full-button" onClick={handleCheckout} disabled={isSubmitting || menuLoading || !!menuError || itemCount === 0 || orderingClosed}>{orderingClosed ? "Ordering closed for this show" : isSubmitting ? "Placing your order…" : <>Continue to order <span>→</span></>}</button>
           <p className="seatbite-secure-note">♡ Made for your movie moment</p>
         </section>

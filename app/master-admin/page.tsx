@@ -508,7 +508,7 @@ export default function MasterAdminPage() {
                 alignItems: "center",
                 background: "#ffffff",
                 borderRadius: "14px",
-                padding: "10px 18px",
+                padding: "12px 22px",
                 boxShadow: "0 3px 12px rgba(0,0,0,0.22)",
               }}
             >
@@ -517,8 +517,8 @@ export default function MasterAdminPage() {
                 alt="SeatBite logo"
                 style={{
                   display: "block",
-                  width: "min(420px, 80vw)",
-                  height: "140px",
+                  width: "min(540px, 88vw)",
+                  height: "175px",
                   objectFit: "contain",
                   objectPosition: "center",
                 }}
@@ -534,7 +534,7 @@ export default function MasterAdminPage() {
             style={{
               marginTop: "8px",
               marginBottom: 0,
-              color: "#f3f4f6",
+              color: "#ffffff",
             }}
           >
             Manage cinemas, managers and food court staff

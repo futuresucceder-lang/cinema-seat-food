@@ -29,7 +29,7 @@ function TrackingContent(){
   const message=copy[status]||["Your order is being updated","This page updates automatically when the team changes your order status.","•"];
   return <main className="sb-customer-page"><div className="sb-page-shell">
     <header className="sb-header"><a href={menuUrl} className="sb-logo-link"><img src="/seatbite-logo.webp.jpg" alt="SeatBite"/></a><button className="sb-header-order" onClick={()=>router.push("/my-orders")}><span>🛒</span> My Order <b>0</b></button></header>
-    <section className="sb-hero sb-hero-track"><div className="sb-hero-copy"><p className="sb-kicker">YOUR MOVIE NIGHT, IN MOTION</p><h1>Track Your<br/><em>Order</em></h1><p>Sit Back • Relax • We’ll Take Care</p></div><div className="sb-hero-art" aria-hidden="true">🍿</div></section>
+    <section className="sb-hero sb-hero-track"><div className="sb-hero-copy"><p className="sb-kicker">YOUR MOVIE NIGHT, IN MOTION</p><h1>Track Your<br/><em>Order</em></h1><p>Sit Back • Relax • We’ll Take Care</p></div><div className="sb-hero-art" aria-hidden="true"><img src="/seatbite-cinema-hero.svg" alt=""/></div></section>
     <section className={"sb-progress-card "+(status==="COMPLETED"?"is-complete":"")}>
       <div className="sb-progress-line"><span style={{width:status==="NEW"?"0%":status==="PREPARING"?"33%":status==="READY"?"66%":status==="COMPLETED"?"100%":"0%"}}/></div>
       {steps.map((step,i)=><div className={"sb-progress-step "+(step.done?"active":"")} key={step.label}><div className="sb-progress-icon">{step.done?"✓":step.icon}</div><strong>{step.label}</strong></div>)}

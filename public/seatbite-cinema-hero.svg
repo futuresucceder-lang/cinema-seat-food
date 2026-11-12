@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" role="img" aria-label="Cinema popcorn and soft drink">
+<defs>
+ <linearGradient id="bg" x2="0" y2="1"><stop stop-color="#29100d"/><stop offset="1" stop-color="#090707"/></linearGradient>
+ <linearGradient id="red" x2="0" y2="1"><stop stop-color="#ff5038"/><stop offset="1" stop-color="#8d100d"/></linearGradient>
+ <linearGradient id="pop" x2="0" y2="1"><stop stop-color="#fff3bd"/><stop offset="1" stop-color="#f5a800"/></linearGradient>
+ <linearGradient id="cup" x2="0" y2="1"><stop stop-color="#ff3d25"/><stop offset="1" stop-color="#b90013"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur stdDeviation="15"/></filter>
+</defs>
+<rect width="1200" height="440" fill="url(#bg)"/>
+<g opacity=".62" fill="#050404">
+ <path d="M-20 70 Q110 15 245 76 L270 330 Q120 365 -10 322Z"/><path d="M270 54 Q390 0 520 66 L540 330 Q390 355 270 325Z"/>
+ <path d="M680 58 Q805 5 925 66 L940 330 Q800 360 680 325Z"/><path d="M940 78 Q1060 20 1220 70 L1220 335 Q1080 360 940 325Z"/>
+</g>
+<g fill="url(#red)" stroke="#5a0c0b" stroke-width="12">
+ <path d="M-5 98 Q112 37 226 101 L242 270 Q128 324 5 273Z"/>
+ <path d="M260 83 Q380 28 500 91 L514 267 Q390 320 270 271Z"/>
+ <path d="M690 88 Q805 28 920 92 L936 269 Q810 320 700 272Z"/>
+ <path d="M950 101 Q1070 42 1205 103 L1210 278 Q1080 320 960 275Z"/>
+</g>
+<g fill="#f56b4c" opacity=".6"><path d="M15 276 Q120 317 230 274 L240 315 Q120 360 0 315Z"/><path d="M275 275 Q390 317 510 272 L518 313 Q390 356 280 314Z"/><path d="M705 276 Q815 318 930 274 L940 314 Q820 355 710 315Z"/><path d="M965 278 Q1080 317 1200 278 L1200 318 Q1080 355 970 316Z"/></g>
+<ellipse cx="750" cy="390" rx="390" ry="38" fill="#000" opacity=".5" filter="url(#shadow)"/>
+<!-- popcorn kernels -->
+<g fill="url(#pop)" stroke="#e49a00" stroke-width="4">
+ <circle cx="680" cy="98" r="35"/><circle cx="724" cy="78" r="39"/><circle cx="765" cy="92" r="36"/><circle cx="810" cy="72" r="37"/><circle cx="850" cy="98" r="34"/><circle cx="895" cy="111" r="31"/>
+ <circle cx="705" cy="137" r="34"/><circle cx="752" cy="132" r="36"/><circle cx="800" cy="128" r="37"/><circle cx="847" cy="140" r="34"/><circle cx="885" cy="146" r="28"/>
+</g>
+<!-- popcorn tub -->
+<path d="M660 145 L915 145 L880 416 Q790 438 697 416Z" fill="#fff" stroke="#e9e2d9" stroke-width="8"/>
+<path d="M690 150 L735 150 L750 426 L710 420Z M785 150 L830 150 L827 430 L785 430Z M880 150 L910 150 L875 420 L846 426Z" fill="#ef241e"/>
+<path d="M650 145 Q785 118 925 145 L920 178 Q790 157 655 180Z" fill="#f7f3e9" stroke="#d8d0c7" stroke-width="6"/>
+<!-- soda cup -->
+<path d="M1000 175 L1160 175 L1135 410 Q1080 430 1025 410Z" fill="url(#cup)" stroke="#f7e5db" stroke-width="8"/>
+<path d="M1020 195 L1145 195" stroke="#fff" stroke-width="10" opacity=".8"/>
+<path d="M1090 176 L1138 50" stroke="#fff" stroke-width="13" stroke-linecap="round"/>
+<path d="M1090 176 L1138 50" stroke="#ed3b2b" stroke-width="5" stroke-linecap="round"/>
+<path d="M1002 178 Q1080 145 1168 178 L1170 201 Q1080 225 998 201Z" fill="#eee" stroke="#bbb" stroke-width="7"/>
+<circle cx="1080" cy="302" r="42" fill="#f04b25" opacity=".92"/><path d="M1054 301 Q1080 275 1106 301 L1098 324 L1063 324Z" fill="#fff"/>
+<!-- falling popcorn -->
+<g fill="#ffc642"><circle cx="605" cy="260" r="11"/><circle cx="635" cy="310" r="8"/><circle cx="950" cy="125" r="9"/><circle cx="965" cy="345" r="10"/></g>
+</svg>

@@ -42,7 +42,7 @@ function MyOrdersContent(){
   function track(code:string){router.push("/order-status?order="+encodeURIComponent(code));}
   return <main className="sb-customer-page"><div className="sb-page-shell">
     <header className="sb-header"><a href={menuUrl} className="sb-logo-link"><img src="/seatbite-logo.webp.jpg" alt="SeatBite"/></a><button className="sb-header-order" onClick={()=>router.push(menuUrl)}><span>🛒</span> My Order <b>0</b></button></header>
-    <section className="sb-hero sb-hero-orders"><div className="sb-hero-copy"><p className="sb-kicker">YOUR MOVIE NIGHT, ALL IN ONE PLACE</p><h1>My Orders</h1><p>Your past orders &amp; latest status</p></div><div className="sb-hero-art" aria-hidden="true">🍿</div></section>
+    <section className="sb-hero sb-hero-orders"><div className="sb-hero-copy"><p className="sb-kicker">YOUR MOVIE NIGHT, ALL IN ONE PLACE</p><h1>My Orders</h1><p>Your past orders &amp; latest status</p></div><div className="sb-hero-art" aria-hidden="true"><img src="/seatbite-cinema-hero.svg" alt=""/></div></section>
     <section className="sb-orders-heading"><div><p className="sb-kicker">ORDER HISTORY</p><h2>Your snack moments</h2><p>Keep track of everything you’ve ordered at your seat.</p></div><span>{orders.length} {orders.length===1?"ORDER":"ORDERS"}</span></section>
     {loading?<div className="sb-loading">Loading your orders…</div>:orders.length===0?<section className="sb-empty-state"><span>🍿</span><h2>No orders yet!</h2><p>Your movie snack journey starts here.</p><button onClick={()=>router.push(menuUrl)}>Explore Menu</button></section>:
     <section className="sb-order-history-list">{orders.map(order=>{

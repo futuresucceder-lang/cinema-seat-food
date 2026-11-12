@@ -502,9 +502,17 @@ export default function FoodMenuPage() {
             margin: "30px 0 40px",
           }}
         >
-          <div style={{ fontSize: "55px" }}>
-            🍔
-          </div>
+          <img
+            src="/seatbite-logo.webp.jpg"
+            alt="SeatBite"
+            style={{
+              width: "min(320px, 75vw)",
+              height: "125px",
+              objectFit: "contain",
+              display: "block",
+              margin: "0 auto 12px",
+            }}
+          />
 
           <h1
             style={{
@@ -523,6 +531,7 @@ export default function FoodMenuPage() {
         {/* ADD / EDIT FORM */}
 
         <section
+          className="seatbite-food-menu-form"
           style={{
             background: "#222",
             borderRadius: "18px",
@@ -765,6 +774,7 @@ export default function FoodMenuPage() {
               {foodItems.map((item) => (
                 <div
                   key={item.id}
+                  className="seatbite-food-item-card"
                   style={{
                     background: "#222",
                     borderRadius: "15px",

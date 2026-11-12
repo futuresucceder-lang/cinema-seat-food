@@ -297,7 +297,7 @@ function CustomerOrderPage() {
           <div className="seatbite-hero-copy">
             <p className="seatbite-eyebrow">SIT BACK • ORDER • ENJOY</p>
             <h1>Good Food<br /><span>Better Movie!</span></h1>
-            <p>Fresh cinema favourites, delivered right to your seat.</p>
+            <p>Sit Back • Order • Enjoy</p>
           </div>
           <div className="seatbite-hero-art" aria-hidden="true">
             <img className="seatbite-hero-food-photo" src="/seatbite-cinema-hero.svg" alt="" />
@@ -309,7 +309,7 @@ function CustomerOrderPage() {
           <span className="seatbite-seat-divider" />
           <div className="seatbite-seat-icon">💺</div>
           <div className="seatbite-seat-copy"><span>SEAT</span><strong>{seat}</strong></div>
-          <span className="seatbite-seat-check">✓</span>
+          
         </section>
         {showMyOrders && (
           <div className="seatbite-cart-overlay" role="presentation" onClick={() => setShowMyOrders(false)}>
@@ -358,11 +358,11 @@ function CustomerOrderPage() {
 
         <section className="seatbite-menu-heading">
           <div><p className="seatbite-eyebrow">OUR MENU</p><h2>Popular dishes</h2><p>Pick your favourites and enjoy them at your seat.</p></div>
-          <span className="seatbite-menu-count">{menuLoading ? "Loading menu…" : filteredFoodItems.length + " delicious picks"}</span>
+          
         </section>
         <nav className="seatbite-categories" aria-label="Food categories">
           {categories.map((category) => (
-            <button key={category} className={selectedCategory === category ? "seatbite-category-active" : ""} onClick={() => setSelectedCategory(category)}>
+            <button key={category} className={selectedCategory === category || (selectedCategory === "All" && category === "Burgers") ? "seatbite-category-active" : ""} onClick={() => setSelectedCategory(category)}>
               <span>{category === "Burgers" ? "🍔" : category === "Pizzas" ? "🍕" : category === "Snacks" ? "🍿" : category === "Drinks" ? "🥤" : "⭐"}</span>{category}
             </button>
           ))}
@@ -382,9 +382,7 @@ function CustomerOrderPage() {
                   <span className="seatbite-product-emoji">{item.emoji}</span>
                 </div>
                 <div className="seatbite-product-content">
-                  <span className="seatbite-product-category">{item.category}</span>
                   <h3>{item.name}</h3>
-                  {item.description && <p>{item.description}</p>}
                   <div className="seatbite-product-bottom"><strong>{formatINR(item.price)}</strong>
                     {quantity === 0 ? <button className="seatbite-add-button" onClick={() => addToCart(item.id)}><span>＋</span> Add</button> :
                       <div className="seatbite-quantity"><button aria-label={"Remove one " + item.name} onClick={() => removeFromCart(item.id)}>−</button><strong>{quantity}</strong><button aria-label={"Add one " + item.name} onClick={() => addToCart(item.id)}>＋</button></div>}
@@ -394,14 +392,6 @@ function CustomerOrderPage() {
             );
           })}
         </section>
-        <section className="seatbite-recent-section">
-          <div className="seatbite-recent-heading"><div><p className="seatbite-eyebrow">YOUR ACTIVITY</p><h2>Recent orders</h2></div><button type="button" onClick={() => setShowMyOrders(true)}>View all <span>›</span></button></div>
-          {savedOrders.length === 0 ? <div className="seatbite-recent-empty"><span>🧾</span><p>Your recent orders will appear here.</p><small>Place an order and come back anytime to track it.</small></div> :
-            <div className="seatbite-recent-grid">{savedOrders.slice(0,3).map((savedOrder) => <article className="seatbite-recent-card" key={savedOrder.order_code}>
-              <div className="seatbite-recent-icon">🍿</div><div className="seatbite-recent-info"><strong>{savedOrder.order_code}</strong><span>Screen {savedOrder.screen} · Seat {savedOrder.seat}</span><small>{savedOrder.delivery_option==="INTERVAL"?"Deliver During Interval":"Deliver Now"}</small></div>
-              <button type="button" onClick={() => router.push("/order-status?order=" + encodeURIComponent(savedOrder.order_code))}>Track <span>→</span></button>
-            </article>)}</div>}
-        </section>
         <div className="seatbite-checkout-spacer" aria-hidden="true" />
         <div className="seatbite-sticky-checkout">
           <div className="seatbite-sticky-item">
@@ -409,9 +399,9 @@ function CustomerOrderPage() {
             <span>{itemCount} {itemCount === 1 ? "item" : "items"} selected</span>
           </div>
           <div className="seatbite-sticky-total"><span>Total Amount</span><strong>{formatINR(total)}</strong></div>
-          <button type="button" onClick={() => setShowMyOrders(true)} disabled={itemCount === 0}>Checkout <span>›</span></button>
+          <button type="button" onClick={() => setShowMyOrders(true)} disabled={itemCount === 0 || isSubmitting}>Checkout <span>→</span></button>
         </div>
-        <footer className="seatbite-footer"><span className="seatbite-footer-icon">▣</span><span>Enjoy the Movie with <strong>SEAT BITE</strong></span><span className="seatbite-footer-heart">♡</span></footer>
+        <footer className="seatbite-footer"><span className="seatbite-footer-icon">🎞</span><span>Enjoy the Movie with <strong>SEAT BITE</strong></span><span className="seatbite-footer-heart">♥</span></footer>
       </div>
     </main>
   );

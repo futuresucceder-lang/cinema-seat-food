@@ -3722,3 +3722,677 @@ main:not(.seatbite-page):has(form) button {
  .seatbite-quantity button{width:22px!important;height:22px!important;min-width:22px!important}
  .seatbite-sticky-item{font-size:9px!important}
 }
+
+
+/* =========================================================
+   SEATBITE — final reference recreation (customer menu only)
+   Scoped to the existing customer menu; no app logic changed.
+   ========================================================= */
+.seatbite-page:not(.seatbite-status-page) {
+  --sb-orange: #ff4b0b;
+  --sb-ink: #111a34;
+  --sb-warm: #fff8f1;
+  width: 100% !important;
+  min-height: 100vh !important;
+  padding: 0 0 0 !important;
+  overflow-x: clip !important;
+  color: var(--sb-ink) !important;
+  background: #fff !important;
+  font-family: var(--font-poppins), "Poppins", sans-serif !important;
+}
+.seatbite-page:not(.seatbite-status-page) *,
+.seatbite-page:not(.seatbite-status-page) *::before,
+.seatbite-page:not(.seatbite-status-page) *::after {
+  box-sizing: border-box;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-shell {
+  width: min(100%, 980px) !important;
+  max-width: 980px !important;
+  margin: 0 auto !important;
+  padding: 0 0 0 !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-topline {
+  position: relative !important;
+  z-index: 5 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+  min-height: 132px !important;
+  margin: 0 !important;
+  padding: 10px 28px !important;
+  border: 0 !important;
+  border-radius: 0 0 42px 42px !important;
+  background: #fff !important;
+  box-shadow: 0 5px 20px rgba(19, 23, 38, .07) !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-customer-logo {
+  display: block !important;
+  width: clamp(205px, 43vw, 360px) !important;
+  height: 112px !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: left center !important;
+  flex: 0 1 auto !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-top-actions { flex: 0 0 auto !important; }
+.seatbite-page:not(.seatbite-status-page) .seatbite-my-orders-button {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  min-width: 142px !important;
+  min-height: 58px !important;
+  padding: 0 24px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, #ff650e 0%, #f43e00 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 7px 18px rgba(255, 75, 11, .25) !important;
+  font-family: var(--font-poppins), Poppins, sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-my-orders-button > span:first-child { font-size: 22px !important; }
+.seatbite-page:not(.seatbite-status-page) .seatbite-cart-badge {
+  position: absolute !important;
+  top: -7px !important;
+  right: -3px !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  background: #f20d35 !important;
+  color: #fff !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-hero {
+  position: relative !important;
+  isolation: isolate !important;
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: clamp(315px, 43vw, 390px) !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 30px 38px !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #180807 !important;
+  box-shadow: none !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-hero::before {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 0 !important;
+  inset: 0 !important;
+  background: linear-gradient(90deg, rgba(17, 4, 4, .38) 0%, rgba(17, 4, 4, .18) 45%, rgba(17, 4, 4, 0) 76%) !important;
+  pointer-events: none !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-hero::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 1 !important;
+  left: -4% !important;
+  right: -4% !important;
+  bottom: -28px !important;
+  height: 62px !important;
+  background: linear-gradient(100deg, #ff650e, #f43e00) !important;
+  clip-path: ellipse(58% 48% at 52% 100%) !important;
+  pointer-events: none !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-hero-copy {
+  position: relative !important;
+  z-index: 2 !important;
+  align-self: center !important;
+  width: 57% !important;
+  max-width: 540px !important;
+  padding: 0 !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-hero .seatbite-eyebrow { display: none !important; }
+.seatbite-page:not(.seatbite-status-page) .seatbite-hero h1 {
+  max-width: 520px !important;
+  margin: 0 !important;
+  color: #fff !important;
+  font-family: var(--font-poppins), Poppins, sans-serif !important;
+  font-size: clamp(38px, 6.2vw, 66px) !important;
+  font-weight: 800 !important;
+  line-height: 1.02 !important;
+  letter-spacing: -2.6px !important;
+  text-shadow: 0 2px 9px rgba(0,0,0,.22) !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-hero h1 span { color: #ff4b0b !important; }
+.seatbite-page:not(.seatbite-status-page) .seatbite-hero-copy > p:not(.seatbite-eyebrow) {
+  margin: 16px 0 0 !important;
+  color: #fff !important;
+  font-family: var(--font-poppins), Poppins, sans-serif !important;
+  font-size: clamp(13px, 1.8vw, 18px) !important;
+  font-weight: 500 !important;
+  letter-spacing: .1px !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-hero-art {
+  position: absolute !important;
+  z-index: -1 !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-hero-food-photo {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center 54% !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-seat-strip {
+  position: relative !important;
+  z-index: 3 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 17px !important;
+  width: calc(100% - 56px) !important;
+  min-height: 104px !important;
+  margin: -23px auto 28px !important;
+  padding: 12px 30px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: #fff !important;
+  box-shadow: 0 7px 22px rgba(16, 26, 53, .12) !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-seat-icon {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 48px !important;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #101a35 !important;
+  font-size: 30px !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-seat-copy {
+  display: flex !important;
+  flex: 1 1 0 !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-seat-copy span {
+  color: #101a35 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-seat-copy strong {
+  color: #ff4b0b !important;
+  font-size: 36px !important;
+  font-weight: 800 !important;
+  line-height: 1.05 !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-seat-divider {
+  display: block !important;
+  flex: 0 0 2px !important;
+  width: 2px !important;
+  height: 62px !important;
+  background: #ff4b0b !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-menu-heading {
+  display: block !important;
+  margin: 0 24px 16px !important;
+  padding: 23px 28px !important;
+  border: 1.5px solid #ffd1a9 !important;
+  border-radius: 25px !important;
+  background: linear-gradient(120deg, #fff5e8, #fffaf4) !important;
+  box-shadow: 0 6px 17px rgba(255, 111, 35, .12) !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-menu-heading .seatbite-eyebrow {
+  margin: 0 0 2px !important;
+  color: #ff4b0b !important;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  letter-spacing: .15px !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-menu-heading h2 {
+  margin: 0 !important;
+  color: #111a34 !important;
+  font-size: 30px !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.9px !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-menu-heading > div > p:last-child {
+  margin: 7px 0 0 !important;
+  color: #56545a !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-categories {
+  display: flex !important;
+  gap: 9px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  margin: 0 22px 18px !important;
+  padding: 0 2px 8px !important;
+  scrollbar-width: none !important;
+  white-space: nowrap !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-categories::-webkit-scrollbar { display: none !important; }
+.seatbite-page:not(.seatbite-status-page) .seatbite-categories button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  gap: 8px !important;
+  min-height: 54px !important;
+  padding: 0 20px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: #fff !important;
+  color: #111a34 !important;
+  box-shadow: 0 4px 13px rgba(16, 26, 53, .10) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-categories button span { font-size: 19px !important; }
+.seatbite-page:not(.seatbite-status-page) .seatbite-categories button.seatbite-category-active {
+  background: linear-gradient(180deg, #ff650e, #f43e00) !important;
+  color: #fff !important;
+  box-shadow: 0 5px 14px rgba(255, 75, 11, .22) !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-food-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 15px !important;
+  margin: 0 !important;
+  padding: 0 22px !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-product-card {
+  display: grid !important;
+  grid-template-columns: 54% minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 7px !important;
+  min-width: 0 !important;
+  min-height: 154px !important;
+  padding: 9px !important;
+  overflow: hidden !important;
+  border: 1px solid #f0eeee !important;
+  border-radius: 24px !important;
+  background: #fff !important;
+  box-shadow: 0 5px 16px rgba(20, 26, 40, .10) !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-product-image-wrap {
+  position: relative !important;
+  width: 100% !important;
+  height: 132px !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  border-radius: 17px !important;
+  background: #fff !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-product-image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: none !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-product-emoji { display: none !important; }
+.seatbite-page:not(.seatbite-status-page) .seatbite-product-content {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  min-width: 0 !important;
+  padding: 3px !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-product-content h3 {
+  margin: 0 0 8px !important;
+  color: #101a35 !important;
+  font-size: clamp(13px, 2vw, 18px) !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.35px !important;
+  overflow-wrap: anywhere !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-product-content p,
+.seatbite-page:not(.seatbite-status-page) .seatbite-product-category { display: none !important; }
+.seatbite-page:not(.seatbite-status-page) .seatbite-product-bottom {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  margin: 0 !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-product-bottom > strong {
+  color: #ff4b0b !important;
+  font-size: clamp(16px, 2.5vw, 22px) !important;
+  font-weight: 800 !important;
+  letter-spacing: -.45px !important;
+  white-space: nowrap !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-quantity {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-quantity button {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 31px !important;
+  width: 31px !important;
+  height: 31px !important;
+  min-width: 31px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: #e8e8e8 !important;
+  color: #101a35 !important;
+  font-size: 22px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,.07) !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-quantity button:last-child {
+  background: #ff4b0b !important;
+  color: #fff !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-quantity button:disabled {
+  opacity: 1 !important;
+  background: #e8e8e8 !important;
+  color: #101a35 !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-quantity strong {
+  min-width: 15px !important;
+  color: #101a35 !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-add-button { display: none !important; }
+.seatbite-page:not(.seatbite-status-page) .seatbite-checkout-spacer { height: 126px !important; }
+.seatbite-page:not(.seatbite-status-page) .seatbite-sticky-checkout {
+  position: fixed !important;
+  z-index: 30 !important;
+  left: 50% !important;
+  bottom: 12px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1.05fr 1.35fr !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: min(calc(100% - 30px), 690px) !important;
+  min-height: 92px !important;
+  margin: 0 !important;
+  padding: 10px 14px !important;
+  transform: translateX(-50%) !important;
+  border: 1px solid #f1eeee !important;
+  border-radius: 27px !important;
+  background: rgba(255,255,255,.98) !important;
+  box-shadow: 0 8px 28px rgba(16,26,53,.15) !important;
+  backdrop-filter: blur(12px) !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-sticky-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+  color: #101a35 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-sticky-item img {
+  width: 40px !important;
+  height: 40px !important;
+  flex: 0 0 40px !important;
+  border-radius: 50% !important;
+  object-fit: contain !important;
+  background: #fff5ec !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-sticky-emoji {
+  display: grid !important;
+  place-items: center !important;
+  width: 38px !important;
+  height: 38px !important;
+  flex: 0 0 38px !important;
+  color: #ff4b0b !important;
+  font-size: 26px !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-sticky-total {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  padding-left: 12px !important;
+  border-left: 2px solid #ff4b0b !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-sticky-total span {
+  color: #101a35 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-sticky-total strong {
+  color: #ff4b0b !important;
+  font-size: clamp(21px, 4vw, 32px) !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-sticky-checkout > button {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-height: 64px !important;
+  padding: 0 14px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, #ff650e, #f43e00) !important;
+  color: #fff !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+  box-shadow: 0 5px 13px rgba(255,75,11,.2) !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-footer {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  min-height: 148px !important;
+  margin: 0 !important;
+  padding: 28px 24px !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 46% 46% 0 0 / 25px 25px 0 0 !important;
+  background:
+    radial-gradient(circle at 7% 70%, rgba(255,255,255,.13) 0 4px, transparent 5px),
+    radial-gradient(circle at 93% 70%, rgba(255,255,255,.13) 0 4px, transparent 5px),
+    linear-gradient(110deg, #ff650e, #f43e00) !important;
+  color: #fff !important;
+  text-align: center !important;
+  font-family: var(--font-poppins), Poppins, sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  letter-spacing: .6px !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-footer::before,
+.seatbite-page:not(.seatbite-status-page) .seatbite-footer::after {
+  content: "◉" !important;
+  position: absolute !important;
+  bottom: -30px !important;
+  display: grid !important;
+  place-items: center !important;
+  width: 116px !important;
+  height: 116px !important;
+  border: 12px solid rgba(255,255,255,.28) !important;
+  border-radius: 50% !important;
+  color: rgba(255,255,255,.35) !important;
+  font-size: 64px !important;
+  pointer-events: none !important;
+}
+.seatbite-page:not(.seatbite-status-page) .seatbite-footer::before { left: -30px !important; }
+.seatbite-page:not(.seatbite-status-page) .seatbite-footer::after { right: -30px !important; }
+.seatbite-page:not(.seatbite-status-page) .seatbite-footer strong,
+.seatbite-page:not(.seatbite-status-page) .seatbite-footer-icon,
+.seatbite-page:not(.seatbite-status-page) .seatbite-footer-heart {
+  position: relative !important;
+  z-index: 1 !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+}
+@media (min-width: 981px) {
+  .seatbite-page:not(.seatbite-status-page) .seatbite-shell { box-shadow: 0 0 35px rgba(16,26,53,.035) !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-food-grid { gap: 18px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-product-card { min-height: 170px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-product-image-wrap { height: 148px !important; }
+}
+@media (max-width: 600px) {
+  .seatbite-page:not(.seatbite-status-page) .seatbite-shell { width: 100% !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-topline {
+    min-height: 112px !important;
+    padding: 7px 16px !important;
+    border-radius: 0 0 32px 32px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-customer-logo {
+    width: min(57vw, 245px) !important;
+    height: 94px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-my-orders-button {
+    min-width: 112px !important;
+    min-height: 48px !important;
+    gap: 6px !important;
+    padding: 0 15px !important;
+    font-size: 12px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-my-orders-button > span:first-child { font-size: 18px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-cart-badge { width: 24px !important; height: 24px !important; font-size: 11px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-hero {
+    height: 310px !important;
+    padding: 22px 24px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-hero-food-photo { object-position: 58% center !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-hero-copy { width: 64% !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-hero h1 {
+    font-size: clamp(33px, 9vw, 48px) !important;
+    line-height: 1.03 !important;
+    letter-spacing: -1.7px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-hero-copy > p:not(.seatbite-eyebrow) {
+    margin-top: 12px !important;
+    font-size: 12px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-seat-strip {
+    width: calc(100% - 32px) !important;
+    min-height: 84px !important;
+    margin: -20px auto 22px !important;
+    padding: 9px 17px !important;
+    gap: 9px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-seat-icon { flex-basis: 34px !important; width: 34px !important; height: 38px !important; font-size: 23px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-seat-copy span { font-size: 12px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-seat-copy strong { font-size: 29px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-seat-divider { height: 48px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-menu-heading {
+    margin: 0 13px 12px !important;
+    padding: 16px 17px !important;
+    border-radius: 19px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-menu-heading .seatbite-eyebrow { font-size: 14px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-menu-heading h2 { font-size: 23px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-menu-heading > div > p:last-child { font-size: 10px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-categories {
+    gap: 7px !important;
+    margin: 0 12px 14px !important;
+    padding: 0 1px 7px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-categories button {
+    min-height: 43px !important;
+    gap: 5px !important;
+    padding: 0 12px !important;
+    font-size: 11px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-categories button span { font-size: 15px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-food-grid {
+    gap: 10px !important;
+    padding: 0 12px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-product-card {
+    grid-template-columns: 52% minmax(0, 1fr) !important;
+    gap: 4px !important;
+    min-height: 126px !important;
+    padding: 7px !important;
+    border-radius: 20px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-product-image-wrap {
+    height: 110px !important;
+    border-radius: 14px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-product-content { padding: 2px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-product-content h3 {
+    margin-bottom: 6px !important;
+    font-size: clamp(11px, 3.3vw, 15px) !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-product-bottom { gap: 6px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-product-bottom > strong { font-size: clamp(13px, 3.8vw, 18px) !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-quantity { gap: 5px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-quantity button {
+    flex-basis: 25px !important;
+    width: 25px !important;
+    height: 25px !important;
+    min-width: 25px !important;
+    font-size: 18px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-quantity strong { font-size: 13px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-checkout-spacer { height: 100px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-sticky-checkout {
+    bottom: 8px !important;
+    width: calc(100% - 20px) !important;
+    min-height: 74px !important;
+    grid-template-columns: .95fr 1fr 1.28fr !important;
+    gap: 6px !important;
+    padding: 7px 8px !important;
+    border-radius: 23px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-sticky-item { gap: 4px !important; font-size: 10px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-sticky-item img,
+  .seatbite-page:not(.seatbite-status-page) .seatbite-sticky-emoji { width: 26px !important; height: 26px !important; flex-basis: 26px !important; font-size: 18px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-sticky-total { padding-left: 7px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-sticky-total span { font-size: 9px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-sticky-total strong { font-size: 21px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-sticky-checkout > button {
+    min-height: 52px !important;
+    padding: 0 8px !important;
+    font-size: 12px !important;
+  }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-footer {
+    min-height: 116px !important;
+    margin-top: 0 !important;
+    padding: 22px 18px !important;
+    font-size: 11px !important;
+    border-radius: 42% 42% 0 0 / 18px 18px 0 0 !important;
+  }
+}
+@media (max-width: 360px) {
+  .seatbite-page:not(.seatbite-status-page) .seatbite-customer-logo { width: 53vw !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-my-orders-button { min-width: 104px !important; padding: 0 11px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-product-card { grid-template-columns: 48% minmax(0, 1fr) !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-product-content h3 { font-size: 11px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-quantity { gap: 3px !important; }
+  .seatbite-page:not(.seatbite-status-page) .seatbite-quantity button { width: 23px !important; height: 23px !important; min-width: 23px !important; flex-basis: 23px !important; }
+}

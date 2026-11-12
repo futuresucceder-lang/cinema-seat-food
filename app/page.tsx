@@ -288,7 +288,7 @@ function CustomerOrderPage() {
         <div className="seatbite-topline">
           <img className="seatbite-customer-logo" src="/seatbite-logo.webp.jpg" alt="SeatBite" />
           <div className="seatbite-top-actions">
-            <button type="button" className="seatbite-primary-button seatbite-my-orders-button" onClick={() => setShowMyOrders((open) => !open)} aria-expanded={showMyOrders} aria-label={"My Order, " + itemCount + " items"}>
+            <button type="button" className="seatbite-primary-button seatbite-my-orders-button" onClick={() => router.push(`/my-orders?cinema=${encodeURIComponent(cinemaId)}&screen=${encodeURIComponent(screen)}&seat=${encodeURIComponent(seat)}`)} aria-label={"My Order, " + itemCount + " items"}>
               <span aria-hidden="true">🛒</span> My Order <span className="seatbite-cart-badge">{itemCount}</span>
             </button>
           </div>

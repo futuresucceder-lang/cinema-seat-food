@@ -236,6 +236,7 @@ export default function OrderHistoryPage() {
               style={{
                 fontSize: "30px",
                 fontWeight: "bold",
+                color: "#ffffff",
               }}
             >
               {orders.length}
@@ -260,6 +261,7 @@ export default function OrderHistoryPage() {
               style={{
                 fontSize: "30px",
                 fontWeight: "bold",
+                color: "#ffffff",
               }}
             >
               ₹{totalSales}
@@ -284,6 +286,7 @@ export default function OrderHistoryPage() {
               style={{
                 fontSize: "30px",
                 fontWeight: "bold",
+                color: "#ffffff",
               }}
             >
               {completedCount}
@@ -308,6 +311,7 @@ export default function OrderHistoryPage() {
               style={{
                 fontSize: "30px",
                 fontWeight: "bold",
+                color: "#ffffff",
               }}
             >
               {filteredOrders.length}
@@ -521,6 +525,7 @@ export default function OrderHistoryPage() {
                     style={{
                       margin: 0,
                       fontSize: "18px",
+                      color: "#ffffff",
                     }}
                   >
                     🔔 {order.order_code}
@@ -548,22 +553,22 @@ export default function OrderHistoryPage() {
                     marginBottom: "15px",
                   }}
                 >
-                  <p style={{ margin: "6px 0" }}>
+                  <p style={{ margin: "6px 0", color: "#f5f5f5" }}>
                     🎬 <strong>Screen:</strong>{" "}
                     {order.screen || "-"}
                   </p>
 
-                  <p style={{ margin: "6px 0" }}>
+                  <p style={{ margin: "6px 0", color: "#f5f5f5" }}>
                     💺 <strong>Seat:</strong>{" "}
                     {order.seat || "-"}
                   </p>
 
-                  <p style={{ margin: "6px 0" }}>
+                  <p style={{ margin: "6px 0", color: "#f5f5f5" }}>
                     🎞️ <strong>Movie:</strong>{" "}
                     {order.movie || "-"}
                   </p>
 
-                  <p style={{ margin: "6px 0" }}>
+                  <p style={{ margin: "6px 0", color: "#f5f5f5" }}>
                     🕐 <strong>Ordered:</strong>{" "}
                     {formatDate(order.created_at)}
                   </p>
@@ -573,6 +578,7 @@ export default function OrderHistoryPage() {
                 <h3
                   style={{
                     marginBottom: "10px",
+                    color: "#ffffff",
                   }}
                 >
                   🍴 Food Items
@@ -601,11 +607,11 @@ export default function OrderHistoryPage() {
                             "1px solid #333",
                         }}
                       >
-                        <span>
+                        <span style={{ color: "#f5f5f5" }}>
                           {item.emoji} {item.name}
                         </span>
 
-                        <span>
+                        <span style={{ color: "#f5f5f5" }}>
                           × {item.quantity}
                         </span>
                       </div>
@@ -630,6 +636,7 @@ export default function OrderHistoryPage() {
                       "space-between",
                     fontSize: "20px",
                     fontWeight: "bold",
+                    color: "#ffffff",
                   }}
                 >
                   <span>Total</span>

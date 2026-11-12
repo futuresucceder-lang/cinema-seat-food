@@ -2646,20 +2646,6 @@ main:not(.seatbite-page):has(form) button {
 .seatbite-food-menu-form strong {
   color: #ffffff !important;
 }
-.seatbite-food-menu-form input,
-.seatbite-food-menu-form select,
-.seatbite-food-menu-form textarea {
-  color: #ffffff !important;
-}
-.seatbite-food-menu-form input::placeholder,
-.seatbite-food-menu-form textarea::placeholder {
-  color: #c9c9c9 !important;
-  opacity: 1 !important;
-}
-.seatbite-food-menu-form select option {
-  color: #ffffff !important;
-  background: #333333 !important;
-}
 .seatbite-food-item-card,
 .seatbite-food-item-card h3,
 .seatbite-food-item-card p,

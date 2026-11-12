@@ -83,7 +83,7 @@ function CustomerOrderPage() {
             id: String(item.id),
             name: String(item.name),
             price: Number(item.price) || 0,
-            emoji: item.emoji || (category === "Drinks" ? "🥤" : category === "Meals" ? "🍔" : "🍿"),
+            emoji: item.emoji || (category === "Drinks" ? "🥤" : category === "Burgers" ? "🍔" : "🍿"),
             category,
             description: item.description || null,
             image_url: item.image_url || null,

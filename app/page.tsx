@@ -384,8 +384,7 @@ function CustomerOrderPage() {
                 <div className="seatbite-product-content">
                   <h3>{item.name}</h3>
                   <div className="seatbite-product-bottom"><strong>{formatINR(item.price)}</strong>
-                    {quantity === 0 ? <button className="seatbite-add-button" onClick={() => addToCart(item.id)}><span>＋</span> Add</button> :
-                      <div className="seatbite-quantity"><button aria-label={"Remove one " + item.name} onClick={() => removeFromCart(item.id)}>−</button><strong>{quantity}</strong><button aria-label={"Add one " + item.name} onClick={() => addToCart(item.id)}>＋</button></div>}
+                    <div className="seatbite-quantity"><button aria-label={"Remove one " + item.name} onClick={() => removeFromCart(item.id)} disabled={quantity === 0}>−</button><strong>{quantity}</strong><button aria-label={"Add one " + item.name} onClick={() => addToCart(item.id)}>＋</button></div>
                   </div>
                 </div>
               </article>

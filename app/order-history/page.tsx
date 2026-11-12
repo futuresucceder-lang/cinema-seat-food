@@ -178,6 +178,7 @@ export default function OrderHistoryPage() {
 
   return (
     <main
+      className="seatbite-order-history-page"
       style={{
         minHeight: "100vh",
         background: "#111",

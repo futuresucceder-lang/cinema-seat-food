@@ -2628,3 +2628,10 @@ main:not(.seatbite-page):has(form) button {
   color: #ffffff !important;
   background: #222222 !important;
 }
+
+
+/* Only the Order History page title and subtitle should be black. */
+.seatbite-order-history-page .order-history-title,
+.seatbite-order-history-page .order-history-subtitle {
+  color: #000000 !important;
+}

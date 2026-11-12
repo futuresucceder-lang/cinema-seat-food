@@ -2635,3 +2635,34 @@ main:not(.seatbite-page):has(form) button {
 .seatbite-order-history-page .order-history-subtitle {
   color: #000000 !important;
 }
+
+
+/* Food Menu Management: replace the burger icon with the SeatBite logo and keep
+   all labels/content on dark management panels readable in white. */
+.seatbite-food-menu-form,
+.seatbite-food-menu-form h2,
+.seatbite-food-menu-form label,
+.seatbite-food-menu-form p,
+.seatbite-food-menu-form strong {
+  color: #ffffff !important;
+}
+.seatbite-food-menu-form input,
+.seatbite-food-menu-form select,
+.seatbite-food-menu-form textarea {
+  color: #ffffff !important;
+}
+.seatbite-food-menu-form input::placeholder,
+.seatbite-food-menu-form textarea::placeholder {
+  color: #c9c9c9 !important;
+  opacity: 1 !important;
+}
+.seatbite-food-menu-form select option {
+  color: #ffffff !important;
+  background: #333333 !important;
+}
+.seatbite-food-item-card,
+.seatbite-food-item-card h3,
+.seatbite-food-item-card p,
+.seatbite-food-item-card div {
+  color: #ffffff;
+}

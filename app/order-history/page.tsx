@@ -195,6 +195,7 @@ export default function OrderHistoryPage() {
         }}
       >
         <h1
+          className="order-history-title"
           style={{
             textAlign: "center",
             marginBottom: "5px",
@@ -204,6 +205,7 @@ export default function OrderHistoryPage() {
         </h1>
 
         <p
+          className="order-history-subtitle"
           style={{
             textAlign: "center",
             color: "#aaa",

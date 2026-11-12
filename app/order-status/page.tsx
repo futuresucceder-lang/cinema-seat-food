@@ -1,72 +1,49 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { createClient } from "../../lib/supabase/client";
+import { useRouter, useSearchParams } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
-const supabase = createClient();
-const formatINR = (amount: number) => new Intl.NumberFormat("en-IN", {
-  style: "currency", currency: "INR", maximumFractionDigits: 0,
-}).format(amount);
+const supabase=createClient();
+const inr=(n:number)=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(n);
+type FoodItem={id?:string;name:string;price?:number;emoji?:string;quantity?:number};
+type Order={order_code:string;cinema_id?:string|null;screen:string;seat:string;food_items:FoodItem[];total:number;status:string;created_at:string;delivery_option?:string|null};
 
-type FoodItem = { id?: string; name: string; price?: number; emoji?: string; quantity?: number };
-type Order = { order_code: string; movie: string | null; cinema_id?: string | null; screen: string; seat: string; food_items: FoodItem[]; total: number; status: string; created_at: string; delivery_option?: string | null };
-
-function OrderStatusContent() {
-  const searchParams = useSearchParams();
-  const orderCode = searchParams.get("order");
-  const [order, setOrder] = useState<Order | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!orderCode) { setError("Order ID is missing."); setLoading(false); return; }
-    async function loadOrder() {
-      const { data, error } = await supabase.from("orders").select("*").eq("order_code", orderCode).single();
-      if (error) { console.error(error); setError("Order not found."); } else { setOrder(data); }
-      setLoading(false);
-    }
-    loadOrder();
-    const channel = supabase.channel(`order-status-${orderCode}`).on("postgres_changes", {
-      event: "UPDATE", schema: "public", table: "orders", filter: `order_code=eq.${orderCode}`,
-    }, (payload) => setOrder(payload.new as Order)).subscribe();
-    return () => { supabase.removeChannel(channel); };
-  }, [orderCode]);
-
-  if (loading) return <main className="seatbite-page seatbite-status-page"><div className="seatbite-status-card"><div className="seatbite-loader">🍿</div><p>Getting your order update…</p></div></main>;
-  if (error || !order) return <main className="seatbite-page seatbite-status-page"><div className="seatbite-status-card"><div className="seatbite-status-symbol">!</div><h1>We couldn't find that order</h1><p className="seatbite-muted">{error}</p><a href="/" className="seatbite-primary-button seatbite-full-button">Back to Seat Bite <span>→</span></a></div></main>;
-
-  const status = (order.status || "NEW").toUpperCase();
-  const stages = [
-    { label: "Received", emoji: "📋", active: ["NEW", "PREPARING", "READY", "COMPLETED"].includes(status) },
-    { label: "Preparing", emoji: "👨‍🍳", active: ["PREPARING", "READY", "COMPLETED"].includes(status) },
-    { label: "Ready", emoji: "🔔", active: ["READY", "COMPLETED"].includes(status) },
-    { label: "Delivered", emoji: "🎉", active: status === "COMPLETED" },
-  ];
-  const statusCopy: Record<string, string> = { NEW: "Your order has been received", PREPARING: "The kitchen is preparing your order", READY: "Your snacks are ready to come to you!", COMPLETED: "Enjoy your movie — order completed" };
-
-  return (
-    <main className="seatbite-page seatbite-status-page">
-      <div className="seatbite-status-shell">
-        <header className="seatbite-status-topline"><a href="/" className="seatbite-wordmark"><span className="seatbite-wordmark-icon">🍿</span><span>seat<span>bite</span></span></a><span className="seatbite-open-pill"><span></span> LIVE ORDER UPDATES</span></header>
-        <section className="seatbite-status-hero"><p className="seatbite-eyebrow">YOUR MOVIE NIGHT, IN MOTION</p><h1>Track your <span>order.</span></h1><p>We'll keep you posted while your favourites make their way to you.</p></section>
-        <section className="seatbite-status-card seatbite-order-summary">
-          <div className="seatbite-status-card-heading"><div><p className="seatbite-eyebrow">ORDER NUMBER</p><h2>{order.order_code}</h2></div><span className={"seatbite-status-badge status-" + status.toLowerCase()}>{status.replace("_", " ")}</span></div>
-          <div className="seatbite-location-row"><div><span>SCREEN</span><strong>{order.screen}</strong></div><div><span>YOUR SEAT</span><strong>{order.seat}</strong></div></div><div style={{marginTop:16,padding:"12px 14px",borderRadius:12,background:order.delivery_option==="INTERVAL"?"#fff0d9":"#e4f6e9",color:order.delivery_option==="INTERVAL"?"#8a4b00":"#176534",fontWeight:800}}>{order.delivery_option==="INTERVAL"?"⏱ Deliver During Interval":"⚡ Deliver Now"}</div>
-        </section>
-        <section className="seatbite-status-card">
-          <p className="seatbite-eyebrow">THE LATEST</p><h2 className="seatbite-section-title">Your snack journey</h2>
-          <div className="seatbite-status-timeline">{stages.map((stage, index) => <div className={"seatbite-timeline-step " + (stage.active ? "is-active" : "")} key={stage.label}><div className="seatbite-timeline-icon">{stage.active ? "✓" : stage.emoji}</div><span>{stage.label}</span>{index < stages.length - 1 && <div className={"seatbite-timeline-line " + (stages[index + 1].active ? "is-active" : "")}></div>}</div>)}</div>
-          <div className="seatbite-status-message"><span className="seatbite-status-message-icon">{status === "COMPLETED" ? "🎉" : status === "READY" ? "🔔" : status === "PREPARING" ? "👨‍🍳" : "🍿"}</span><div><strong>{statusCopy[status] || "Your order status has been updated"}</strong><p>Keep enjoying the show. This page updates when the team changes your order status.</p></div></div>
-        </section>
-        <section className="seatbite-status-card"><p className="seatbite-eyebrow">IN YOUR SNACK BOX</p><h2 className="seatbite-section-title">Your order</h2><div className="seatbite-status-food-list">{order.food_items?.map((item, index) => <div className="seatbite-status-food" key={item.id ?? index}><span className="seatbite-status-food-icon">{item.emoji ?? "🍿"}</span><span className="seatbite-status-food-name">{item.name}<small>Quantity: {item.quantity ?? 1}</small></span><strong>{formatINR((item.price ?? 0) * (item.quantity ?? 1))}</strong></div>)}</div><div className="seatbite-status-total"><span>Total</span><strong>{formatINR(order.total)}</strong></div></section>
-        <a href={order.cinema_id ? `/?cinema=${encodeURIComponent(order.cinema_id)}&screen=${encodeURIComponent(order.screen)}&seat=${encodeURIComponent(order.seat)}` : "/"} className="seatbite-secondary-button seatbite-status-back">← Back to menu</a>
-        <footer className="seatbite-footer"><span>🍿 seatbite</span><span>Good food. Great movies.</span></footer>
-      </div>
-    </main>
-  );
+function TrackingContent(){
+  const params=useSearchParams(),router=useRouter(),code=params.get("order");
+  const [order,setOrder]=useState<Order|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState("");
+  useEffect(()=>{
+    if(!code){setError("Order information is missing.");setLoading(false);return;}
+    let active=true;
+    async function load(){const r=await supabase.from("orders").select("*").eq("order_code",code).single();if(!active)return;if(r.error){console.error(r.error);setError("We couldn’t find this order.");}else setOrder(r.data as Order);setLoading(false);}
+    load();
+    const channel=supabase.channel("track-"+code).on("postgres_changes",{event:"UPDATE",schema:"public",table:"orders",filter:"order_code=eq."+code},payload=>setOrder(payload.new as Order)).subscribe();
+    return()=>{active=false;supabase.removeChannel(channel);};
+  },[code]);
+  if(loading)return <main className="sb-customer-page"><div className="sb-loading">🍿 Loading your order…</div></main>;
+  if(error||!order)return <main className="sb-customer-page"><div className="sb-page-shell"><section className="sb-empty-state"><span>🍿</span><h2>Order not found</h2><p>{error}</p><button onClick={()=>router.push("/my-orders")}>Back to My Orders</button></section></div></main>;
+  const status=(order.status||"NEW").toUpperCase();
+  const menuUrl=order.cinema_id?"/?cinema="+encodeURIComponent(order.cinema_id)+"&screen="+encodeURIComponent(order.screen)+"&seat="+encodeURIComponent(order.seat):"/";
+  const steps=[{label:"Order Placed",done:["NEW","PREPARING","READY","COMPLETED"].includes(status),icon:"✓"},{label:"Preparing",done:["PREPARING","READY","COMPLETED"].includes(status),icon:"♨"},{label:"Out for Delivery",done:["READY","COMPLETED"].includes(status),icon:"♧"},{label:"Delivered",done:status==="COMPLETED",icon:"✓"}];
+  const copy:Record<string,[string,string,string]>={NEW:["Your order has been received!","Our cinema team has received your snack order.","✓"],PREPARING:["Preparing Your Order…","Our team is getting your food ready!","◷"],READY:["Your food is ready!","Your snacks are ready to be delivered to your seat.","♧"],COMPLETED:["Enjoy your food!","Your order has been delivered. Enjoy the movie!","♥"],CANCELLED:["This order has been cancelled.","Please contact cinema staff if you need assistance.","×"]};
+  const message=copy[status]||["Your order is being updated","This page updates automatically when the team changes your order status.","•"];
+  return <main className="sb-customer-page"><div className="sb-page-shell">
+    <header className="sb-header"><a href={menuUrl} className="sb-logo-link"><img src="/seatbite-logo.webp.jpg" alt="SeatBite"/></a><button className="sb-header-order" onClick={()=>router.push("/my-orders")}><span>🛒</span> My Order <b>0</b></button></header>
+    <section className="sb-hero sb-hero-track"><div className="sb-hero-copy"><p className="sb-kicker">YOUR MOVIE NIGHT, IN MOTION</p><h1>Track Your<br/><em>Order</em></h1><p>Sit Back • Relax • We’ll Take Care</p></div><div className="sb-hero-art" aria-hidden="true">🍿</div></section>
+    <section className={"sb-progress-card "+(status==="COMPLETED"?"is-complete":"")}>
+      <div className="sb-progress-line"><span style={{width:status==="NEW"?"0%":status==="PREPARING"?"33%":status==="READY"?"66%":status==="COMPLETED"?"100%":"0%"}}/></div>
+      {steps.map((step,i)=><div className={"sb-progress-step "+(step.done?"active":"")} key={step.label}><div className="sb-progress-icon">{step.done?"✓":step.icon}</div><strong>{step.label}</strong></div>)}
+    </section>
+    <section className={"sb-status-banner "+(status==="COMPLETED"?"success":status==="CANCELLED"?"cancelled":"")}><span className="sb-status-symbol">{message[2]}</span><div><h2>{message[0]}</h2><p>{message[1]}</p></div></section>
+    <section className="sb-order-detail-card">
+      <div className="sb-order-card-top"><div><p className="sb-label">ORDER NUMBER</p><h2>Order #{order.order_code}</h2><p className="sb-date">▦ {new Date(order.created_at).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})}</p></div><span className={"sb-status-pill "+status.toLowerCase()}>{status==="COMPLETED"?"✓ Delivered":status==="CANCELLED"?"× Cancelled":status.replace("_"," ")}</span></div>
+      <div className="sb-screen-seat"><span>Screen <b>{order.screen}</b></span><i/><span>Seat <b>{order.seat}</b></span></div>
+      <h3>Your Items</h3><div className="sb-items-list">{(order.food_items||[]).map((item,i)=><div className="sb-order-item" key={item.id||i}><span className="sb-food-emoji">{item.emoji||"🍿"}</span><div><strong>{item.name}</strong><b>{inr((item.price||0)*(item.quantity||1))}</b></div><span>×{item.quantity||1}</span></div>)}</div>
+      <div className="sb-order-total"><span>Total Amount</span><strong>{inr(Number(order.total)||0)}</strong></div>
+      <div className="sb-delivery-tag">{order.delivery_option==="INTERVAL"?"◷ Deliver During Interval":"⚡ Deliver Now"}</div>
+    </section>
+    <div className="sb-page-actions"><button className="sb-outline-button" onClick={()=>router.push("/my-orders")}>← Back to My Orders</button><button className="sb-primary-button" onClick={()=>router.push(menuUrl)}>Order More Food →</button></div>
+    <footer className="sb-footer"><span>🎞</span> Enjoy the Movie with <b>SEAT BITE</b> ♥</footer>
+  </div></main>;
 }
-
-export default function OrderStatusPage() {
-  return <Suspense fallback={<main className="seatbite-page seatbite-loading"><div className="seatbite-loader">🍿</div><p>Loading your order…</p></main>}><OrderStatusContent /></Suspense>;
-}
+export default function OrderStatusPage(){return <Suspense fallback={<main className="sb-customer-page"><div className="sb-loading">🍿 Loading your order…</div></main>}><TrackingContent/></Suspense>;}

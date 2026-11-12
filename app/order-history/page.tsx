@@ -525,6 +525,7 @@ export default function OrderHistoryPage() {
                     style={{
                       margin: 0,
                       fontSize: "18px",
+                      color: "#ffffff",
                     }}
                   >
                     🔔 {order.order_code}

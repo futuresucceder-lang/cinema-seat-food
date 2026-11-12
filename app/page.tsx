@@ -296,14 +296,11 @@ function CustomerOrderPage() {
         <header className="seatbite-hero">
           <div className="seatbite-hero-copy">
             <p className="seatbite-eyebrow">SIT BACK • ORDER • ENJOY</p>
-            <h1>Good Food,<br /><span>Better Movie!</span></h1>
+            <h1>Good Food<br /><span>Better Movie!</span></h1>
             <p>Fresh cinema favourites, delivered right to your seat.</p>
-            <div className="seatbite-hero-tags"><span>Freshly prepared</span><span>Made for movie time</span></div>
           </div>
           <div className="seatbite-hero-art" aria-hidden="true">
-            <div className="seatbite-hero-glow"></div>{foodItems.find((food) => food.image_url)?.image_url ? <img className="seatbite-hero-food-photo" src={foodItems.find((food) => food.image_url)!.image_url!} alt="" /> : <div className="seatbite-popcorn-illustration">🍔</div>}
-            <span className="seatbite-art-spark spark-one">✦</span><span className="seatbite-art-spark spark-two">✧</span>
-            <div className="seatbite-art-caption">MADE FOR<br />MOVIE TIME</div>
+            <img className="seatbite-hero-food-photo" src="/seatbite-cinema-hero.svg" alt="" />
           </div>
         </header>
         <section className="seatbite-seat-strip">
@@ -334,6 +331,20 @@ function CustomerOrderPage() {
                   </div>;
                 })}</div>}
               <div className="seatbite-drawer-total"><span>Subtotal</span><strong>{formatINR(total)}</strong></div>
+              <div className="seatbite-delivery-choice">
+                <h3>Delivery timing</h3>
+                <label className={deliveryOption === "NOW" ? "seatbite-delivery-option active" : "seatbite-delivery-option"}>
+                  <input type="radio" name="deliveryOption" checked={deliveryOption==="NOW"} onChange={()=>setDeliveryOption("NOW")} />
+                  <span><strong>Deliver Now</strong><small>Bring it to my seat as soon as possible.</small></span>
+                </label>
+                <label className={deliveryOption === "INTERVAL" ? "seatbite-delivery-option active" : "seatbite-delivery-option"}>
+                  <input type="radio" name="deliveryOption" checked={deliveryOption==="INTERVAL"} onChange={()=>setDeliveryOption("INTERVAL")} />
+                  <span><strong>Deliver During Interval</strong><small>Prepare it for the movie break.</small></span>
+                </label>
+                {showSchedule && !orderingClosed && <p>Ordering closes at {cutoffLabel}, 30 minutes before the show ends.</p>}
+                {orderingClosed && <p role="alert" className="seatbite-ordering-closed">Ordering is closed for this show. Please contact cinema staff.</p>}
+                {!scheduleChecked && <p>Checking show ordering time…</p>}
+              </div>
               <p className="seatbite-drawer-tax-note">No additional taxes are configured.</p>
               <button className="seatbite-primary-button seatbite-full-button" onClick={() => { setShowMyOrders(false); handleCheckout(); }} disabled={isSubmitting || menuLoading || !!menuError || itemCount === 0 || orderingClosed}>{orderingClosed ? "Ordering closed for this show" : isSubmitting ? "Placing your order…" : <>Checkout · {formatINR(total)} <span>→</span></>}</button>
               <div className="seatbite-drawer-saved-orders">
@@ -344,22 +355,7 @@ function CustomerOrderPage() {
             </section>
           </div>
         )}
-        <section className="seatbite-seat-strip" aria-label="Delivery timing" style={{display:"block",marginTop:14}}>
-          <div style={{fontWeight:800,marginBottom:10,color:"#202124"}}>When would you like your order?</div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(190px,1fr))",gap:10}}>
-            <label style={{display:"flex",alignItems:"flex-start",gap:10,padding:13,border:"1px solid "+(deliveryOption==="NOW"?"#f45135":"#e8d8d1"),borderRadius:12,background:deliveryOption==="NOW"?"#fff0e9":"#fff",cursor:"pointer",color:"#202124"}}>
-              <input type="radio" name="deliveryOption" checked={deliveryOption==="NOW"} onChange={()=>setDeliveryOption("NOW")} style={{marginTop:4,accentColor:"#f45135"}} />
-              <span><strong>Deliver Now</strong><br/><small>Bring it to my seat as soon as possible.</small></span>
-            </label>
-            <label style={{display:"flex",alignItems:"flex-start",gap:10,padding:13,border:"1px solid "+(deliveryOption==="INTERVAL"?"#f45135":"#e8d8d1"),borderRadius:12,background:deliveryOption==="INTERVAL"?"#fff0e9":"#fff",cursor:"pointer",color:"#202124"}}>
-              <input type="radio" name="deliveryOption" checked={deliveryOption==="INTERVAL"} onChange={()=>setDeliveryOption("INTERVAL")} style={{marginTop:4,accentColor:"#f45135"}} />
-              <span><strong>Deliver During Interval</strong><br/><small>Prepare it for the movie break.</small></span>
-            </label>
-          </div>
-          {showSchedule && !orderingClosed && <p style={{margin:"10px 0 0",fontSize:13,color:"#59473f"}}>Ordering closes at {cutoffLabel} (30 minutes before this show ends).</p>}
-          {orderingClosed && <p role="alert" style={{margin:"10px 0 0",fontWeight:800,color:"#b42318"}}>Ordering is closed for this show. Please contact cinema staff.</p>}
-          {!scheduleChecked && <p style={{margin:"8px 0 0",fontSize:12,color:"#756b66"}}>Checking show ordering time…</p>}
-        </section>
+
         <section className="seatbite-menu-heading">
           <div><p className="seatbite-eyebrow">OUR MENU</p><h2>Popular dishes</h2><p>Pick your favourites and enjoy them at your seat.</p></div>
           <span className="seatbite-menu-count">{menuLoading ? "Loading menu…" : filteredFoodItems.length + " delicious picks"}</span>
@@ -408,10 +404,14 @@ function CustomerOrderPage() {
         </section>
         <div className="seatbite-checkout-spacer" aria-hidden="true" />
         <div className="seatbite-sticky-checkout">
-          <div><span>{itemCount} selected</span><strong>{formatINR(total)}</strong></div>
-          <button type="button" onClick={() => setShowMyOrders(true)} disabled={itemCount === 0}>View Order & Checkout <span>→</span></button>
+          <div className="seatbite-sticky-item">
+            {(() => { const first = Object.entries(cart).find(([, quantity]) => quantity > 0); const item = first ? foodItems.find((food) => food.id === first[0]) : null; return item?.image_url ? <img src={item.image_url} alt="" /> : <span className="seatbite-sticky-emoji">{item?.emoji || "🍿"}</span>; })()}
+            <span>{itemCount} {itemCount === 1 ? "item" : "items"} selected</span>
+          </div>
+          <div className="seatbite-sticky-total"><span>Total Amount</span><strong>{formatINR(total)}</strong></div>
+          <button type="button" onClick={() => setShowMyOrders(true)} disabled={itemCount === 0}>Checkout <span>›</span></button>
         </div>
-        <footer className="seatbite-footer"><span>🍿 seatbite</span><span>Good food. Great movies.</span></footer>
+        <footer className="seatbite-footer"><span className="seatbite-footer-icon">▣</span><span>Enjoy the Movie with <strong>SEAT BITE</strong></span><span className="seatbite-footer-heart">♡</span></footer>
       </div>
     </main>
   );

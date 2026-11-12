@@ -2652,3 +2652,67 @@ main:not(.seatbite-page):has(form) button {
 .seatbite-food-item-card div {
   color: #ffffff;
 }
+
+
+/* Food Menu Management page refinements:
+   hide the duplicate global brand mark (the page has its own in-panel logo),
+   keep all text on dark panels/cards white, and prevent form overflow. */
+.seatbite-food-menu-page::before {
+  display: none !important;
+  content: none !important;
+}
+.seatbite-food-menu-page {
+  padding: 22px 20px 48px !important;
+}
+.seatbite-food-menu-page > div {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+.seatbite-food-menu-page .seatbite-food-menu-form {
+  box-sizing: border-box;
+  width: 100%;
+  color: #ffffff !important;
+}
+.seatbite-food-menu-page .seatbite-food-menu-form *:not(input):not(select):not(textarea):not(button) {
+  color: #ffffff !important;
+}
+.seatbite-food-menu-page .seatbite-food-menu-form > form > div:first-child > div {
+  min-width: 0;
+}
+.seatbite-food-menu-page .seatbite-food-menu-form input:not([type="checkbox"]):not([type="file"]),
+.seatbite-food-menu-page .seatbite-food-menu-form select,
+.seatbite-food-menu-page .seatbite-food-menu-form textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.seatbite-food-menu-page .seatbite-food-menu-form input[type="file"] {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  color: #ffffff !important;
+}
+.seatbite-food-menu-page .seatbite-food-item-card,
+.seatbite-food-menu-page .seatbite-food-item-card *:not(button) {
+  color: #ffffff !important;
+}
+.seatbite-food-menu-page .seatbite-food-item-card p {
+  color: #f1f1f1 !important;
+}
+@media (max-width: 640px) {
+  .seatbite-food-menu-page {
+    padding: 16px 12px 36px !important;
+  }
+  .seatbite-food-menu-page .seatbite-food-menu-form {
+    padding: 18px !important;
+  }
+  .seatbite-food-menu-page header {
+    margin: 14px 0 26px !important;
+  }
+  .seatbite-food-menu-page header img {
+    width: min(260px, 78vw) !important;
+    height: 100px !important;
+  }
+}

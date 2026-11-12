@@ -2611,3 +2611,20 @@ main:not(.seatbite-page):has(form) button {
   .seatbite-page.seatbite-status-page { padding:0 13px 30px !important; }
   .seatbite-status-shell { padding-top:18px !important; }
 }
+
+
+/* Order History: force every text element to white, including text affected by global dashboard styles. */
+.seatbite-order-history-page,
+.seatbite-order-history-page *,
+.seatbite-order-history-page *::before,
+.seatbite-order-history-page *::after {
+  color: #ffffff !important;
+}
+.seatbite-order-history-page input::placeholder {
+  color: #ffffff !important;
+  opacity: .9 !important;
+}
+.seatbite-order-history-page select option {
+  color: #ffffff !important;
+  background: #222222 !important;
+}

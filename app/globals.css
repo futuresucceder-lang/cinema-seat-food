@@ -4464,3 +4464,67 @@ main:not(.seatbite-page):has(form) button {
   .sb-landing .sb-shortcuts>a { min-height:68px; border-right:0!important; border-bottom:1px solid #eee6df; }
   .sb-landing .sb-shortcuts>a:last-child { border-bottom:0; }
 }
+
+
+/* Isolated SeatBite marketing homepage styles. All sbl-* names avoid QR-menu hero rules. */
+.sbl-landing { width:100%; min-height:100vh; margin:0; padding:0 6.4vw 28px!important; overflow:hidden; box-sizing:border-box; color:#193638; background:#fbf5f1 radial-gradient(rgba(244,77,58,.11) 1.2px,transparent 1.2px) 0 0/18px 18px; font-family:var(--font-poppins),Poppins,Arial,sans-serif; }
+.sbl-landing * { box-sizing:border-box; }
+.sbl-wrap { width:100%; max-width:1440px; margin:0 auto; }
+.sbl-nav { height:112px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.sbl-brand { display:inline-flex; align-items:center; text-decoration:none; }
+.sbl-brand .seatbite-official-logo { display:block; width:260px; max-width:52vw; height:86px; object-fit:contain; object-position:left center; }
+.sbl-platform-pill { border:1px solid #e5d9ce; border-radius:30px; padding:10px 18px; color:#8e867b; font-size:10px; font-weight:800; letter-spacing:1.25px; white-space:nowrap; }
+.sbl-hero { position:relative!important; isolation:auto!important; min-height:500px!important; height:auto!important; margin:0!important; padding:26px 0 34px!important; border-radius:0!important; overflow:visible!important; display:grid!important; grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr)!important; gap:48px!important; align-items:center!important; color:#193638!important; background:transparent!important; }
+.sbl-hero:before,.sbl-hero:after { content:none!important; display:none!important; }
+.sbl-hero-copy { position:relative!important; z-index:2!important; width:auto!important; max-width:700px!important; padding:0!important; align-self:center!important; }
+.sbl-eyebrow { margin:0 0 18px!important; color:#f04432!important; font-size:10px!important; font-weight:900!important; letter-spacing:1.8px!important; }
+.sbl-hero-copy h1 { max-width:none!important; margin:0 0 25px!important; color:#193638!important; font-family:var(--font-poppins),Poppins,sans-serif!important; font-size:clamp(66px,7.2vw,104px)!important; line-height:.88!important; letter-spacing:-.075em!important; font-weight:950!important; }
+.sbl-hero-copy h1 em { color:#fa402b!important; font-style:normal!important; }
+.sbl-hero-description { max-width:600px!important; margin:0 0 28px!important; color:#696c68!important; font-size:17px!important; line-height:1.75!important; font-weight:400!important; }
+.sbl-hero-actions { display:flex; align-items:center; gap:24px; }
+.sbl-primary-link { display:inline-flex; align-items:center; justify-content:space-between; gap:24px; min-width:190px; min-height:70px; padding:14px 20px; border-radius:11px; color:#fff!important; background:#ff402b!important; box-shadow:0 10px 22px rgba(240,64,43,.18); text-decoration:none!important; font-size:15px; line-height:1.2; font-weight:900; }
+.sbl-primary-link span { font-size:22px; }
+.sbl-text-link { color:#173538!important; text-decoration:none!important; border-bottom:1px solid #173538; padding:8px 0; font-size:13px; font-weight:800; }
+.sbl-trust-row { margin-top:28px; color:#797c76; font-size:11px; font-weight:700; }
+.sbl-hero-art { position:relative!important; inset:auto!important; z-index:1!important; width:100%!important; height:clamp(390px,42vw,570px)!important; min-height:390px!important; display:flex!important; align-items:center!important; justify-content:center!important; overflow:visible!important; opacity:1!important; }
+.sbl-popcorn-photo { position:relative; width:clamp(300px,31vw,430px); height:clamp(390px,42vw,550px); border:5px solid #fff; border-radius:150px 150px 24px 24px; background-image:linear-gradient(0deg,rgba(0,0,0,.78),transparent 52%),url('https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=900&q=85'); background-size:cover; background-position:center; box-shadow:0 18px 35px rgba(52,39,25,.15); }
+.sbl-popcorn-overlay { position:absolute; left:22px; bottom:25px; display:flex; flex-direction:column; color:#fff; }
+.sbl-popcorn-overlay strong { max-width:260px; font-size:clamp(34px,3.5vw,52px); line-height:.98; letter-spacing:-.055em; font-weight:950; }
+.sbl-popcorn-overlay span { margin-top:9px; color:#eee8df; font-size:10px; }
+.sbl-qr-float { position:absolute; left:0; bottom:105px; width:180px; height:130px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; border-radius:12px; background:#fff; box-shadow:0 10px 28px rgba(53,39,25,.17); transform:rotate(-7deg); color:#202526; }
+.sbl-qr-float small { font-size:9px; letter-spacing:1.5px; font-weight:900; }
+.sbl-qr-float strong { max-width:140px; text-align:center; font-size:19px; line-height:1.05; letter-spacing:-.7px; font-weight:950; }
+.sbl-shortcuts { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); background:#fff; border:1px solid #e7ded5; border-radius:12px; min-height:88px; box-shadow:0 8px 24px rgba(46,35,24,.04); }
+.sbl-shortcuts>a { display:flex; align-items:center; gap:14px; padding:16px 20px; border-right:1px solid #eee6df; color:#263638!important; text-decoration:none!important; }
+.sbl-shortcuts>a:last-child { border-right:0; }
+.sbl-shortcut-icon { display:grid; place-items:center; width:38px; height:38px; flex:0 0 38px; border-radius:50%; background:#fff0eb; color:#f04432; font-size:18px; }
+.sbl-shortcuts>a span:nth-child(2) { display:flex; flex-direction:column; gap:5px; min-width:0; flex:1; }
+.sbl-shortcuts small { color:#989187; font-size:8px; letter-spacing:1.1px; font-weight:900; }
+.sbl-shortcuts strong { color:#233638; font-size:12px; font-weight:850; }
+.sbl-shortcuts b { font-size:17px; font-weight:500; }
+.sbl-footer { display:flex; justify-content:space-between; padding:18px 4px 0; color:#8c857a; font-size:11px; font-weight:800; }
+.sbl-footer span { font-weight:500; }
+@media(max-width:900px) {
+ .sbl-landing { padding:0 24px 24px!important; }
+ .sbl-hero { grid-template-columns:minmax(0,1fr) minmax(270px,.8fr)!important; gap:20px!important; }
+ .sbl-hero-copy h1 { font-size:clamp(54px,7vw,76px)!important; }
+ .sbl-popcorn-photo { width:clamp(250px,32vw,330px); }
+ .sbl-shortcuts { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .sbl-shortcuts>a:nth-child(2) { border-right:0; }
+ .sbl-shortcuts>a:nth-child(-n+2) { border-bottom:1px solid #eee6df; }
+}
+@media(max-width:650px) {
+ .sbl-landing { padding:0 18px 22px!important; }
+ .sbl-nav { height:86px; }
+ .sbl-brand .seatbite-official-logo { width:205px; height:68px; }
+ .sbl-platform-pill { font-size:7px; padding:7px 9px; letter-spacing:.7px; }
+ .sbl-hero { display:flex!important; flex-direction:column; align-items:stretch!important; gap:18px!important; padding:28px 0!important; }
+ .sbl-hero-copy h1 { font-size:clamp(52px,13vw,74px)!important; }
+ .sbl-hero-description { font-size:14px!important; }
+ .sbl-hero-art { height:350px!important; min-height:0!important; }
+ .sbl-popcorn-photo { width:245px; height:330px; }
+ .sbl-qr-float { left:calc(50% - 155px); bottom:75px; width:145px; height:110px; }
+ .sbl-shortcuts { grid-template-columns:1fr; }
+ .sbl-shortcuts>a { min-height:68px; border-right:0!important; border-bottom:1px solid #eee6df; }
+ .sbl-shortcuts>a:last-child { border-bottom:0; }
+}

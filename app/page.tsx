@@ -1,5 +1,7 @@
 "use client";
 
+// Production redeploy trigger: keep the latest customer menu homepage active.
+
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";

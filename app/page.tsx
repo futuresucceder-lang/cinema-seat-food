@@ -5,6 +5,7 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import SeatBiteLanding from "@/app/components/SeatBiteLanding";
 
 type Category = "All" | "Burgers" | "Pizzas" | "Snacks" | "Drinks" | "Combo Deals";
 type SavedOrder = { order_code: string; status: string; screen: string; seat: string; created_at: string; delivery_option?: string | null };
@@ -248,17 +249,7 @@ function CustomerOrderPage() {
   }
 
   if (!cinemaId || !screen || !seat) {
-    return (
-      <main className="seatbite-page seatbite-gate">
-        <section className="seatbite-gate-card">
-          <div className="seatbite-gate-icon">🎬</div>
-          <div className="seatbite-brand-small"><span>🍿</span> SEAT BITE</div>
-          <p className="seatbite-eyebrow">CINEMA, MADE DELICIOUS</p>
-          <h1>Your movie night,<br />with better bites.</h1>
-          <p className="seatbite-muted">Please scan the QR code at your cinema seat to load the correct cinema menu.</p>
-        </section>
-      </main>
-    );
+    return <SeatBiteLanding />;
   }
 
   if (orderPlaced) {

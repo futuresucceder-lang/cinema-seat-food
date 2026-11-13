@@ -4528,3 +4528,23 @@ main:not(.seatbite-page):has(form) button {
  .sbl-shortcuts>a { min-height:68px; border-right:0!important; border-bottom:1px solid #eee6df; }
  .sbl-shortcuts>a:last-child { border-bottom:0; }
 }
+
+
+/* Shared SeatBite login theme — Poppins, warm dotted canvas and red-orange accents. */
+.sbl-login-page { min-height:100vh; display:grid; place-items:center; padding:36px 20px; color:#193638; background:#fbf5f1 radial-gradient(rgba(244,77,58,.12) 1.2px,transparent 1.2px) 0 0/18px 18px; font-family:var(--font-poppins),Poppins,Arial,sans-serif; }
+.sbl-login-shell { width:100%; max-width:480px; }
+.sbl-login-top { display:flex; justify-content:center; margin:0 auto 18px; }
+.sbl-login-logo { display:block; width:min(245px,68vw); height:88px; object-fit:contain; }
+.sbl-login-card { width:100%; padding:34px; border:1px solid #eadfd7; border-radius:22px; background:#fffdfa; box-shadow:0 22px 55px rgba(51,37,27,.10); }
+.sbl-login-kicker { margin:0 0 8px; color:#f04432; text-align:center; font-size:10px; letter-spacing:2px; font-weight:900; }
+.sbl-login-card h1 { margin:0; color:#193638; text-align:center; font-size:30px; line-height:1.2; letter-spacing:-1.1px; font-weight:850; }
+.sbl-login-subtitle { margin:10px 0 26px; color:#77716a; text-align:center; font-size:13px; line-height:1.6; }
+.sbl-login-card label { display:block; margin:0 0 7px; color:#263638; font-size:13px; font-weight:700; }
+.sbl-login-card input { display:block; width:100%; min-height:50px; box-sizing:border-box; margin:0 0 18px; padding:13px 14px; border:1px solid #e5d9d0; border-radius:11px; outline:none; background:#fff; color:#1f2d2e; font:500 14px var(--font-poppins),Poppins,Arial,sans-serif; }
+.sbl-login-card input:focus { border-color:#f04432; box-shadow:0 0 0 3px rgba(240,68,50,.12); }
+.sbl-login-submit { display:flex; justify-content:center; align-items:center; width:100%; min-height:52px; margin-top:6px; border:0; border-radius:11px; background:#ff402b; color:#fff; font-size:14px; font-weight:850; box-shadow:0 10px 22px rgba(240,64,43,.18); }
+.sbl-login-submit:disabled { opacity:.65; }
+.sbl-login-error { margin:0 0 18px; padding:12px 14px; border:1px solid #f1b9ae; border-radius:10px; background:#fff0ec; color:#a72f20; font-size:12px; line-height:1.5; }
+.sbl-login-back { display:block; margin-top:22px; color:#526466; text-align:center; text-decoration:none; font-size:12px; font-weight:700; }
+.sbl-login-back:hover { color:#f04432; }
+@media(max-width:520px) { .sbl-login-page { padding:24px 15px; } .sbl-login-card { padding:26px 21px; border-radius:18px; } .sbl-login-card h1 { font-size:26px; } }

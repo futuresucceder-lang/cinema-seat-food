@@ -32,7 +32,7 @@ export default function SeatBiteLanding() {
           <a id="customer-flow" href="#customer-flow"><span className="sbl-shortcut-icon">▯</span><span><small>CUSTOMER</small><strong>Scan the QR on your seat</strong></span></a>
           <Link href="/manager-login"><span className="sbl-shortcut-icon">◉</span><span><small>STAFF ACCESS</small><strong>Manager Login</strong></span><b>→</b></Link>
           <Link href="/food-court-login"><span className="sbl-shortcut-icon">◉</span><span><small>FOOD COURT</small><strong>Food Court Login</strong></span><b>→</b></Link>
-          <Link href="/master-admin-login"><span className="sbl-shortcut-icon">◉</span><span><small>MASTER ADMIN</small><strong>Master Admin Login</strong></span><b>→</b></Link>
+          <Link href="/master-login"><span className="sbl-shortcut-icon">◉</span><span><small>MASTER ADMIN</small><strong>Master Admin Login</strong></span><b>→</b></Link>
         </nav>
         <footer className="sbl-footer">SeatBite <span>Good food. Great movies.</span></footer>
       </div>

@@ -43,7 +43,8 @@ export default function ManagerLoginPage() {
           <div className="sb-auth-role-note"><strong>Manager</strong><span>Sign in with your manager account.</span></div>
         </div>
       </section>
-      <section className="sb-auth-form-side">\n        <img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="sb-auth-logo" />
+      <section className="sb-auth-form-side">
+        <img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="sb-auth-logo" />
         <div className="sb-auth-card">
           <p className="sb-auth-kicker">MANAGER ACCESS</p>
           <h2>Manager Login</h2>

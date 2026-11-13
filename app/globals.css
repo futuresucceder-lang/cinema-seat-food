@@ -4548,3 +4548,40 @@ main:not(.seatbite-page):has(form) button {
 .sbl-login-back { display:block; margin-top:22px; color:#526466; text-align:center; text-decoration:none; font-size:12px; font-weight:700; }
 .sbl-login-back:hover { color:#f04432; }
 @media(max-width:520px) { .sbl-login-page { padding:24px 15px; } .sbl-login-card { padding:26px 21px; border-radius:18px; } .sbl-login-card h1 { font-size:26px; } }
+
+/* Original SeatBite staff login design: split-screen cinema auditorium + role-specific form. */
+.sb-auth-page{min-height:100vh;width:100%;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(420px,.92fr);background:#061314;color:#fff;font-family:var(--font-geist-sans),Arial,sans-serif;overflow:hidden}
+.sb-auth-visual{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;padding:42px clamp(30px,5vw,78px);isolation:isolate;background:radial-gradient(ellipse at 48% 25%,rgba(255,75,57,.24),transparent 40%),linear-gradient(145deg,#102e30 0%,#071719 55%,#020809 100%);overflow:hidden}
+.sb-auth-visual:before{content:"";position:absolute;z-index:-1;inset:0;background-image:linear-gradient(180deg,rgba(1,8,9,.08),rgba(1,8,9,.58)),url("/seat-bite-login-background.svg");background-size:cover;background-position:center 44%;opacity:.34}
+.sb-auth-visual:after{content:"";position:absolute;z-index:-1;left:-12%;right:-12%;bottom:-17%;height:52%;border-radius:50% 50% 0 0;background:repeating-linear-gradient(90deg,transparent 0 7%,rgba(255,48,48,.20) 7.2% 7.7%,transparent 8% 14%),linear-gradient(180deg,#1b3d3e,#020708 78%);box-shadow:0 -18px 60px rgba(0,0,0,.35)}
+.sb-auth-logo{width:min(340px,70%);height:92px;object-fit:contain;object-position:left center;filter:drop-shadow(0 7px 16px rgba(0,0,0,.3))}
+.sb-auth-copy{max-width:650px;margin:auto 0;position:relative;z-index:1;padding:55px 0}
+.sb-auth-eyebrow{font-family:var(--font-oswald),sans-serif;color:#ff7056;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin:0 0 17px}
+.sb-auth-copy h1{font-family:var(--font-bangers),Impact,sans-serif;color:#fff;font-size:clamp(54px,6.3vw,88px);font-weight:400;letter-spacing:1px;line-height:.98;margin:0 0 22px;text-shadow:0 5px 24px rgba(0,0,0,.28)}
+.sb-auth-copy p{max-width:500px;color:#c6d6d3;font-size:16px;line-height:1.8;margin:0}
+.sb-auth-wordmark{font-family:var(--font-marker),cursive;color:#fff;font-size:20px;letter-spacing:1px}
+.sb-auth-visual-foot{color:#9fb4b0;font-family:var(--font-oswald),sans-serif;letter-spacing:2px;font-size:11px;text-transform:uppercase}
+.sb-auth-form-side{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:44px clamp(24px,5vw,76px);background:radial-gradient(ellipse at 90% 8%,rgba(255,64,48,.12),transparent 34%),#09191a}
+.sb-auth-card{width:100%;max-width:470px;padding:clamp(28px,3.4vw,46px);border:1px solid rgba(190,218,211,.17);border-radius:24px;background:linear-gradient(155deg,rgba(23,48,49,.97),rgba(10,24,25,.98));box-shadow:0 28px 85px rgba(0,0,0,.4);position:relative}
+.sb-auth-card:before{content:"";position:absolute;top:0;left:36px;right:36px;height:3px;border-radius:0 0 5px 5px;background:linear-gradient(90deg,#ff704c,#ff1834)}
+.sb-auth-card-brand{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.sb-auth-brand-icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,#ff704c,#ed1736);font-size:25px;box-shadow:0 8px 22px rgba(255,42,50,.2)}
+.sb-auth-brand-text{font-family:var(--font-marker),cursive;color:#fff;font-size:22px;letter-spacing:.4px}
+.sb-auth-kicker{font-family:var(--font-oswald),sans-serif;color:#ff765d;font-size:12px;letter-spacing:2.4px;text-transform:uppercase;font-weight:700;margin:0 0 8px}
+.sb-auth-card h2{font-family:var(--font-bangers),Impact,sans-serif;color:#fff;font-weight:400;font-size:43px;letter-spacing:.8px;line-height:1;margin:0}
+.sb-auth-subtitle{color:#b8c9c5;font-size:13px;line-height:1.65;margin:10px 0 27px}
+.sb-auth-field{display:block;margin:0 0 19px}
+.sb-auth-field>span{display:block;margin:0 0 8px;color:#e8efec;font-family:var(--font-oswald),sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.sb-auth-input-wrap{position:relative}
+.sb-auth-input{width:100%;height:54px;border:1px solid #365456;border-radius:12px;background:#071516;color:#fff!important;-webkit-text-fill-color:#fff!important;padding:0 15px;font-family:var(--font-geist-sans),Arial,sans-serif;font-size:14px;outline:none;box-shadow:inset 0 1px 3px rgba(0,0,0,.18)}
+.sb-auth-input::placeholder{color:#829b97;-webkit-text-fill-color:#829b97}
+.sb-auth-input:focus{border-color:#ff6a50;box-shadow:0 0 0 3px rgba(255,91,70,.14)}
+.sb-auth-password{padding-right:76px}
+.sb-auth-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#ff987f;font-family:var(--font-oswald),sans-serif;font-size:12px;font-weight:700;letter-spacing:.8px;padding:7px;cursor:pointer}
+.sb-auth-error{padding:12px 14px;margin:0 0 18px;border:1px solid #9b3c43;border-radius:11px;background:rgba(116,24,36,.24);color:#ffc1c4;font-size:12px;line-height:1.5}
+.sb-auth-submit{width:100%;height:56px;margin-top:6px;border:0;border-radius:13px;background:linear-gradient(100deg,#ff704c,#ff2638);color:#fff;font-family:var(--font-oswald),sans-serif;font-size:16px;font-weight:700;letter-spacing:1.4px;box-shadow:0 12px 28px rgba(255,47,53,.22);cursor:pointer}
+.sb-auth-submit:disabled{opacity:.65;cursor:not-allowed}
+.sb-auth-back{display:block;text-align:center;margin-top:24px;color:#afc2bd;font-size:12px;font-weight:600;text-decoration:none}
+.sb-auth-back:hover{color:#ff8b73}
+@media(max-width:900px){.sb-auth-page{grid-template-columns:1fr}.sb-auth-visual{min-height:390px;padding:28px 30px 18px}.sb-auth-logo{height:72px;width:260px}.sb-auth-copy{padding:38px 0 24px}.sb-auth-copy h1{font-size:58px}.sb-auth-visual-foot{display:none}.sb-auth-form-side{min-height:auto;padding:32px 20px 48px}}
+@media(max-width:520px){.sb-auth-visual{min-height:320px;padding:22px 22px 10px}.sb-auth-logo{width:220px;height:62px}.sb-auth-copy{padding:28px 0 20px}.sb-auth-copy h1{font-size:48px}.sb-auth-copy p{font-size:14px}.sb-auth-form-side{padding:20px 14px 34px}.sb-auth-card{padding:27px 21px;border-radius:19px}.sb-auth-card h2{font-size:38px}}

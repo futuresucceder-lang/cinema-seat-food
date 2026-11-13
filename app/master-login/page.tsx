@@ -43,7 +43,8 @@ export default function MasterAdminLoginPage() {
           <div className="sb-auth-role-note"><strong>Master Admin</strong><span>Sign in with your authorized Master Admin account.</span></div>
         </div>
       </section>
-      <section className="sb-auth-form-side">\n        <img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="sb-auth-logo" />
+      <section className="sb-auth-form-side">
+        <img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="sb-auth-logo" />
         <div className="sb-auth-card">
           <p className="sb-auth-kicker">MASTER ADMIN ACCESS</p>
           <h2>Master Admin Login</h2>

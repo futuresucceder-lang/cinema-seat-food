@@ -35,20 +35,19 @@ export default function MasterAdminLoginPage() {
   return (
     <main className="sb-auth-page">
       <section className="sb-auth-visual">
-        <img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="sb-auth-logo" />
+        <a className="sb-auth-home-link" href="/">← Back to home</a>
         <div className="sb-auth-copy">
-          <p className="sb-auth-eyebrow">SEATBITE · VENUE OPERATIONS</p>
-          <h1>Run venue service<br />with clear control.</h1>
-          <p>One connected platform for cinema teams. Keep service smooth, coordinate every order and let guests enjoy the show.</p>
+          <p className="sb-auth-eyebrow">SEATBITE OPERATIONS</p>
+          <h1>Run venue<br />service<br />with clear<br />control.</h1>
+          <p>Oversee cinemas, staff accounts and platform-wide performance from one place.</p>
+          <div className="sb-auth-role-note"><strong>Master Admin</strong><span>Sign in with your authorized Master Admin account.</span></div>
         </div>
-        <div className="sb-auth-visual-foot">ORDER · WATCH · ENJOY &nbsp; / &nbsp; MASTER ADMIN</div>
       </section>
-      <section className="sb-auth-form-side">
+      <section className="sb-auth-form-side">\n        <img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="sb-auth-logo" />
         <div className="sb-auth-card">
-          <div className="sb-auth-card-brand"><span className="sb-auth-brand-icon">✦</span><span className="sb-auth-brand-text">SeatBite</span></div>
-          <p className="sb-auth-kicker">PLATFORM ADMINISTRATION</p>
+          <p className="sb-auth-kicker">MASTER ADMIN ACCESS</p>
           <h2>Master Admin Login</h2>
-          <p className="sb-auth-subtitle">Sign in to manage cinemas, staff accounts and platform-wide performance.</p>
+          <p className="sb-auth-subtitle">Sign in with your authorized Master Admin account.</p>
           {error && <div className="sb-auth-error" role="alert">{error}</div>}
           <form onSubmit={handleLogin}>
             <label className="sb-auth-field" htmlFor="master-admin-email">

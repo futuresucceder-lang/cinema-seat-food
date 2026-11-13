@@ -35,20 +35,19 @@ export default function ManagerLoginPage() {
   return (
     <main className="sb-auth-page">
       <section className="sb-auth-visual">
-        <img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="sb-auth-logo" />
+        <a className="sb-auth-home-link" href="/">← Back to home</a>
         <div className="sb-auth-copy">
-          <p className="sb-auth-eyebrow">SEATBITE · VENUE OPERATIONS</p>
-          <h1>Run venue service<br />with clear control.</h1>
-          <p>One connected platform for cinema teams. Keep service smooth, coordinate every order and let guests enjoy the show.</p>
+          <p className="sb-auth-eyebrow">SEATBITE OPERATIONS</p>
+          <h1>Run venue<br />service<br />with clear<br />control.</h1>
+          <p>Manage cinema menus, screens and staff while keeping every order on track.</p>
+          <div className="sb-auth-role-note"><strong>Manager</strong><span>Sign in with your manager account.</span></div>
         </div>
-        <div className="sb-auth-visual-foot">ORDER · WATCH · ENJOY &nbsp; / &nbsp; MANAGER</div>
       </section>
-      <section className="sb-auth-form-side">
+      <section className="sb-auth-form-side">\n        <img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="sb-auth-logo" />
         <div className="sb-auth-card">
-          <div className="sb-auth-card-brand"><span className="sb-auth-brand-icon">▣</span><span className="sb-auth-brand-text">SeatBite</span></div>
-          <p className="sb-auth-kicker">STAFF ACCESS</p>
+          <p className="sb-auth-kicker">MANAGER ACCESS</p>
           <h2>Manager Login</h2>
-          <p className="sb-auth-subtitle">Sign in to manage your cinema, menus, screens and team.</p>
+          <p className="sb-auth-subtitle">Sign in with your manager account.</p>
           {error && <div className="sb-auth-error" role="alert">{error}</div>}
           <form onSubmit={handleLogin}>
             <label className="sb-auth-field" htmlFor="manager-email">

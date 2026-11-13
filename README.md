@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍿 SeatBite – QR-Based Cinema Food Ordering System
 
-## Getting Started
+SeatBite is a web-based cinema food ordering platform that allows customers to order food directly from their cinema seats by scanning a QR code. It simplifies the food ordering process through real-time order tracking and dedicated management dashboards.
 
-First, run the development server:
+🌐 **Live Website:** https://cinema-seat-food.vercel.app/
+
+## 🚀 Features
+
+### Customer Features
+- QR-based food ordering.
+- Automatic cinema, screen and seat identification.
+- Browse food menus and manage cart quantities.
+- Place food orders online.
+- Choose delivery during the interval or immediately.
+- Track order status in real time.
+- View previous orders.
+
+### Manager Dashboard
+- Manage food items, prices and images.
+- Add and manage cinema screens and seats.
+- Generate QR codes for cinema seats.
+- Manage movie show schedules.
+- Monitor orders and revenue.
+- Manage cinema-specific operations.
+
+### Food Court Dashboard
+- View incoming food orders.
+- Update order preparation status.
+- Manage order fulfilment.
+- View delivery preferences.
+
+### Master Admin Dashboard
+- Manage multiple cinemas.
+- Create and manage manager accounts.
+- Manage food court staff accounts.
+- Monitor overall cinema operations.
+
+## 🛠️ Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| Next.js | Full-stack web application framework |
+| React.js | User interface development |
+| TypeScript | Type-safe development |
+| Supabase | Backend services and authentication |
+| PostgreSQL | Database management |
+| CSS | Responsive user interface styling |
+| Git & GitHub | Version control |
+| Vercel | Application deployment |
+
+## ⚙️ Installation and Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/futuresucceder-lang/cinema-seat-food.git
+```
+
+### 2. Navigate to the Project
+
+```bash
+cd cinema-seat-food
+```
+
+### 3. Install Dependencies
+
+```bash
+npm install
+```
+
+### 4. Configure Environment Variables
+
+Create a `.env.local` file in the project root and configure your Supabase project URL and publishable key using the variable names expected by the application.
+
+Never commit private API keys or service role credentials.
+
+### 5. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📂 Project Highlights
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Multi-cinema food ordering architecture.
+- QR-based seat identification.
+- Real-time order status updates.
+- Role-based authentication and dashboards.
+- Database integration using Supabase.
+- Responsive web application design.
 
-## Learn More
+## 🎯 Project Objective
 
-To learn more about Next.js, take a look at the following resources:
+To improve the cinema food ordering experience by reducing manual ordering processes, simplifying food court operations and enabling customers to order food conveniently from their seats.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 👨‍💻 Developer
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Rahul M S**
 
-## Deploy on Vercel
+B.E. – Computer Science and Engineering  
+Specialization: Artificial Intelligence and Machine Learning
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+GitHub: https://github.com/futuresucceder-lang
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+⭐ If you find this project interesting, consider giving the repository a star!

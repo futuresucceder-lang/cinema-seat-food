@@ -5284,3 +5284,20 @@ main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
     transform: translateY(7px) !important;
   }
 }
+
+
+/* Logo-only visual scale: keep its layout box unchanged so the entire login form stays put. */
+main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
+  transform: translateY(12px) scale(1.06) !important;
+  transform-origin: center center !important;
+}
+@media (max-width: 850px) {
+  main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
+    transform: translateY(9px) scale(1.05) !important;
+  }
+}
+@media (max-width: 520px) {
+  main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
+    transform: translateY(7px) scale(1.04) !important;
+  }
+}

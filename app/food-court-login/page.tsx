@@ -38,7 +38,7 @@ export default function FoodCourtLoginPage() {
         <a className="sb-auth-home-link" href="/">← Back to home</a>
         <div className="sb-auth-copy">
           <p className="sb-auth-eyebrow">SEATBITE OPERATIONS</p>
-          <h1>Run venue<br />service<br />with clear<br />control.</h1>
+          <h1>Run food court<br />service<br />with clear<br />control.</h1>
           <p>Receive customer orders and manage food preparation and delivery for your assigned cinema.</p>
           <div className="sb-auth-role-note"><strong>Food Court</strong><span>Sign in with your Food Court staff account.</span></div>
         </div>
@@ -46,7 +46,7 @@ export default function FoodCourtLoginPage() {
       <section className="sb-auth-form-side">
         <img src="/seatbite-logo.webp.jpg" alt="SeatBite" className="sb-auth-logo" />
         <div className="sb-auth-card">
-          <p className="sb-auth-kicker">FOOD COURT ACCESS</p>
+          <p className="sb-auth-kicker">FOOD COURT STAFF ACCESS</p>
           <h2>Food Court Login</h2>
           <p className="sb-auth-subtitle">Sign in with your Food Court staff account.</p>
           {error && <div className="sb-auth-error" role="alert">{error}</div>}

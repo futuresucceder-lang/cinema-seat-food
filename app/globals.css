@@ -4655,3 +4655,19 @@ main.sb-auth-page{width:100%;min-height:100vh;padding:0!important;margin:0;displ
     object-position: left center;
   }
 }
+
+
+/* Final homepage logo sizing and vertical alignment adjustment. */
+.sbl-landing .sbl-brand .seatbite-official-logo {
+  width: clamp(340px, 35vw, 450px);
+  max-width: min(62vw, 450px);
+  height: 128px;
+  transform: translateY(12px);
+}
+@media (max-width: 650px) {
+  .sbl-landing .sbl-brand .seatbite-official-logo {
+    width: min(260px, 62vw);
+    height: 88px;
+    transform: translateY(7px);
+  }
+}

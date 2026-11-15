@@ -4630,14 +4630,14 @@ main.sb-auth-page{width:100%;min-height:100vh;padding:0!important;margin:0;displ
   object-position: left center;
   background: transparent;
   mix-blend-mode: multiply;
-  transform: translate(-8px, 48px);
+  transform: translate(-8px, 40px);
 }
 @media (max-width: 650px) {
   .sbl-landing .sbl-brand .seatbite-official-logo {
     width: min(330px, 72vw);
     max-width: 100%;
     height: 108px;
-    transform: translate(-8px, 48px);
+    transform: translate(-8px, 40px);
   }
 }
 

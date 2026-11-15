@@ -52,14 +52,14 @@ export default function ManagerLoginPage() {
           {error && <div className="sb-auth-error" role="alert">{error}</div>}
           <form onSubmit={handleLogin}>
             <label className="sb-auth-field" htmlFor="manager-email">
-              <span>Email address</span>
-              <input className="sb-auth-input" id="manager-email" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="Enter your email" autoComplete="username" required />
+              <span>Username</span>
+              <input className="sb-auth-input" id="manager-email" type="email" value={email} onChange={e=>setEmail(e.target.value)} autoComplete="username" required />
             </label>
             <label className="sb-auth-field" htmlFor="manager-password">
               <span>Password</span>
               <div className="sb-auth-input-wrap">
-                <input className="sb-auth-input sb-auth-password" id="manager-password" type={showPassword ? "text" : "password"} value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" autoComplete="current-password" required />
-                <button type="button" className="sb-auth-toggle" onClick={()=>setShowPassword(v=>!v)} aria-label={showPassword ? "Hide password" : "Show password"}>{showPassword ? "HIDE" : "SHOW"}</button>
+                <input className="sb-auth-input sb-auth-password" id="manager-password" type={showPassword ? "text" : "password"} value={password} onChange={e=>setPassword(e.target.value)} autoComplete="current-password" required />
+                <button type="button" className="sb-auth-toggle" onClick={()=>setShowPassword(v=>!v)} aria-label={showPassword ? "Hide password" : "Show password"}>{<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.2 12s3.4-6.5 9.8-6.5 9.8 6.5 9.8 6.5-3.4 6.5-9.8 6.5S2.2 12 2.2 12Z" fill="none" stroke="currentColor" strokeWidth="1.8"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" strokeWidth="1.8"/>{showPassword && <path d="M4 4l16 16" stroke="currentColor" strokeWidth="1.8" />}</svg>}</button>
               </div>
             </label>
             <button className="sb-auth-submit" type="submit" disabled={loading}>{loading ? "SIGNING IN…" : "SIGN IN  →"}</button>

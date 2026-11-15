@@ -5189,3 +5189,25 @@ main.sb-auth-page {
   border-color: #ff402b !important;
   color: #ffffff !important;
 }
+
+
+/* Highest-specificity colour override for both login action controls on every auth route. */
+main.sb-auth-page .sb-auth-form-side form > button.sb-auth-submit,
+main.sb-auth-page .sb-auth-form-side form > button.sb-auth-submit:hover,
+main.sb-auth-page .sb-auth-form-side form > button.sb-auth-submit:focus,
+main.sb-auth-page .sb-auth-form-side form > button.sb-auth-submit:active,
+main.sb-auth-page .sb-auth-form-side form .sb-auth-input-wrap > button.sb-auth-toggle,
+main.sb-auth-page .sb-auth-form-side form .sb-auth-input-wrap > button.sb-auth-toggle:hover,
+main.sb-auth-page .sb-auth-form-side form .sb-auth-input-wrap > button.sb-auth-toggle:focus,
+main.sb-auth-page .sb-auth-form-side form .sb-auth-input-wrap > button.sb-auth-toggle:active {
+  background: #ff402b !important;
+  background-color: #ff402b !important;
+  background-image: none !important;
+  border-color: #ff402b !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+main.sb-auth-page .sb-auth-form-side form .sb-auth-input-wrap > button.sb-auth-toggle svg {
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+}

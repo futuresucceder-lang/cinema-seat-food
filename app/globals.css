@@ -5211,3 +5211,25 @@ main.sb-auth-page .sb-auth-form-side form .sb-auth-input-wrap > button.sb-auth-t
   stroke: #ffffff !important;
   color: #ffffff !important;
 }
+
+
+/* Exact colour sampled from the user's latest uploaded swatch: RGB(244, 61, 39). */
+main.sb-auth-page .sb-auth-form-side form > button.sb-auth-submit,
+main.sb-auth-page .sb-auth-form-side form > button.sb-auth-submit:hover,
+main.sb-auth-page .sb-auth-form-side form > button.sb-auth-submit:focus,
+main.sb-auth-page .sb-auth-form-side form > button.sb-auth-submit:active,
+main.sb-auth-page .sb-auth-form-side form .sb-auth-input-wrap > button.sb-auth-toggle,
+main.sb-auth-page .sb-auth-form-side form .sb-auth-input-wrap > button.sb-auth-toggle:hover,
+main.sb-auth-page .sb-auth-form-side form .sb-auth-input-wrap > button.sb-auth-toggle:focus,
+main.sb-auth-page .sb-auth-form-side form .sb-auth-input-wrap > button.sb-auth-toggle:active {
+  background: #f43d27 !important;
+  background-color: #f43d27 !important;
+  background-image: none !important;
+  border-color: #f43d27 !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+main.sb-auth-page .sb-auth-form-side form .sb-auth-input-wrap > button.sb-auth-toggle svg {
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+}

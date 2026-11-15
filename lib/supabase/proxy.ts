@@ -43,7 +43,10 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith("/screens-seats") ||
     pathname.startsWith("/qr-generator");
 
-  const foodCourtRoute = pathname.startsWith("/food-court");
+  // Do not protect the public Food Court login page itself.
+  const foodCourtRoute =
+    pathname.startsWith("/food-court/") &&
+    !pathname.startsWith("/food-court-login");
 
   // Any protected page requires login.
   if ((managerRoutes || foodCourtRoute) && !claims) {

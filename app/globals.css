@@ -4665,3 +4665,15 @@ main.sb-auth-page{width:100%;min-height:100vh;padding:0!important;margin:0;displ
     width: min(350px, 75vw);
   }
 }
+
+
+/* Small additional homepage logo size increase; preserve its position and layout. */
+.sbl-landing .sbl-brand .seatbite-official-logo {
+  width: clamp(520px, 50vw, 660px);
+  max-width: min(77vw, 660px);
+}
+@media (max-width: 650px) {
+  .sbl-landing .sbl-brand .seatbite-official-logo {
+    width: min(365px, 77vw);
+  }
+}

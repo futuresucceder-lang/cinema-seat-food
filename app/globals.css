@@ -5257,3 +5257,30 @@ main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
     height: 132px !important;
   }
 }
+
+
+/* Logo-only adjustment requested: slightly larger and lower; leave every other element untouched. */
+main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
+  width: min(620px, 99%) !important;
+  max-width: 99% !important;
+  height: 212px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: translateY(12px) !important;
+}
+@media (max-width: 850px) {
+  main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
+    width: min(510px, 96%) !important;
+    max-width: 96% !important;
+    height: 174px !important;
+    transform: translateY(9px) !important;
+  }
+}
+@media (max-width: 520px) {
+  main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
+    width: min(430px, 98%) !important;
+    max-width: 98% !important;
+    height: 146px !important;
+    transform: translateY(7px) !important;
+  }
+}

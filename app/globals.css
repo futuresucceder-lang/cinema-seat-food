@@ -5176,3 +5176,16 @@ main.sb-auth-page {
     margin-bottom: 30px !important;
   }
 }
+
+
+/* Match the exact orange swatch supplied by the user: RGB(255, 64, 43). */
+.sb-auth-toggle,
+.sb-auth-toggle:hover,
+.sb-auth-toggle:focus-visible,
+.sb-auth-submit,
+.sb-auth-submit:hover:not(:disabled),
+.sb-auth-submit:focus-visible {
+  background-color: #ff402b !important;
+  border-color: #ff402b !important;
+  color: #ffffff !important;
+}

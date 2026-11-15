@@ -4984,3 +4984,100 @@ main.sb-auth-page {
   }
   .sb-auth-card { width: min(330px, 78vw); }
 }
+
+
+/* Reference-matched login composition: photographic auditorium, larger logo and narrower form. */
+.sb-auth-visual {
+  background-color: #050505 !important;
+  background-image:
+    linear-gradient(90deg, rgba(0,0,0,.76) 0%, rgba(0,0,0,.58) 55%, rgba(0,0,0,.68) 100%),
+    linear-gradient(0deg, rgba(0,0,0,.72), rgba(0,0,0,.18) 58%, rgba(0,0,0,.55)),
+    url("https://images.unsplash.com/photo-1768381937064-0cff674a09ca?auto=format&fit=crop&w=1800&q=85") !important;
+  background-size: cover !important;
+  background-position: center 56% !important;
+  background-repeat: no-repeat !important;
+}
+.sb-auth-visual:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.08) 48%, rgba(0,0,0,.4)) !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+.sb-auth-visual:after { display: none !important; }
+
+.sb-auth-form-side {
+  justify-content: flex-start !important;
+  padding-top: 48px !important;
+  padding-bottom: 44px !important;
+}
+.sb-auth-logo {
+  width: min(560px, 96%) !important;
+  max-width: 96% !important;
+  height: 174px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  margin: 0 auto 36px !important;
+  background: transparent !important;
+  mix-blend-mode: multiply !important;
+}
+.sb-auth-card {
+  width: min(430px, 66%) !important;
+  max-width: 430px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+.sb-auth-field {
+  width: 100% !important;
+  margin: 0 0 20px !important;
+}
+.sb-auth-input-wrap,
+.sb-auth-input {
+  width: 100% !important;
+}
+.sb-auth-input {
+  height: 44px !important;
+  padding: 0 13px !important;
+  border: 2px solid #e6d0ad !important;
+  border-radius: 8px !important;
+  background: #fffefa !important;
+  box-shadow: none !important;
+}
+.sb-auth-toggle {
+  width: 32px !important;
+  height: 32px !important;
+  right: 7px !important;
+  padding: 6px !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: #89918e !important;
+}
+.sb-auth-submit {
+  height: 52px !important;
+  margin-top: 0 !important;
+  border-radius: 10px !important;
+}
+@media (max-width: 850px) {
+  .sb-auth-form-side {
+    padding: 38px 24px 52px !important;
+  }
+  .sb-auth-logo {
+    width: min(420px, 88%) !important;
+    height: 130px !important;
+    margin-bottom: 30px !important;
+  }
+  .sb-auth-card {
+    width: min(430px, 88%) !important;
+  }
+}
+@media (max-width: 520px) {
+  .sb-auth-logo {
+    width: min(360px, 92%) !important;
+    height: 112px !important;
+  }
+  .sb-auth-card {
+    width: min(360px, 92%) !important;
+  }
+}

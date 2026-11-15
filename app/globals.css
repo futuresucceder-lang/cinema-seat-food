@@ -4910,3 +4910,77 @@ main.sb-auth-page {
 .sb-auth-visual .sb-auth-role-note strong {
   color: #ffb52f !important;
 }
+
+
+/* Login-page refinements from the supplied reference images. */
+.sb-auth-visual {
+  background-color: #050505 !important;
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.72) 42%, rgba(0,0,0,.52) 68%, rgba(0,0,0,.84) 100%),
+    url("/login-cinema-seats.svg") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+}
+.sb-auth-visual:before {
+  background: linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.12) 50%, rgba(0,0,0,.48)) !important;
+  opacity: 1 !important;
+}
+.sb-auth-visual:after { display: none !important; }
+
+/* Larger logo, with transparent edges blending into the dotted cream panel. */
+.sb-auth-logo {
+  display: block;
+  width: min(430px, 90%) !important;
+  height: 138px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  margin: 0 auto 38px !important;
+  background: transparent !important;
+  mix-blend-mode: multiply !important;
+}
+
+/* Keep the form controls aligned and sized like the reference. */
+.sb-auth-card {
+  width: 100%;
+  max-width: 470px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+.sb-auth-field { display: block; width: 100%; }
+.sb-auth-input-wrap { position: relative; width: 100%; }
+.sb-auth-input {
+  display: block;
+  width: 100% !important;
+  height: 44px !important;
+  border: 2px solid #e7d1ad !important;
+  border-radius: 8px !important;
+  background: #fffefa !important;
+}
+.sb-auth-submit {
+  display: block;
+  width: 100% !important;
+  height: 52px !important;
+  border-radius: 10px !important;
+  background: #ff402c !important;
+}
+@media (max-width: 850px) {
+  .sb-auth-visual {
+    background-position: center 58% !important;
+  }
+  .sb-auth-logo {
+    width: min(350px, 82%) !important;
+    height: 112px !important;
+    margin-bottom: 30px !important;
+  }
+  .sb-auth-card {
+    width: min(330px, 72vw);
+  }
+}
+@media (max-width: 520px) {
+  .sb-auth-logo {
+    width: min(330px, 86%) !important;
+    height: 100px !important;
+  }
+  .sb-auth-card { width: min(330px, 78vw); }
+}

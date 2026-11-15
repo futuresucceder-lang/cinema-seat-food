@@ -4894,3 +4894,13 @@ main.sb-auth-page {
   .sb-auth-logo { width: min(280px, 85%); height: 78px; margin-bottom: 25px; }
   .sb-auth-card h2 { font-size: 30px !important; }
 }
+
+
+/* Login left-panel copy: make the requested operations text fully white. */
+.sb-auth-visual .sb-auth-eyebrow,
+.sb-auth-visual .sb-auth-copy h1,
+.sb-auth-visual .sb-auth-copy > p:not(.sb-auth-eyebrow),
+.sb-auth-visual .sb-auth-role-note strong,
+.sb-auth-visual .sb-auth-role-note span {
+  color: #ffffff !important;
+}

@@ -5233,3 +5233,27 @@ main.sb-auth-page .sb-auth-form-side form .sb-auth-input-wrap > button.sb-auth-t
   stroke: #ffffff !important;
   color: #ffffff !important;
 }
+
+
+/* Increase the SeatBite logo size on all three login pages only. */
+main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
+  width: min(560px, 98%) !important;
+  max-width: 98% !important;
+  height: 190px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+@media (max-width: 850px) {
+  main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
+    width: min(470px, 94%) !important;
+    max-width: 94% !important;
+    height: 158px !important;
+  }
+}
+@media (max-width: 520px) {
+  main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
+    width: min(400px, 96%) !important;
+    max-width: 96% !important;
+    height: 132px !important;
+  }
+}

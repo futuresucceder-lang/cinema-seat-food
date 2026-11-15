@@ -4619,3 +4619,39 @@ main.sb-auth-page{width:100%;min-height:100vh;padding:0!important;margin:0;displ
 .sb-auth-error{padding:12px 14px;margin:0 0 18px;border:1px solid #f0b7ac;border-radius:9px;background:#fff0ec;color:#a72f20;font-size:12px;line-height:1.5}
 @media(max-width:850px){main.sb-auth-page{grid-template-columns:1fr}.sb-auth-visual{min-height:360px;padding:24px 28px}.sb-auth-copy{margin:auto 0 0;padding:42px 0 26px}.sb-auth-copy h1{font-size:clamp(43px,9vw,62px)!important}.sb-auth-role-note{margin-top:22px;padding-top:17px}.sb-auth-form-side{min-height:auto;padding:38px 24px 52px}.sb-auth-logo{height:90px;margin-bottom:30px}}
 @media(max-width:520px){.sb-auth-visual{min-height:330px;padding:22px}.sb-auth-copy{padding:34px 0 20px}.sb-auth-copy h1{font-size:43px!important;letter-spacing:-2px!important}.sb-auth-copy .sb-auth-eyebrow{margin-bottom:17px}.sb-auth-copy>p:not(.sb-auth-eyebrow){font-size:13px}.sb-auth-role-note strong{font-size:23px}.sb-auth-form-side{padding:32px 22px 42px}.sb-auth-logo{width:min(280px,85%);height:78px;margin-bottom:25px}.sb-auth-card h2{font-size:30px!important}}
+
+
+/* Homepage logo: larger, properly proportioned, and blended into the warm canvas. */
+.sbl-landing .sbl-nav {
+  min-height: 126px;
+  height: auto;
+  padding: 12px 0;
+}
+.sbl-landing .sbl-brand {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+.sbl-landing .sbl-brand .seatbite-official-logo {
+  display: block;
+  width: clamp(300px, 30vw, 390px);
+  max-width: min(58vw, 390px);
+  height: 108px;
+  object-fit: contain;
+  object-position: left center;
+  background: transparent;
+  mix-blend-mode: multiply;
+  transform: none;
+}
+@media (max-width: 650px) {
+  .sbl-landing .sbl-nav {
+    min-height: 94px;
+    height: auto;
+    gap: 10px;
+  }
+  .sbl-landing .sbl-brand .seatbite-official-logo {
+    width: min(238px, 58vw);
+    max-width: 100%;
+    height: 78px;
+    object-position: left center;
+  }
+}

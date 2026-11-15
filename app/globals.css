@@ -4904,3 +4904,9 @@ main.sb-auth-page {
 .sb-auth-visual .sb-auth-role-note span {
   color: #ffffff !important;
 }
+
+
+/* Highlight only the role name on the left side of each login page. */
+.sb-auth-visual .sb-auth-role-note strong {
+  color: #ffb52f !important;
+}

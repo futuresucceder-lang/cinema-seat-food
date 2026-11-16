@@ -5842,3 +5842,16 @@ main.seatbite-manager-page a > .seatbite-manager-card {
     transform: scale(1.12) !important;
   }
 }
+
+
+/* Food Menu logo: enlarge the image visually again while preserving its
+   existing layout box, margins, and the position of all surrounding content. */
+.seatbite-food-menu-page > div > header img {
+  transform: scale(1.28) !important;
+  transform-origin: center center !important;
+}
+@media (max-width: 560px) {
+  .seatbite-food-menu-page > div > header img {
+    transform: scale(1.20) !important;
+  }
+}

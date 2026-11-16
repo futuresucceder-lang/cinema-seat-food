@@ -5497,3 +5497,23 @@ main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
 .seatbite-manager-page .seatbite-manager-header .seatbite-manager-logo {
   display: block !important;
 }
+
+
+/* Slightly enlarge the logo within the existing header space; keep cinema name position fixed. */
+.seatbite-manager-page .seatbite-manager-header .seatbite-manager-logo {
+  width: min(350px, 76vw) !important;
+  max-width: 350px !important;
+  height: 112px !important;
+  margin: 0 auto 8px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: scale(1.08);
+  transform-origin: center center;
+}
+@media (max-width: 640px) {
+  .seatbite-manager-page .seatbite-manager-header .seatbite-manager-logo {
+    width: min(285px, 80vw) !important;
+    max-width: 285px !important;
+    height: 92px !important;
+  }
+}

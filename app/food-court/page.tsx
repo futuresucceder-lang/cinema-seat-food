@@ -265,7 +265,7 @@ export default function FoodCourtPage() {
 
   return (
     <main
-      className="seatbite-food-court-page seatbite-food-court-page"
+      className="seatbite-food-court-page"
       style={{
         minHeight: "100vh",
         background: "#fff8f4",
@@ -274,8 +274,8 @@ export default function FoodCourtPage() {
       }}
     >
       {/* Seat Bite brand header */}
-      <header className="seatbite-dashboard-header">
-        <div className="seatbite-dashboard-brand">
+      <header className="seatbite-dashboard-header seatbite-food-court-header">
+        <div className="seatbite-dashboard-brand seatbite-food-court-brand">
           <span className="seatbite-dashboard-logo" aria-hidden="true">🍿</span>
           <span className="seatbite-dashboard-wordmark">seat bite</span>
         </div>
@@ -333,6 +333,7 @@ export default function FoodCourtPage() {
 
       {/* Dashboard Stats */}
       <div
+        className="seatbite-food-court-stats"
         style={{
           display: "grid",
           gridTemplateColumns:
@@ -344,6 +345,7 @@ export default function FoodCourtPage() {
       >
         {/* New */}
         <div
+          className="seatbite-food-court-stat"
           style={{
             background: "#ffffff",
             color: "#202124",
@@ -370,6 +372,7 @@ export default function FoodCourtPage() {
 
         {/* Preparing */}
         <div
+          className="seatbite-food-court-stat"
           style={{
             background: "#ffffff",
             color: "#202124",
@@ -396,6 +399,7 @@ export default function FoodCourtPage() {
 
         {/* Ready */}
         <div
+          className="seatbite-food-court-stat"
           style={{
             background: "#ffffff",
             color: "#202124",
@@ -422,6 +426,7 @@ export default function FoodCourtPage() {
 
         {/* Completed */}
         <div
+          className="seatbite-food-court-stat"
           style={{
             background: "#ffffff",
             color: "#202124",
@@ -449,6 +454,7 @@ export default function FoodCourtPage() {
 
       {/* Filters */}
       <div
+        className="seatbite-food-court-filters"
         style={{
           display: "flex",
           justifyContent: "center",
@@ -458,6 +464,7 @@ export default function FoodCourtPage() {
         }}
       >
         <button
+          className="seatbite-food-court-filter"
           onClick={() => setFilter("ALL")}
           style={{
             padding: "11px 18px",
@@ -479,6 +486,7 @@ export default function FoodCourtPage() {
         </button>
 
         <button
+          className="seatbite-food-court-filter"
           onClick={() => setFilter("NEW")}
           style={{
             padding: "11px 18px",
@@ -497,6 +505,7 @@ export default function FoodCourtPage() {
         </button>
 
         <button
+          className="seatbite-food-court-filter"
           onClick={() => setFilter("PREPARING")}
           style={{
             padding: "11px 18px",
@@ -515,6 +524,7 @@ export default function FoodCourtPage() {
         </button>
 
         <button
+          className="seatbite-food-court-filter"
           onClick={() => setFilter("READY")}
           style={{
             padding: "11px 18px",
@@ -545,6 +555,7 @@ export default function FoodCourtPage() {
         !authError &&
         filteredOrders.length === 0 && (
           <div
+            className="seatbite-food-court-empty"
             style={{
               textAlign: "center",
               background: "#ffffff",
@@ -566,6 +577,7 @@ export default function FoodCourtPage() {
 
       {/* Orders */}
       <div
+        className="seatbite-food-court-order-grid"
         style={{
           display: "grid",
           gridTemplateColumns:
@@ -582,6 +594,7 @@ export default function FoodCourtPage() {
           return (
             <div
               key={order.id}
+              className="seatbite-food-court-order-card"
               style={{
                 background: "#ffffff",
                 color: "#202124",
@@ -627,6 +640,7 @@ export default function FoodCourtPage() {
 
               {/* Seat Information */}
               <div
+                className="seatbite-food-court-seat-info"
                 style={{
                   background: "#fff0e9",
                   padding: "15px",
@@ -645,7 +659,7 @@ export default function FoodCourtPage() {
                 </p>
               </div>
 
-              <div style={{marginBottom:15,padding:"10px 12px",borderRadius:10,background:order.delivery_option==="INTERVAL"?"#fff0d9":"#e4f6e9",color:order.delivery_option==="INTERVAL"?"#8a4b00":"#176534",fontWeight:800}}>
+              <div className="seatbite-food-court-delivery" style={{marginBottom:15,padding:"10px 12px",borderRadius:10,background:order.delivery_option==="INTERVAL"?"#fff0d9":"#e4f6e9",color:order.delivery_option==="INTERVAL"?"#8a4b00":"#176534",fontWeight:800}}>
                 {order.delivery_option==="INTERVAL" ? "⏱ Deliver during interval" : "⚡ Deliver now"}
               </div>
 
@@ -655,6 +669,7 @@ export default function FoodCourtPage() {
               </h3>
 
               <div
+                className="seatbite-food-court-items"
                 style={{
                   background: "#fff8f4",
                   padding: "12px",
@@ -710,6 +725,7 @@ export default function FoodCourtPage() {
                 }}
               >
                 <button
+                  className="seatbite-food-court-action"
                   onClick={() =>
                     updateStatus(
                       order.id,
@@ -731,6 +747,7 @@ export default function FoodCourtPage() {
                 </button>
 
                 <button
+                  className="seatbite-food-court-action"
                   onClick={() =>
                     updateStatus(
                       order.id,
@@ -752,6 +769,7 @@ export default function FoodCourtPage() {
                 </button>
 
                 <button
+                  className="seatbite-food-court-action"
                   onClick={() =>
                     updateStatus(
                       order.id,

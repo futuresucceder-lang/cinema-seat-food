@@ -5461,9 +5461,9 @@ main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
 }
 
 
-/* Keep SeatBite branding inside the Manager Dashboard card only. */
-.seatbite-manager-page > div > .seatbite-dashboard-brand,
-.seatbite-manager-page > .seatbite-dashboard-brand {
+/* Remove the standalone SeatBite logo above/outside the Manager Dashboard card.
+   The logo inside .seatbite-manager-header remains visible. */
+.seatbite-manager-page .seatbite-dashboard-brand {
   display: none !important;
 }
 .seatbite-manager-page .seatbite-manager-header .seatbite-manager-logo {

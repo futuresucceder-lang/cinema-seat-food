@@ -338,9 +338,10 @@ export default function QRGeneratorPage() {
             </p>
 
             {cinemaName && (
-              <p className="text-green-400 mt-2 font-semibold">
-                🎬 {cinemaName}
-              </p>
+              <div className="inline-flex items-center gap-2 mt-3 rounded-xl border-2 border-orange-500/70 bg-orange-500/10 px-4 py-2.5 text-orange-400 font-bold tracking-wide shadow-[0_0_18px_rgba(249,115,22,0.12)]">
+                <span aria-hidden="true" className="text-lg">🎬</span>
+                <span>{cinemaName}</span>
+              </div>
             )}
           </div>
 

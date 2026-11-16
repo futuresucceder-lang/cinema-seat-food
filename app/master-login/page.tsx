@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 
 export default function MasterAdminLoginPage() {
   const router = useRouter();
-  const [email,setEmail] = useState("admin@cinema.com");
+  const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
   const [showPassword,setShowPassword] = useState(false);
   const [loading,setLoading] = useState(false);

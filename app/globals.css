@@ -5573,3 +5573,19 @@ main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
 .seatbite-manager-page .seatbite-manager-header.seatbite-manager-card {
   border: 2px solid #111111 !important;
 }
+
+
+/* Apply the same fully visible dark outline to EVERY card on the Manager Dashboard,
+   including statistics, all Admin Tools tiles, the header, and Quick Action. */
+main.seatbite-manager-page .seatbite-manager-header,
+main.seatbite-manager-page .seatbite-manager-card,
+main.seatbite-manager-page a > .seatbite-manager-card {
+  border: 2px solid #111111 !important;
+  border-top: 2px solid #111111 !important;
+  border-right: 2px solid #111111 !important;
+  border-bottom: 2px solid #111111 !important;
+  border-left: 2px solid #111111 !important;
+  box-sizing: border-box !important;
+  box-shadow: none !important;
+  outline: none !important;
+}

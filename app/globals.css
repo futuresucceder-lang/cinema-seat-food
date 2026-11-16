@@ -5393,3 +5393,42 @@ main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
     height: 64px !important;
   }
 }
+
+
+/* Compact Manager Dashboard header: remove logo/tagline, emphasize assigned cinema. */
+.seatbite-manager-page .seatbite-manager-header {
+  padding: 25px 24px 24px !important;
+  gap: 7px !important;
+}
+.seatbite-manager-page .seatbite-manager-kicker {
+  margin-bottom: 2px !important;
+}
+.seatbite-manager-page .seatbite-manager-title {
+  margin: 0 !important;
+}
+.seatbite-manager-page .seatbite-manager-cinema-name {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 7px 0 0 !important;
+  padding: 8px 18px !important;
+  border: 1px solid #f5c7b8 !important;
+  border-radius: 999px !important;
+  background: #fff2ec !important;
+  color: #e64f32 !important;
+  font-family: var(--font-poppins), Arial, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  letter-spacing: .2px !important;
+}
+.seatbite-manager-page .seatbite-manager-header button {
+  margin-top: 9px !important;
+}
+@media (max-width: 640px) {
+  .seatbite-manager-page .seatbite-manager-header {
+    padding: 21px 15px 20px !important;
+  }
+  .seatbite-manager-page .seatbite-manager-cinema-name {
+    font-size: 14px !important;
+  }
+}

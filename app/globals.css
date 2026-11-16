@@ -5746,3 +5746,60 @@ main.seatbite-manager-page a > .seatbite-manager-card {
     margin-bottom: 17px !important;
   }
 }
+
+
+/* Food Menu Management header refinements: standout dashboard navigation,
+   white supporting line, and a larger SeatBite logo plaque. */
+.seatbite-food-menu-page > div > a {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  padding: 11px 18px !important;
+  border: 1px solid rgba(244, 61, 39, .8) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(135deg, #f43d27 0%, #d92d1b 100%) !important;
+  color: #ffffff !important;
+  font-family: var(--font-poppins), Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  letter-spacing: .15px !important;
+  text-decoration: none !important;
+  box-shadow: 0 6px 18px rgba(244, 61, 39, .22) !important;
+  transition: transform .18s ease, box-shadow .18s ease !important;
+}
+.seatbite-food-menu-page > div > a:hover {
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 9px 22px rgba(244, 61, 39, .32) !important;
+}
+.seatbite-food-menu-page > div > header > p {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+  font-family: var(--font-poppins), Arial, sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+}
+.seatbite-food-menu-page > div > header img {
+  width: min(470px, 90vw) !important;
+  max-width: 470px !important;
+  height: 174px !important;
+  padding: 14px 28px !important;
+  margin-bottom: 22px !important;
+}
+@media (max-width: 560px) {
+  .seatbite-food-menu-page > div > a {
+    padding: 10px 15px !important;
+    font-size: 12px !important;
+  }
+  .seatbite-food-menu-page > div > header img {
+    width: min(370px, 90vw) !important;
+    max-width: 370px !important;
+    height: 136px !important;
+    padding: 10px 18px !important;
+    margin-bottom: 18px !important;
+  }
+  .seatbite-food-menu-page > div > header > p {
+    font-size: 13px !important;
+  }
+}

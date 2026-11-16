@@ -5856,15 +5856,17 @@ main.seatbite-manager-page a > .seatbite-manager-card {
   }
 }
 
-/* QR Generator: enlarge only the existing header logo without changing layout dimensions. */
+/* QR Generator: make the logo visibly larger while preserving its reserved layout space. */
 .seatbite-qr-generator-page::before {
-  transform: scale(1.62) !important;
+  transform: scale(1.78) !important;
   transform-origin: center center !important;
+  background-size: 128% auto !important;
 }
 
 @media (max-width: 640px) {
   .seatbite-qr-generator-page::before {
-    transform: scale(1.42) !important;
+    transform: scale(1.52) !important;
     transform-origin: center center !important;
+    background-size: 128% auto !important;
   }
 }

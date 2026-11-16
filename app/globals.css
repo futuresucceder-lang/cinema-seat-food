@@ -5482,3 +5482,18 @@ main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
     height: 92px !important;
   }
 }
+
+
+/* Manager Dashboard: hide only any standalone logo rendered before the card.
+   Preserve the official logo inside .seatbite-manager-header. */
+.seatbite-manager-page::before,
+.seatbite-manager-page > .seatbite-dashboard-brand,
+.seatbite-manager-page > div > .seatbite-dashboard-brand,
+.seatbite-manager-page > div > :not(.seatbite-manager-header) .seatbite-dashboard-brand {
+  display: none !important;
+  content: none !important;
+  background-image: none !important;
+}
+.seatbite-manager-page .seatbite-manager-header .seatbite-manager-logo {
+  display: block !important;
+}

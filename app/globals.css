@@ -5858,14 +5858,14 @@ main.seatbite-manager-page a > .seatbite-manager-card {
 
 /* QR Generator: make the logo visibly larger while preserving its reserved layout space. */
 .seatbite-qr-generator-page::before {
-  transform: translateY(12px) scale(1.32) !important;
+  transform: translateY(12px) scale(1.27) !important;
   transform-origin: center center !important;
   background-size: 102% auto !important;
 }
 
 @media (max-width: 640px) {
   .seatbite-qr-generator-page::before {
-    transform: translateY(12px) scale(1.25) !important;
+    transform: translateY(12px) scale(1.21) !important;
     transform-origin: center center !important;
     background-size: 108% auto !important;
   }

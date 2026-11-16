@@ -5301,3 +5301,95 @@ main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
     transform: translateY(7px) scale(1.04) !important;
   }
 }
+
+
+/* Manager dashboard header refresh: one contained SeatBite logo, no duplicate emoji wordmark. */
+.seatbite-manager-page {
+  min-height: 100vh !important;
+  padding: 28px 22px 56px !important;
+  background: #f7f7f5 !important;
+  color: #282c3f !important;
+  font-family: var(--font-poppins), Arial, sans-serif !important;
+}
+.seatbite-manager-page > div { max-width: 1240px !important; }
+.seatbite-manager-page .seatbite-manager-header {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 26px 24px 28px !important;
+  margin: 0 auto 28px !important;
+  border: 1px solid #eee8e2 !important;
+  border-top: 4px solid #f05236 !important;
+  border-radius: 20px !important;
+  background: #ffffff !important;
+  box-shadow: 0 10px 30px rgba(40,44,63,.07) !important;
+}
+.seatbite-manager-page .seatbite-manager-logo {
+  display: block !important;
+  width: min(220px, 60vw) !important;
+  height: 76px !important;
+  margin: 0 auto 4px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+.seatbite-manager-page .seatbite-manager-kicker {
+  color: #e85a3d !important;
+  font-family: var(--font-poppins), Arial, sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 2px !important;
+}
+.seatbite-manager-page .seatbite-manager-title {
+  margin: 2px 0 0 !important;
+  color: #173437 !important;
+  font-family: var(--font-poppins), Arial, sans-serif !important;
+  font-size: clamp(27px, 3.2vw, 38px) !important;
+  font-weight: 800 !important;
+  letter-spacing: -1.2px !important;
+  line-height: 1.15 !important;
+}
+.seatbite-manager-page .seatbite-manager-header > p {
+  margin: 2px 0 0 !important;
+  color: #756c66 !important;
+  font-size: 14px !important;
+}
+.seatbite-manager-page .seatbite-manager-header > p[style*="#4ade80"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  margin-top: 8px !important;
+  padding: 7px 14px !important;
+  border: 1px solid #f3dfd4 !important;
+  border-radius: 999px !important;
+  background: #fff6f1 !important;
+  color: #d94e32 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+.seatbite-manager-page .seatbite-manager-header button {
+  margin-top: 10px !important;
+  padding: 11px 22px !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: #f05236 !important;
+  color: #fff !important;
+  box-shadow: 0 5px 12px rgba(240,82,54,.2) !important;
+  font-family: var(--font-poppins), Arial, sans-serif !important;
+  font-weight: 700 !important;
+}
+.seatbite-manager-page .seatbite-manager-header button:hover {
+  background: #df452d !important;
+}
+@media (max-width: 640px) {
+  .seatbite-manager-page { padding: 16px 12px 34px !important; }
+  .seatbite-manager-page .seatbite-manager-header {
+    padding: 20px 15px 22px !important;
+    margin-bottom: 22px !important;
+    border-radius: 16px !important;
+  }
+  .seatbite-manager-page .seatbite-manager-logo {
+    width: min(190px, 66vw) !important;
+    height: 64px !important;
+  }
+}

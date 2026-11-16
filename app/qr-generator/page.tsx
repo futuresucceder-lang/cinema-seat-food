@@ -303,7 +303,7 @@ export default function QRGeneratorPage() {
 
   if (loading) {
     return (
-      <main className="seatbite-qr-generator-page min-h-screen bg-slate-950 text-white p-6">
+      <main className="min-h-screen bg-slate-950 text-white p-6">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold">
             QR Generator
@@ -491,11 +491,6 @@ export default function QRGeneratorPage() {
 
       {/* PRINT STYLES */}
       <style jsx global>{`
-        .seatbite-qr-generator-page label {
-          color: #ffffff !important;
-          opacity: 1 !important;
-        }
-
         @media print {
           body {
             background: white !important;

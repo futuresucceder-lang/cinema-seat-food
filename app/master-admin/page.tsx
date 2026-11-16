@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 type Cinema = {
@@ -38,6 +39,7 @@ type AccountForm = {
 };
 
 export default function MasterAdminPage() {
+  const router = useRouter();
   const supabase = createClient();
 
   const [cinemas, setCinemas] = useState<Cinema[]>([]);
@@ -105,6 +107,8 @@ export default function MasterAdminPage() {
     setCinemas([]);
     setRevenue(null);
     setLoginPassword("");
+    router.replace("/");
+    router.refresh();
   }
 
   async function loadCinemas() {

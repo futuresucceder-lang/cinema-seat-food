@@ -491,6 +491,11 @@ export default function QRGeneratorPage() {
 
       {/* PRINT STYLES */}
       <style jsx global>{`
+        .seatbite-qr-generator-page label {
+          color: #ffffff !important;
+          opacity: 1 !important;
+        }
+
         @media print {
           body {
             background: white !important;

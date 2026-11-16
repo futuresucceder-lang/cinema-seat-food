@@ -5533,3 +5533,24 @@ main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
   color: #000000 !important;
   -webkit-text-fill-color: #000000 !important;
 }
+
+
+/* Final correction: every Manager Dashboard card gets one plain black outline.
+   Remove all card shadows and avoid a thicker coloured top edge. */
+.seatbite-manager-page .seatbite-manager-header,
+.seatbite-manager-page .seatbite-manager-card,
+.seatbite-manager-page section > a > div,
+.seatbite-manager-page section > div {
+  border: 1px solid #000000 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+.seatbite-manager-page .seatbite-manager-header {
+  border-top: 1px solid #000000 !important;
+  box-shadow: none !important;
+}
+.seatbite-manager-page .seatbite-manager-header.seatbite-manager-card,
+.seatbite-manager-page .seatbite-manager-card {
+  border-color: #000000 !important;
+  box-shadow: none !important;
+}

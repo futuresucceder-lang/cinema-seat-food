@@ -238,7 +238,7 @@ export default function AdminDashboard() {
         }}
       >
         {/* Header */}
-        <header className="seatbite-manager-header"
+        <header className="seatbite-manager-header seatbite-manager-card"
           style={{
             textAlign: "center",
             marginBottom: "32px",
@@ -418,6 +418,7 @@ export default function AdminDashboard() {
 
         {/* Quick Action */}
         <section
+          className="seatbite-manager-card"
           style={{
             background: "#222",
             borderRadius: "18px",
@@ -481,6 +482,7 @@ function StatCard({
 }) {
   return (
     <div
+      className="seatbite-manager-card"
       style={{
         background: "#222",
         borderRadius: "15px",
@@ -502,7 +504,7 @@ function StatCard({
         {value}
       </div>
 
-      <div style={{ color: "#aaa" }}>
+      <div className="seatbite-manager-stat-label" style={{ color: "#aaa" }}>
         {label}
       </div>
     </div>
@@ -535,6 +537,7 @@ function AdminCard({
       }}
     >
       <div
+        className="seatbite-manager-card"
         style={{
           background: "#222",
           borderRadius: "18px",

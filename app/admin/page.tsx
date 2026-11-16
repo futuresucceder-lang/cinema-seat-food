@@ -244,27 +244,12 @@ export default function AdminDashboard() {
             marginBottom: "32px",
           }}
         >
-          <img
-            src="/seatbite-logo.webp.jpg"
-            alt="SeatBite"
-            className="seatbite-manager-logo"
-          />
           <div className="seatbite-manager-kicker">CINEMA OPERATIONS</div>
           <h1 className="seatbite-manager-title">Manager Dashboard</h1>
 
-          <p
-            style={{
-              color: "#aaa",
-              margin: 0,
-            }}
-          >
-            Manage cinema seat food orders
-          </p>
-
           {cinemaName && (
-            <p
+            <p className="seatbite-manager-cinema-name"
               style={{
-                color: "#4ade80",
                 marginTop: "10px",
                 fontSize: "18px",
                 fontWeight: "bold",

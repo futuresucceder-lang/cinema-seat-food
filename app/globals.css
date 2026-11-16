@@ -5432,3 +5432,30 @@ main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
     font-size: 14px !important;
   }
 }
+
+
+/* FINAL manager header overrides: visibly larger SeatBite logo and exact requested orange. */
+.seatbite-manager-page .seatbite-manager-header .seatbite-manager-logo {
+  display: block !important;
+  width: min(320px, 72vw) !important;
+  max-width: 320px !important;
+  height: 112px !important;
+  margin: 0 auto 8px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+.seatbite-manager-page .seatbite-manager-header .seatbite-manager-cinema-name {
+  color: #f43d27 !important;
+  -webkit-text-fill-color: #f43d27 !important;
+  background: #fff2ec !important;
+  border-color: #f43d27 !important;
+  font-size: 17px !important;
+  font-weight: 800 !important;
+}
+@media (max-width: 640px) {
+  .seatbite-manager-page .seatbite-manager-header .seatbite-manager-logo {
+    width: min(260px, 76vw) !important;
+    max-width: 260px !important;
+    height: 92px !important;
+  }
+}

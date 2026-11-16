@@ -5518,3 +5518,18 @@ main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
     transform: scale(1.14);
   }
 }
+
+
+/* Manager dashboard card outlines and statistic labels requested by user. */
+.seatbite-manager-page .seatbite-manager-card {
+  border: 1px solid #000000 !important;
+  box-sizing: border-box !important;
+}
+.seatbite-manager-page .seatbite-manager-header.seatbite-manager-card {
+  border: 1px solid #000000 !important;
+  border-top: 4px solid #000000 !important;
+}
+.seatbite-manager-page .seatbite-manager-stat-label {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}

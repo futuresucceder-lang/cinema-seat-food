@@ -506,11 +506,13 @@ export default function FoodMenuPage() {
             src="/seatbite-logo.webp.jpg"
             alt="SeatBite"
             style={{
-              width: "min(320px, 75vw)",
-              height: "125px",
+              width: "min(460px, 88vw)",
+              height: "170px",
               objectFit: "contain",
+              objectPosition: "center",
               display: "block",
               margin: "0 auto 12px",
+              mixBlendMode: "darken",
             }}
           />
 
@@ -752,7 +754,14 @@ export default function FoodMenuPage() {
         {/* FOOD ITEMS */}
 
         <section>
-          <h2>🍿 Current Food Items</h2>
+          <div className="seatbite-food-items-heading">
+            <span className="seatbite-food-items-heading-icon">🍿</span>
+            <div>
+              <h2>Current Food Items</h2>
+              <p>View, update and manage the food available in your cinema.</p>
+            </div>
+            <span className="seatbite-food-items-count">{foodItems.length} ITEMS</span>
+          </div>
 
           {loading ? (
             <p style={{ color: "#aaa" }}>

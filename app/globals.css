@@ -5602,3 +5602,83 @@ main.seatbite-manager-page a > .seatbite-manager-card {
     transform: scale(1.24) !important;
   }
 }
+
+
+/* Food Menu Management: larger logo that blends into the page background,
+   plus a clear boxed heading for the Current Food Items section. */
+.seatbite-food-menu-page > div > header {
+  margin-top: 24px !important;
+  margin-bottom: 34px !important;
+}
+.seatbite-food-menu-page > div > header img {
+  width: min(460px, 88vw) !important;
+  height: 170px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  mix-blend-mode: darken !important;
+}
+.seatbite-food-menu-page .seatbite-food-items-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 22px;
+  padding: 18px 22px;
+  border: 1px solid #484848;
+  border-left: 5px solid #f43d27;
+  border-radius: 16px;
+  background: linear-gradient(110deg, #242424, #1b1b1b);
+  box-shadow: 0 8px 22px rgba(0,0,0,.18);
+}
+.seatbite-food-menu-page .seatbite-food-items-heading-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 52px;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: #3a2924;
+  font-size: 27px;
+}
+.seatbite-food-menu-page .seatbite-food-items-heading h2 {
+  margin: 0;
+  color: #fff !important;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -.4px;
+}
+.seatbite-food-menu-page .seatbite-food-items-heading p {
+  margin: 5px 0 0;
+  color: #bdbdbd;
+  font-size: 13px;
+}
+.seatbite-food-menu-page .seatbite-food-items-count {
+  margin-left: auto;
+  padding: 8px 12px;
+  border: 1px solid #6a342b;
+  border-radius: 999px;
+  background: #38221e;
+  color: #ff8c78;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  white-space: nowrap;
+}
+@media (max-width: 560px) {
+  .seatbite-food-menu-page > div > header img {
+    width: min(390px, 94vw) !important;
+    height: 140px !important;
+  }
+  .seatbite-food-menu-page .seatbite-food-items-heading {
+    gap: 11px;
+    padding: 15px 13px;
+  }
+  .seatbite-food-menu-page .seatbite-food-items-heading-icon {
+    flex-basis: 43px;
+    width: 43px;
+    height: 43px;
+    font-size: 23px;
+  }
+  .seatbite-food-menu-page .seatbite-food-items-heading h2 { font-size: 18px; }
+  .seatbite-food-menu-page .seatbite-food-items-heading p { font-size: 11px; }
+  .seatbite-food-menu-page .seatbite-food-items-count { padding: 6px 8px; font-size: 9px; }
+}

@@ -363,7 +363,7 @@ export default function QRGeneratorPage() {
 
         {/* SCREEN SELECTOR */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-8">
-          <label className="block text-sm text-slate-400 mb-2">
+          <label className="block text-sm text-white mb-2">
             Select Screen
           </label>
 
@@ -384,7 +384,7 @@ export default function QRGeneratorPage() {
             ))}
           </select>
 
-          <div className="mt-3 text-sm text-slate-400">
+          <div className="mt-3 text-sm text-white">
             {selectedScreen?.name ||
               "No screen selected"}{" "}
             • {seats.length} active seats

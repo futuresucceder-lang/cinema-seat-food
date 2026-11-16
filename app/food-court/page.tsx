@@ -38,7 +38,7 @@ export default function FoodCourtPage() {
 
   async function handleSignOut() {
     await supabase.auth.signOut();
-    window.location.assign("/manager-login");
+    window.location.assign("/");
   }
 
   async function getFoodCourtCinemaId() {

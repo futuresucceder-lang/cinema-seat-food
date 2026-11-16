@@ -17,7 +17,7 @@ export default function AdminDashboard() {
 
   async function handleSignOut() {
     await supabase.auth.signOut();
-    window.location.assign("/manager-login");
+    window.location.assign("/");
   }
 
   const [orders, setOrders] = useState<Order[]>([]);

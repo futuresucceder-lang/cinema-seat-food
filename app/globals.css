@@ -5870,3 +5870,36 @@ main.seatbite-manager-page a > .seatbite-manager-card {
     background-size: 108% auto !important;
   }
 }
+
+/* SeatBite Food Court Dashboard — polished cinema-operations styling. */
+.seatbite-food-court-page { background: radial-gradient(ellipse at 50% -12%, rgba(244,61,39,.16), transparent 42%), #111 !important; color:#f7f7f7 !important; padding:30px 24px 64px !important; font-family:var(--font-poppins),Arial,sans-serif !important; }
+.seatbite-food-court-page .seatbite-food-court-header { max-width:1200px; margin:0 auto 14px; padding:26px 24px 24px; border:1px solid rgba(244,61,39,.55); border-top:4px solid #f43d27; border-radius:22px; background:radial-gradient(ellipse at 50% 0%,rgba(244,61,39,.14),transparent 58%),linear-gradient(135deg,#242424 0%,#171717 58%,#202020 100%); box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 14px 34px rgba(0,0,0,.26); }
+.seatbite-food-court-page .seatbite-food-court-brand { justify-content:center; gap:10px; margin-bottom:12px; }
+.seatbite-food-court-page .seatbite-dashboard-logo { display:grid; place-items:center; width:42px; height:42px; border:1px solid rgba(244,61,39,.55); border-radius:13px; background:rgba(244,61,39,.14); font-size:24px; }
+.seatbite-food-court-page .seatbite-dashboard-wordmark { color:#fff; font-size:25px; font-weight:800; letter-spacing:-.8px; }
+.seatbite-food-court-page .seatbite-food-court-header h1 { color:#fff !important; font-size:clamp(27px,3.5vw,36px); font-weight:800; letter-spacing:-.8px; }
+.seatbite-food-court-page .seatbite-food-court-header button { border:1px solid #f43d27 !important; background:#f43d27 !important; color:#fff !important; transition:transform .18s ease,background .18s ease; }
+.seatbite-food-court-page .seatbite-food-court-header button:hover { background:#d92d1b !important; transform:translateY(-2px); }
+.seatbite-food-court-page > p { color:#c5c5c5 !important; margin:0 auto 28px !important; font-size:14px; letter-spacing:.15px; }
+.seatbite-food-court-page .seatbite-food-court-stats { max-width:1200px !important; gap:16px !important; margin:0 auto 28px !important; }
+.seatbite-food-court-page .seatbite-food-court-stats > div { position:relative; overflow:hidden; border:1px solid #454545 !important; border-top:3px solid #f43d27 !important; border-radius:17px !important; background:linear-gradient(145deg,#252525,#1a1a1a) !important; color:#fff !important; padding:20px 18px !important; box-shadow:none !important; transition:transform .18s ease,border-color .18s ease; }
+.seatbite-food-court-page .seatbite-food-court-stats > div:hover { transform:translateY(-3px); border-color:#f43d27 !important; }
+.seatbite-food-court-page .seatbite-food-court-stats > div > div:nth-child(2) { color:#fff; font-size:34px !important; font-weight:800 !important; }
+.seatbite-food-court-page .seatbite-food-court-stats > div > div:last-child { color:#d2d2d2; font-size:13px; font-weight:600; }
+.seatbite-food-court-page .seatbite-food-court-filters { gap:10px !important; margin-bottom:28px !important; }
+.seatbite-food-court-page .seatbite-food-court-filter { border:1px solid #4b4b4b !important; border-radius:999px !important; background:#242424 !important; color:#eee !important; padding:11px 19px !important; font-family:inherit; font-size:13px; font-weight:700; transition:transform .18s ease,border-color .18s ease; }
+.seatbite-food-court-page .seatbite-food-court-filter:hover { border-color:#f43d27 !important; transform:translateY(-1px); }
+.seatbite-food-court-page .seatbite-food-court-filter:first-child { background:#f43d27 !important; border-color:#f43d27 !important; color:#fff !important; }
+.seatbite-food-court-page .seatbite-food-court-order-grid { max-width:1400px !important; gap:18px !important; }
+.seatbite-food-court-page .seatbite-food-court-order-card { border:1px solid #494949 !important; border-top:3px solid #f43d27 !important; border-radius:18px !important; background:linear-gradient(145deg,#252525,#1b1b1b) !important; color:#f7f7f7 !important; padding:21px !important; box-shadow:0 10px 26px rgba(0,0,0,.22) !important; }
+.seatbite-food-court-page .seatbite-food-court-order-card h2,.seatbite-food-court-page .seatbite-food-court-order-card h3 { color:#fff !important; }
+.seatbite-food-court-page .seatbite-food-court-seat-info { background:#303030 !important; border:1px solid #474747; color:#f3f3f3 !important; }
+.seatbite-food-court-page .seatbite-food-court-seat-info p { color:#f3f3f3; }
+.seatbite-food-court-page .seatbite-food-court-items { background:#202020 !important; border:1px solid #414141; color:#f3f3f3 !important; }
+.seatbite-food-court-page .seatbite-food-court-items > div { border-bottom:1px solid #444 !important; }
+.seatbite-food-court-page .seatbite-food-court-order-card > div[style*='fontSize: 20px'] { color:#fff !important; }
+.seatbite-food-court-page .seatbite-food-court-action { min-height:43px; border:1px solid rgba(255,255,255,.12) !important; border-radius:10px !important; font-family:inherit; font-size:12px; font-weight:800 !important; transition:transform .18s ease,filter .18s ease; }
+.seatbite-food-court-page .seatbite-food-court-action:hover { filter:brightness(1.08); transform:translateY(-2px); }
+.seatbite-food-court-page .seatbite-food-court-empty { border:1px solid #484848 !important; border-top:3px solid #f43d27 !important; border-radius:18px !important; background:linear-gradient(145deg,#252525,#1b1b1b) !important; color:#fff !important; }
+.seatbite-food-court-page .seatbite-food-court-empty p { color:#c5c5c5 !important; }
+@media (max-width:640px) { .seatbite-food-court-page { padding:18px 13px 40px !important; } .seatbite-food-court-page .seatbite-food-court-header { padding:20px 14px; border-radius:17px; } .seatbite-food-court-page .seatbite-food-court-stats > div { padding:16px 12px !important; } .seatbite-food-court-page .seatbite-food-court-filter { padding:10px 14px !important; font-size:12px; } .seatbite-food-court-page .seatbite-food-court-order-card { padding:16px !important; } }

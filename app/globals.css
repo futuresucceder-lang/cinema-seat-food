@@ -5858,13 +5858,13 @@ main.seatbite-manager-page a > .seatbite-manager-card {
 
 /* QR Generator: enlarge only the existing header logo without changing layout dimensions. */
 .seatbite-qr-generator-page::before {
-  transform: scale(1.28) !important;
+  transform: scale(1.48) !important;
   transform-origin: center center !important;
 }
 
 @media (max-width: 640px) {
   .seatbite-qr-generator-page::before {
-    transform: scale(1.18) !important;
+    transform: scale(1.32) !important;
     transform-origin: center center !important;
   }
 }

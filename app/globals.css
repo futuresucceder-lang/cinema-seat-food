@@ -5589,3 +5589,16 @@ main.seatbite-manager-page a > .seatbite-manager-card {
   box-shadow: none !important;
   outline: none !important;
 }
+
+
+/* Enlarge only the Manager Dashboard logo visually; preserve its layout space
+   so the cinema name and all following header content stay in the same position. */
+.seatbite-manager-page .seatbite-manager-header .seatbite-manager-logo {
+  transform: scale(1.34) !important;
+  transform-origin: center center !important;
+}
+@media (max-width: 640px) {
+  .seatbite-manager-page .seatbite-manager-header .seatbite-manager-logo {
+    transform: scale(1.24) !important;
+  }
+}

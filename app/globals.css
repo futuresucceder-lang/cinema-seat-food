@@ -5682,3 +5682,37 @@ main.seatbite-manager-page a > .seatbite-manager-card {
   .seatbite-food-menu-page .seatbite-food-items-heading p { font-size: 11px; }
   .seatbite-food-menu-page .seatbite-food-items-count { padding: 6px 8px; font-size: 9px; }
 }
+
+
+/* Food Menu Management: polished dashboard header card and high-contrast description. */
+.seatbite-food-menu-page > div > header {
+  position: relative !important;
+  isolation: isolate !important;
+  box-sizing: border-box !important;
+  padding: 24px 28px 26px !important;
+  border: 1px solid rgba(244, 61, 39, .55) !important;
+  border-top: 4px solid #f43d27 !important;
+  border-radius: 22px !important;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(244, 61, 39, .16), transparent 58%),
+    linear-gradient(135deg, #242424 0%, #171717 58%, #202020 100%) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+.seatbite-food-menu-page > div > header h1 {
+  color: #ffffff !important;
+  font-size: clamp(28px, 4vw, 38px) !important;
+  font-weight: 800 !important;
+  letter-spacing: -.8px !important;
+  line-height: 1.2 !important;
+}
+.seatbite-food-menu-page .seatbite-food-items-heading p {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
+@media (max-width: 560px) {
+  .seatbite-food-menu-page > div > header {
+    padding: 18px 14px 21px !important;
+    border-radius: 17px !important;
+  }
+}

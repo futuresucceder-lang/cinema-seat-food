@@ -5803,3 +5803,16 @@ main.seatbite-manager-page a > .seatbite-manager-card {
     font-size: 13px !important;
   }
 }
+
+
+/* Enlarge the Food Menu header logo visually without changing its reserved
+   layout dimensions or shifting the title, description, or surrounding content. */
+.seatbite-food-menu-page > div > header img {
+  transform: scale(1.16) !important;
+  transform-origin: center center !important;
+}
+@media (max-width: 560px) {
+  .seatbite-food-menu-page > div > header img {
+    transform: scale(1.10) !important;
+  }
+}

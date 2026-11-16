@@ -5459,3 +5459,26 @@ main.sb-auth-page .sb-auth-form-side .sb-auth-logo {
     height: 92px !important;
   }
 }
+
+
+/* Keep SeatBite branding inside the Manager Dashboard card only. */
+.seatbite-manager-page > div > .seatbite-dashboard-brand,
+.seatbite-manager-page > .seatbite-dashboard-brand {
+  display: none !important;
+}
+.seatbite-manager-page .seatbite-manager-header .seatbite-manager-logo {
+  display: block !important;
+  width: min(320px, 72vw) !important;
+  max-width: 320px !important;
+  height: 112px !important;
+  margin: 0 auto 8px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+@media (max-width: 640px) {
+  .seatbite-manager-page .seatbite-manager-header .seatbite-manager-logo {
+    width: min(260px, 76vw) !important;
+    max-width: 260px !important;
+    height: 92px !important;
+  }
+}

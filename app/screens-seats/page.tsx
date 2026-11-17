@@ -1180,6 +1180,7 @@ export default function ScreensSeatsPage() {
             <h2
               style={{
                 fontSize: 20,
+                color: "#ffffff",
                 marginTop: 0,
                 marginBottom: 8,
               }}
@@ -1375,6 +1376,7 @@ export default function ScreensSeatsPage() {
             <h2
               style={{
                 fontSize: 20,
+                color: "#ffffff",
                 marginTop: 0,
                 marginBottom: 8,
               }}

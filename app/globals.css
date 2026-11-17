@@ -5903,3 +5903,49 @@ main.seatbite-manager-page a > .seatbite-manager-card {
 .seatbite-food-court-page .seatbite-food-court-empty { border:1px solid #484848 !important; border-top:3px solid #f43d27 !important; border-radius:18px !important; background:linear-gradient(145deg,#252525,#1b1b1b) !important; color:#fff !important; }
 .seatbite-food-court-page .seatbite-food-court-empty p { color:#c5c5c5 !important; }
 @media (max-width:640px) { .seatbite-food-court-page { padding:18px 13px 40px !important; } .seatbite-food-court-page .seatbite-food-court-header { padding:20px 14px; border-radius:17px; } .seatbite-food-court-page .seatbite-food-court-stats > div { padding:16px 12px !important; } .seatbite-food-court-page .seatbite-food-court-filter { padding:10px 14px !important; font-size:12px; } .seatbite-food-court-page .seatbite-food-court-order-card { padding:16px !important; } }
+
+
+/* Show Schedule: enforce high-contrast white header copy, enlarge the page logo
+   moderately, and style the manager navigation as a clear action button. */
+.seatbite-show-schedule-page::before {
+  width: min(300px, 72vw) !important;
+  height: 82px !important;
+  margin-bottom: 18px !important;
+  background-size: contain !important;
+}
+.seatbite-show-schedule-page > div > div:first-of-type :is(p, h1),
+.seatbite-show-schedule-page > div > div:first-of-type :is(p, h1) * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
+.seatbite-show-schedule-page .seatbite-show-schedule-back-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  min-height: 44px !important;
+  padding: 11px 19px !important;
+  border: 1px solid #f43d27 !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #ff6a12 0%, #f43d27 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  font-family: var(--font-poppins), Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 0 #a92719, 0 7px 16px rgba(244, 61, 39, .2) !important;
+}
+.seatbite-show-schedule-page .seatbite-show-schedule-back-button:hover {
+  background: #e93622 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  transform: translateY(-1px);
+}
+@media (max-width: 640px) {
+  .seatbite-show-schedule-page::before {
+    width: min(270px, 76vw) !important;
+    height: 72px !important;
+  }
+}

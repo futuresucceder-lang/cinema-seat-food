@@ -975,6 +975,7 @@ export default function ScreensSeatsPage() {
           <h2
             style={{
               fontSize: 20,
+              color: "#ffffff",
               marginTop: 0,
               marginBottom: 8,
             }}
@@ -984,7 +985,7 @@ export default function ScreensSeatsPage() {
 
           <p
             style={{
-              color: "#aaa",
+              color: "#ffffff",
               marginTop: 0,
               marginBottom: 15,
             }}
@@ -992,7 +993,7 @@ export default function ScreensSeatsPage() {
             Add a screen to{" "}
             <strong
               style={{
-                color: "#39ff88",
+                color: "#ffffff",
               }}
             >
               {cinemaName}
@@ -1068,6 +1069,7 @@ export default function ScreensSeatsPage() {
           <h2
             style={{
               fontSize: 20,
+              color: "#ffffff",
               marginTop: 0,
               marginBottom: 12,
             }}
@@ -1188,7 +1190,7 @@ export default function ScreensSeatsPage() {
 
             <p
               style={{
-                color: "#aaa",
+                color: "#ffffff",
                 marginTop: 0,
                 marginBottom: 15,
               }}
@@ -1211,7 +1213,7 @@ export default function ScreensSeatsPage() {
                   style={{
                     display:
                       "block",
-                    color: "#aaa",
+                    color: "#ffffff",
                     marginBottom: 6,
                   }}
                 >
@@ -1247,7 +1249,7 @@ export default function ScreensSeatsPage() {
                   style={{
                     display:
                       "block",
-                    color: "#aaa",
+                    color: "#ffffff",
                     marginBottom: 6,
                   }}
                 >
@@ -1286,7 +1288,7 @@ export default function ScreensSeatsPage() {
                   style={{
                     display:
                       "block",
-                    color: "#aaa",
+                    color: "#ffffff",
                     marginBottom: 6,
                   }}
                 >

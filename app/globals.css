@@ -5908,8 +5908,8 @@ main.seatbite-manager-page a > .seatbite-manager-card {
 /* Show Schedule: enforce high-contrast white header copy, enlarge the page logo
    moderately, and style the manager navigation as a clear action button. */
 .seatbite-show-schedule-page::before {
-  width: min(450px, 85vw) !important;
-  height: 120px !important;
+  width: min(550px, 92vw) !important;
+  height: 145px !important;
   margin-bottom: 18px !important;
   background-size: contain !important;
 }
@@ -5945,7 +5945,7 @@ main.seatbite-manager-page a > .seatbite-manager-card {
 }
 @media (max-width: 640px) {
   .seatbite-show-schedule-page::before {
-    width: min(450px, 90vw) !important;
-    height: 108px !important;
+    width: min(550px, 94vw) !important;
+    height: 128px !important;
   }
 }

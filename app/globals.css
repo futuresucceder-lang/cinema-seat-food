@@ -5949,3 +5949,63 @@ main.seatbite-manager-page a > .seatbite-manager-card {
     height: 128px !important;
   }
 }
+
+
+/* Food Court Dashboard: larger SeatBite logo and a more polished dashboard header card. */
+.seatbite-food-court-page::before {
+  width: min(550px, 92vw) !important;
+  height: 145px !important;
+  margin: 0 auto 22px !important;
+  background-size: contain !important;
+}
+.seatbite-food-court-page .seatbite-food-court-header {
+  position: relative !important;
+  max-width: 1200px !important;
+  margin: 0 auto 16px !important;
+  padding: 32px 30px 28px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(244, 61, 39, .72) !important;
+  border-top: 5px solid #ff6a12 !important;
+  border-bottom: 3px solid #f43d27 !important;
+  border-radius: 24px !important;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(244, 61, 39, .22), transparent 62%),
+    linear-gradient(135deg, #292929 0%, #171717 55%, #242020 100%) !important;
+  box-shadow: 0 16px 38px rgba(0, 0, 0, .32), inset 0 1px 0 rgba(255, 255, 255, .09) !important;
+}
+.seatbite-food-court-page .seatbite-food-court-brand {
+  margin-bottom: 16px !important;
+}
+.seatbite-food-court-page .seatbite-food-court-header h1 {
+  margin-top: 4px !important;
+  margin-bottom: 8px !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, .35) !important;
+}
+.seatbite-food-court-page .seatbite-food-court-header button {
+  min-height: 46px !important;
+  padding: 12px 25px !important;
+  border: 1px solid #ff8a42 !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #ff7a18 0%, #f43d27 100%) !important;
+  color: #fff !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  letter-spacing: .2px !important;
+  box-shadow: 0 4px 0 #a92a1b, 0 8px 18px rgba(244, 61, 39, .22) !important;
+}
+.seatbite-food-court-page .seatbite-food-court-header button:hover {
+  background: linear-gradient(135deg, #ff8a2b 0%, #df3020 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 0 #a92a1b, 0 12px 22px rgba(244, 61, 39, .28) !important;
+}
+@media (max-width: 640px) {
+  .seatbite-food-court-page::before {
+    width: min(550px, 94vw) !important;
+    height: 128px !important;
+    margin-bottom: 16px !important;
+  }
+  .seatbite-food-court-page .seatbite-food-court-header {
+    padding: 24px 16px 22px !important;
+  }
+}

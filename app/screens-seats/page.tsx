@@ -866,9 +866,14 @@ export default function ScreensSeatsPage() {
 
             <p
               style={{
-                color: "#aaa",
+                display: "inline-block",
+                color: "#111",
+                background: "#f5f5f4",
+                padding: "8px 12px",
+                borderRadius: 8,
                 marginTop: 8,
                 marginBottom: 0,
+                fontWeight: 600,
               }}
             >
               Manage screens and seats
@@ -876,15 +881,25 @@ export default function ScreensSeatsPage() {
             </p>
 
             {cinemaName && (
-              <p
+              <div
                 style={{
-                  color: "#39ff88",
-                  fontWeight: "bold",
-                  marginTop: 10,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  background: "linear-gradient(135deg, #F43D27, #ff7043)",
+                  color: "#fff",
+                  border: "1px solid #ff8a65",
+                  borderRadius: 10,
+                  padding: "9px 15px",
+                  marginTop: 12,
+                  fontWeight: 800,
+                  letterSpacing: "0.2px",
+                  boxShadow: "0 4px 14px rgba(244, 61, 39, 0.25)",
                 }}
               >
-                🎥 {cinemaName}
-              </p>
+                <span aria-hidden="true">🎥</span>
+                <span>{cinemaName}</span>
+              </div>
             )}
           </div>
 

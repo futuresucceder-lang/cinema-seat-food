@@ -90,9 +90,9 @@ export default function ShowSchedulePage() {
     <div style={{maxWidth:980,margin:"0 auto"}}>
       <Link href="/admin" style={{color:"#ff0038",fontWeight:800}}>← Back to Manager Dashboard</Link>
       <div style={{marginTop:22,borderRadius:12,background:"#050505",color:"#fff",padding:"24px",borderBottom:"4px solid #ff0038"}}>
-        <p style={{margin:0,color:"#ff7896",fontSize:12,fontWeight:900,letterSpacing:3}}>SEAT BITE · CINEMA SETTINGS</p>
+        <p style={{margin:0,color:"#ffffff",fontSize:12,fontWeight:900,letterSpacing:3}}>SEAT BITE · CINEMA SETTINGS</p>
         <h1 style={{margin:"10px 0",color:"#fff"}}>🎬 Show Schedule</h1>
-        <p style={{margin:0,color:"#e1e1e1",lineHeight:1.6}}>Add each show separately for each screen. Online food ordering closes 30 minutes before that show ends. Existing orders remain visible to Food Court staff.</p>
+        <p style={{margin:0,color:"#ffffff",lineHeight:1.6}}>Add each show separately for each screen. Online food ordering closes 30 minutes before that show ends. Existing orders remain visible to Food Court staff.</p>
       </div>
       <form onSubmit={addSchedule} style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(190px,1fr))",gap:14,background:"#fff",padding:20,border:"1px solid #deddd9",borderRadius:12,marginTop:20}}>
         <label style={{display:"grid",gap:7,fontWeight:800}}>Screen name<input value={screen} onChange={e=>setScreen(e.target.value)} placeholder="e.g. 3" required /></label>

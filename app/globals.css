@@ -6145,3 +6145,19 @@ main.seatbite-manager-page a > .seatbite-manager-card {
     transform: scale(1.08) !important;
   }
 }
+
+
+/* Fix the Food Court logo card: clip the image's square white corners to the
+   rounded card, and make the logo just a little larger without resizing the card. */
+.seatbite-food-court-page .seatbite-food-court-brand {
+  overflow: hidden !important;
+}
+.seatbite-food-court-page .seatbite-food-court-logo {
+  transform: scale(1.20) !important;
+  transform-origin: center center !important;
+}
+@media (max-width: 640px) {
+  .seatbite-food-court-page .seatbite-food-court-logo {
+    transform: scale(1.14) !important;
+  }
+}

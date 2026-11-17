@@ -1445,6 +1445,7 @@ export default function ScreensSeatsPage() {
                             17,
                           fontWeight:
                             "bold",
+                          color: "#ffffff",
                           marginBottom:
                             8,
                         }}

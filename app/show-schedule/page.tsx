@@ -88,7 +88,7 @@ export default function ShowSchedulePage() {
 
   return <main className="seatbite-show-schedule-page seatbite-dashboard-page" style={{minHeight:"100vh",padding:"28px 20px",background:"#f2f1ee",color:"#111"}}>
     <div style={{maxWidth:980,margin:"0 auto"}}>
-      <Link href="/admin" style={{color:"#ff0038",fontWeight:800}}>← Back to Manager Dashboard</Link>
+      <Link href="/admin" className="seatbite-show-schedule-back-button">← Back to Manager Dashboard</Link>
       <div style={{marginTop:22,borderRadius:12,background:"#050505",color:"#fff",padding:"24px",borderBottom:"4px solid #ff0038"}}>
         <p style={{margin:0,color:"#ffffff",fontSize:12,fontWeight:900,letterSpacing:3}}>SEAT BITE · CINEMA SETTINGS</p>
         <h1 style={{margin:"10px 0",color:"#fff"}}>🎬 Show Schedule</h1>

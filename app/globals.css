@@ -6132,3 +6132,16 @@ main.seatbite-manager-page a > .seatbite-manager-card {
   .seatbite-food-court-page .seatbite-food-court-brand { width: min(340px, 90vw) !important; min-height: 108px !important; padding: 8px 16px !important; border-radius: 18px !important; }
   .seatbite-food-court-page .seatbite-food-court-logo { width: 100% !important; height: 88px !important; }
 }
+
+
+/* Food Court Dashboard: enlarge only the logo inside its existing white card.
+   Keep the card dimensions and all surrounding layout unchanged. */
+.seatbite-food-court-page .seatbite-food-court-logo {
+  transform: scale(1.12) !important;
+  transform-origin: center center !important;
+}
+@media (max-width: 640px) {
+  .seatbite-food-court-page .seatbite-food-court-logo {
+    transform: scale(1.08) !important;
+  }
+}

@@ -588,6 +588,7 @@ export default function FoodMenuPage() {
                 <label>Category</label>
 
                 <select
+                  className="food-menu-category-select"
                   value={category}
                   onChange={(e) =>
                     setCategory(e.target.value)
@@ -935,6 +936,12 @@ export default function FoodMenuPage() {
           )}
         </section>
       </div>
+      <style jsx global>{`
+        .food-menu-category-select option {
+          color: #000000 !important;
+          background-color: #ffffff !important;
+        }
+      `}</style>
     </main>
   );
 }

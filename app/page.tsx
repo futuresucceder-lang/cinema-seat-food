@@ -209,20 +209,43 @@ function CustomerOrderPage() {
       }] : [];
     });
 
-    const { error } = await supabase.from("orders").insert({
-      order_code: newOrderCode,
-      movie: null,
-      cinema_id: cinemaId,
-      screen,
-      seat,
-      food_items: orderedFoodItems,
-      total,
-      status: "NEW",
-      delivery_option: deliveryOption,
-    });
-    if (error) {
-      console.error("Order error:", error);
-      alert("Your order could not be submitted. Please try again.");
+    try {
+      const { error } = await supabase.from("orders").insert({
+        order_code: newOrderCode,
+        movie: null,
+        cinema_id: cinemaId,
+        screen,
+        seat,
+        food_items: orderedFoodItems,
+        total,
+        status: "NEW",
+        delivery_option: deliveryOption,
+      });
+      if (error) {
+        console.error("SeatBite order insert failed:", {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          cinemaId,
+          screen,
+          seat,
+          deliveryOption,
+        });
+        const diagnostic = [
+          error.message,
+          error.code ? "Code: " + error.code : "",
+          error.details ? "Details: " + error.details : "",
+          error.hint ? "Hint: " + error.hint : "",
+        ].filter(Boolean).join("\\n");
+        alert("Your order was not saved. Please share this error with SeatBite support:\\n\\n" + diagnostic);
+        setIsSubmitting(false);
+        return;
+      }
+    } catch (error) {
+      console.error("Unexpected SeatBite checkout error:", error);
+      const message = error instanceof Error ? error.message : String(error);
+      alert("Checkout could not reach the ordering service. Please try again.\\n\\n" + message);
       setIsSubmitting(false);
       return;
     }

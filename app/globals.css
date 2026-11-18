@@ -6161,3 +6161,14 @@ main.seatbite-manager-page a > .seatbite-manager-card {
     transform: scale(1.14) !important;
   }
 }
+
+
+/* Food Menu Management: force category dropdown text to black. */
+select.food-menu-category-select,
+select.food-menu-category-select option {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+select.food-menu-category-select option {
+  background-color: #ffffff !important;
+}

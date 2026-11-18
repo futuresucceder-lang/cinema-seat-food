@@ -594,15 +594,15 @@ export default function FoodMenuPage() {
                   }
                   style={inputStyle}
                 >
-                  <option value="Snacks">
+                  <option value="Snacks" style={{ backgroundColor: "#ffffff", color: "#111111" }}>
                     Snacks
                   </option>
 
-                  <option value="Meals">
+                  <option value="Meals" style={{ backgroundColor: "#ffffff", color: "#111111" }}>
                     Meals
                   </option>
 
-                  <option value="Drinks">
+                  <option value="Drinks" style={{ backgroundColor: "#ffffff", color: "#111111" }}>
                     Drinks
                   </option>
                 </select>

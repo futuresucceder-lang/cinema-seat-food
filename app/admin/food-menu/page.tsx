@@ -29,6 +29,7 @@ export default function FoodMenuPage() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Snacks");
+  const [categoryOpen, setCategoryOpen] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [currentImageUrl, setCurrentImageUrl] =
@@ -587,26 +588,72 @@ export default function FoodMenuPage() {
               <div>
                 <label>Category</label>
 
-                <select
-                  className="food-menu-category-select"
-                  value={category}
-                  onChange={(e) =>
-                    setCategory(e.target.value)
-                  }
-                  style={inputStyle}
-                >
-                  <option value="Snacks" style={{ backgroundColor: "#ffffff", color: "#111111" }}>
-                    Snacks
-                  </option>
-
-                  <option value="Meals" style={{ backgroundColor: "#ffffff", color: "#111111" }}>
-                    Meals
-                  </option>
-
-                  <option value="Drinks" style={{ backgroundColor: "#ffffff", color: "#111111" }}>
-                    Drinks
-                  </option>
-                </select>
+                <div style={{ position: "relative", marginTop: "8px" }}>
+                  <button
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded={categoryOpen}
+                    onClick={() => setCategoryOpen((open) => !open)}
+                    style={{
+                      ...inputStyle,
+                      marginTop: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      textAlign: "left",
+                      color: "#000000",
+                      background: "#fffdf8",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <span style={{ color: "#000000" }}>{category}</span>
+                    <span aria-hidden="true" style={{ color: "#000000" }}>⌄</span>
+                  </button>
+                  {categoryOpen && (
+                    <div
+                      role="listbox"
+                      aria-label="Food category"
+                      style={{
+                        position: "absolute",
+                        top: "calc(100% + 4px)",
+                        left: 0,
+                        right: 0,
+                        zIndex: 100,
+                        background: "#ffffff",
+                        border: "1px solid #d1d5db",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        boxShadow: "0 8px 20px rgba(0,0,0,0.18)",
+                      }}
+                    >
+                      {["Snacks", "Meals", "Drinks"].map((option) => (
+                        <button
+                          key={option}
+                          type="button"
+                          role="option"
+                          aria-selected={category === option}
+                          onClick={() => {
+                            setCategory(option);
+                            setCategoryOpen(false);
+                          }}
+                          style={{
+                            display: "block",
+                            width: "100%",
+                            padding: "10px 14px",
+                            border: "none",
+                            background: category === option ? "#f3f4f6" : "#ffffff",
+                            color: "#000000",
+                            textAlign: "left",
+                            fontSize: "15px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div>
@@ -936,12 +983,6 @@ export default function FoodMenuPage() {
           )}
         </section>
       </div>
-      <style jsx global>{`
-        .food-menu-category-select option {
-          color: #000000 !important;
-          background-color: #ffffff !important;
-        }
-      `}</style>
     </main>
   );
 }

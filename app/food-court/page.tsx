@@ -33,6 +33,7 @@ export default function FoodCourtPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterStatus>("ALL");
+  const [selectedScreen, setSelectedScreen] = useState("ALL");
   const [cinemaId, setCinemaId] = useState<string | null>(null);
   const [authError, setAuthError] = useState("");
 
@@ -220,13 +221,43 @@ export default function FoodCourtPage() {
     (order) => order.status === "COMPLETED"
   ).length;
 
-  const filteredOrders = orders.filter((order) => {
+  const statusFilteredOrders = orders.filter((order) => {
     if (filter === "ALL") {
       return order.status !== "COMPLETED";
     }
 
     return order.status === filter;
   });
+
+  const screenOptions = Array.from(
+    new Set(
+      orders
+        .map((order) => (order.screen || "").trim())
+        .filter((screen) => screen.length > 0)
+    )
+  ).sort((a, b) => {
+    const aNumber = Number(a.replace(/\\D/g, ""));
+    const bNumber = Number(b.replace(/\\D/g, ""));
+    if (aNumber && bNumber) return aNumber - bNumber;
+    return a.localeCompare(b, undefined, { numeric: true });
+  });
+
+  const filteredOrders =
+    selectedScreen === "ALL"
+      ? statusFilteredOrders
+      : statusFilteredOrders.filter(
+          (order) => (order.screen || "").trim() === selectedScreen
+        );
+
+  function screenButtonLabel(screen: string) {
+    return screen.replace(/^screen\\s*/i, "").trim();
+  }
+
+  function screenOrderCount(screen: string) {
+    return statusFilteredOrders.filter(
+      (order) => (order.screen || "").trim() === screen
+    ).length;
+  }
 
   function getStatusStyle(status: string | null) {
     if (status === "NEW") {
@@ -471,6 +502,65 @@ export default function FoodCourtPage() {
           <div>Completed</div>
         </div>
       </div>
+
+      {/* Screen selector */}
+      <section
+        aria-label="Filter orders by screen"
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto 24px",
+          padding: "20px",
+          borderRadius: "16px",
+          background: "#ffffff",
+          border: "1px solid #f0e5df",
+          boxShadow: "0 8px 24px rgba(75,42,27,.06)",
+        }}
+      >
+        <div style={{ marginBottom: "13px", textAlign: "center" }}>
+          <h2 style={{ margin: 0, fontSize: "19px" }}>🎬 Select Screen</h2>
+          <p style={{ margin: "5px 0 0", color: "#756b66", fontSize: "13px" }}>
+            Choose a screen to view only its orders
+          </p>
+        </div>
+        <div style={{ display: "flex", justifyContent: "center", gap: "10px", flexWrap: "wrap" }}>
+          <button
+            type="button"
+            onClick={() => setSelectedScreen("ALL")}
+            aria-pressed={selectedScreen === "ALL"}
+            style={{
+              padding: "12px 20px",
+              border: selectedScreen === "ALL" ? "2px solid #f45135" : "1px solid #e7d8d0",
+              borderRadius: "11px",
+              cursor: "pointer",
+              background: selectedScreen === "ALL" ? "#f45135" : "#fff8f4",
+              color: selectedScreen === "ALL" ? "#fff" : "#292321",
+              fontWeight: 800,
+            }}
+          >
+            All Screens ({statusFilteredOrders.length})
+          </button>
+          {screenOptions.map((screen) => (
+            <button
+              key={screen}
+              type="button"
+              onClick={() => setSelectedScreen(screen)}
+              aria-pressed={selectedScreen === screen}
+              style={{
+                minWidth: "105px",
+                padding: "12px 18px",
+                border: selectedScreen === screen ? "2px solid #f45135" : "1px solid #e7d8d0",
+                borderRadius: "11px",
+                cursor: "pointer",
+                background: selectedScreen === screen ? "#242424" : "#fff8f4",
+                color: selectedScreen === screen ? "#fff" : "#292321",
+                fontWeight: 800,
+              }}
+            >
+              Screen {screenButtonLabel(screen)} ({screenOrderCount(screen)})
+            </button>
+          ))}
+        </div>
+      </section>
 
       {/* Filters */}
       <div

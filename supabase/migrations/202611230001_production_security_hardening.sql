@@ -25,6 +25,21 @@ $function$;
 revoke all on function public.is_active_cinema(uuid) from public;
 grant execute on function public.is_active_cinema(uuid) to anon, authenticated;
 
+-- Master Admin profile role is server-managed (no client update policy exists).
+create or replace function public.is_master_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+as $function$
+  select exists (
+    select 1 from public.profiles p
+    where p.id = auth.uid() and p.role = 'master_admin'
+  );
+$function$;
+revoke all on function public.is_master_admin() from public;
+grant execute on function public.is_master_admin() to authenticated;
+
 -- Remove broad policies that expose or mutate cross-cinema records.
 drop policy if exists "Allow food court to read orders" on public.orders;
 drop policy if exists "Managers and food court can read orders" on public.orders;
@@ -104,6 +119,29 @@ using (
   (auth.jwt() -> 'app_metadata' ->> 'role') = 'manager'
   and cinema_id::text = (auth.jwt() -> 'app_metadata' ->> 'cinema_id')
 );
+
+-- Master Admin policies accept the protected server-managed profile role.
+drop policy if exists "Master admins can delete cinemas" on public.cinemas;
+drop policy if exists "Master admins can insert cinemas" on public.cinemas;
+drop policy if exists "Master admins can update cinemas" on public.cinemas;
+drop policy if exists "Master admins can view cinemas" on public.cinemas;
+
+create policy "Master admins can delete cinemas"
+on public.cinemas for delete to authenticated
+using (public.is_master_admin());
+
+create policy "Master admins can insert cinemas"
+on public.cinemas for insert to authenticated
+with check (public.is_master_admin());
+
+create policy "Master admins can update cinemas"
+on public.cinemas for update to authenticated
+using (public.is_master_admin())
+with check (public.is_master_admin());
+
+create policy "Master admins can view cinemas"
+on public.cinemas for select to authenticated
+using (public.is_master_admin());
 
 -- Keep public show-time lookup anonymous; signed-in staff see only their own cinema.
 drop policy if exists "Public can read show schedules" on public.show_schedules;

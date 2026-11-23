@@ -10,6 +10,21 @@ alter table public.orders
 create unique index if not exists orders_tracking_token_key
   on public.orders (tracking_token);
 
+-- SECURITY DEFINER helper allows public menu/order checks without exposing cinema rows.
+create or replace function public.is_active_cinema(p_cinema_id uuid)
+returns boolean
+language sql
+security definer
+set search_path = public
+as $
+  select exists (
+    select 1 from public.cinemas c
+    where c.id = p_cinema_id and c.is_active = true
+  );
+$;
+revoke all on function public.is_active_cinema(uuid) from public;
+grant execute on function public.is_active_cinema(uuid) to anon, authenticated;
+
 -- Remove broad policies that expose or mutate cross-cinema records.
 drop policy if exists "Allow food court to read orders" on public.orders;
 drop policy if exists "Managers and food court can read orders" on public.orders;
@@ -39,10 +54,7 @@ create policy "Customers can create valid cinema orders"
 on public.orders for insert to anon
 with check (
   cinema_id is not null
-  and exists (
-    select 1 from public.cinemas c
-    where c.id = orders.cinema_id and c.is_active = true
-  )
+  and public.is_active_cinema(cinema_id)
   and coalesce(total, 0) >= 0
   and delivery_option in ('NOW', 'INTERVAL')
   and tracking_token is not null
@@ -58,10 +70,7 @@ create policy "Public can view available items at active cinemas"
 on public.food_items for select to anon, authenticated
 using (
   is_available = true
-  and exists (
-    select 1 from public.cinemas c
-    where c.id = food_items.cinema_id and c.is_active = true
-  )
+  and public.is_active_cinema(cinema_id)
 );
 
 create policy "Managers can view their cinema food items"

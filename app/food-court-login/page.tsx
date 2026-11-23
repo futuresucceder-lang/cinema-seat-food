@@ -21,7 +21,7 @@ export default function FoodCourtLoginPage() {
       setError(loginError?.message || "Login failed. Please check your details.");
       setLoading(false); return;
     }
-    const role = data.user.app_metadata?.role ?? data.user.user_metadata?.role;
+    const role = data.user.app_metadata?.role;
     const allowed = role === "food_court";
     if (!allowed) {
       await supabase.auth.signOut();

@@ -41,28 +41,54 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith("/admin") ||
     pathname.startsWith("/order-history") ||
     pathname.startsWith("/screens-seats") ||
-    pathname.startsWith("/qr-generator");
+    pathname.startsWith("/qr-generator") ||
+    pathname.startsWith("/show-schedule");
 
   // Do not protect the public Food Court login page itself.
   const foodCourtRoute =
-    pathname.startsWith("/food-court/") &&
+    (pathname === "/food-court" || pathname.startsWith("/food-court/")) &&
     !pathname.startsWith("/food-court-login");
+
+  // Master Admin pages are protected independently from cinema staff routes.
+  const masterAdminRoute = pathname === "/master-admin" || pathname.startsWith("/master-admin/");
+  if (masterAdminRoute && !claims) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/master-login";
+    url.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(url);
+  }
 
   // Any protected page requires login.
   if ((managerRoutes || foodCourtRoute) && !claims) {
     const url = request.nextUrl.clone();
-    url.pathname = "/manager-login";
+    url.pathname = foodCourtRoute ? "/food-court-login" : "/manager-login";
     url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }
 
   const role =
     (claims?.app_metadata as { role?: string } | undefined)?.role;
+  let profileRole: string | null = null;
+  if (masterAdminRoute && claims?.sub && role !== "master_admin") {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", claims.sub)
+      .maybeSingle();
+    profileRole = profile?.role ?? null;
+  }
+
+  if (masterAdminRoute && role !== "master_admin" && profileRole !== "master_admin") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/master-login";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
 
   // Manager-only pages.
   if (managerRoutes && role !== "manager") {
     const url = request.nextUrl.clone();
-    url.pathname = "/food-court";
+    url.pathname = role === "food_court" ? "/food-court" : role === "master_admin" ? "/master-admin" : "/manager-login";
     url.search = "";
     return NextResponse.redirect(url);
   }
@@ -70,7 +96,7 @@ export async function updateSession(request: NextRequest) {
   // Food Court-only page.
   if (foodCourtRoute && role !== "food_court") {
     const url = request.nextUrl.clone();
-    url.pathname = "/admin";
+    url.pathname = role === "manager" ? "/admin" : role === "master_admin" ? "/master-admin" : "/food-court-login";
     url.search = "";
     return NextResponse.redirect(url);
   }

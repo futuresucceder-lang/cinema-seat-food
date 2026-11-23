@@ -10,16 +10,23 @@ type FoodItem={id?:string;name:string;price?:number;emoji?:string;quantity?:numb
 type Order={order_code:string;cinema_id?:string|null;screen:string;seat:string;food_items:FoodItem[];total:number;status:string;created_at:string;delivery_option?:string|null};
 
 function TrackingContent(){
-  const params=useSearchParams(),router=useRouter(),code=params.get("order");
+  const params=useSearchParams(),router=useRouter(),token=params.get("token");
   const [order,setOrder]=useState<Order|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState("");
   useEffect(()=>{
-    if(!code){setError("Order information is missing.");setLoading(false);return;}
+    if(!token || !/^[0-9a-f-]{36}$/i.test(token)){setError("Order tracking information is missing or invalid.");setLoading(false);return;}
     let active=true;
-    async function load(){const r=await supabase.from("orders").select("*").eq("order_code",code).single();if(!active)return;if(r.error){console.error(r.error);setError("We couldn’t find this order.");}else setOrder(r.data as Order);setLoading(false);}
+    async function load(){
+      const result=await supabase.rpc("get_customer_order",{p_tracking_token:token}).maybeSingle();
+      if(!active)return;
+      if(result.error){console.error(result.error);setError("We couldn’t load this order.");}
+      else if(!result.data){setError("We couldn’t find this order.");}
+      else setOrder(result.data as Order);
+      setLoading(false);
+    }
     load();
-    const channel=supabase.channel("track-"+code).on("postgres_changes",{event:"UPDATE",schema:"public",table:"orders",filter:"order_code=eq."+code},payload=>setOrder(payload.new as Order)).subscribe();
-    return()=>{active=false;supabase.removeChannel(channel);};
-  },[code]);
+    const timer=window.setInterval(load,5000);
+    return()=>{active=false;window.clearInterval(timer);};
+  },[token]);
   if(loading)return <main className="sb-customer-page"><div className="sb-loading">🍿 Loading your order…</div></main>;
   if(error||!order)return <main className="sb-customer-page"><div className="sb-page-shell"><section className="sb-empty-state"><span>🍿</span><h2>Order not found</h2><p>{error}</p><button onClick={()=>router.push("/my-orders")}>Back to My Orders</button></section></div></main>;
   const status=(order.status||"NEW").toUpperCase();

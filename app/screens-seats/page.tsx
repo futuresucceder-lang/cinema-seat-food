@@ -59,12 +59,10 @@ export default function ScreensSeatsPage() {
     }
 
     const role =
-      user.app_metadata?.role ??
-      user.user_metadata?.role;
+      user.app_metadata?.role;
 
     const managerCinemaId =
-      user.app_metadata?.cinema_id ??
-      user.user_metadata?.cinema_id;
+      user.app_metadata?.cinema_id;
 
     if (role !== "manager") {
       throw new Error(

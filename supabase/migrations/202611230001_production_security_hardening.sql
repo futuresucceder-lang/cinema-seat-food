@@ -196,7 +196,7 @@ begin
   select s.id into v_screen_id
   from public.screens s
   where s.cinema_id = new.cinema_id
-    and coalesce(nullif(regexp_replace(s.name, '[^0-9]', '', 'g'), ''), s.name) = new.screen
+    and coalesce(substring(s.name from '[0-9]+'), s.name) = new.screen
   limit 1;
 
   if v_screen_id is null then
@@ -213,7 +213,8 @@ begin
   end if;
 
   if jsonb_typeof(new.food_items) <> 'array'
-     or jsonb_array_length(new.food_items) = 0 then
+     or jsonb_array_length(new.food_items) = 0
+     or jsonb_array_length(new.food_items) > 30 then
     raise exception 'Please select at least one food item.';
   end if;
 
@@ -311,7 +312,8 @@ as $$
   select o.tracking_token, o.order_code, o.cinema_id, o.screen, o.seat, o.food_items,
          o.total, o.status, o.created_at, o.delivery_option
   from public.orders o
-  where o.tracking_token = any(coalesce(p_tracking_tokens, array[]::uuid[]))
+  where cardinality(coalesce(p_tracking_tokens, array[]::uuid[])) <= 100
+    and o.tracking_token = any(coalesce(p_tracking_tokens, array[]::uuid[]))
   order by o.created_at desc
   limit 100;
 $$;

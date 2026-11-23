@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import SeatBiteLanding from "@/app/components/SeatBiteLanding";
 
 type Category = "All" | "Burgers" | "Pizzas" | "Snacks" | "Drinks" | "Combo Deals";
-type SavedOrder = { order_code: string; status: string; screen: string; seat: string; created_at: string; delivery_option?: string | null };
+type SavedOrder = { order_code: string; tracking_token: string; status: string; screen: string; seat: string; created_at: string; delivery_option?: string | null };
 type ShowSchedule = { id: string; show_end_at: string };
 type DeliveryOption = "NOW" | "INTERVAL";
 type FoodItem = {
@@ -124,20 +124,15 @@ function CustomerOrderPage() {
       setOrdersLoading(true);
       setOrdersError("");
       try {
-        const stored = JSON.parse(localStorage.getItem("cinema_order_codes") || "[]");
-        const codes = Array.isArray(stored)
-          ? [...new Set(stored.filter((code): code is string => typeof code === "string" && code.length > 0))]
+        const stored = JSON.parse(localStorage.getItem("cinema_order_tracking_tokens") || "[]");
+        const tokens = Array.isArray(stored)
+          ? [...new Set(stored.filter((token): token is string => typeof token === "string" && /^[0-9a-f-]{36}$/i.test(token)))].slice(-100)
           : [];
-        if (codes.length === 0) {
+        if (tokens.length === 0) {
           if (!cancelled) setSavedOrders([]);
           return;
         }
-        const { data, error } = await supabase
-          .from("orders")
-          .select("order_code,status,screen,seat,created_at,delivery_option")
-          .eq("cinema_id", cinemaId)
-          .in("order_code", codes)
-          .order("created_at", { ascending: false });
+        const { data, error } = await supabase.rpc("get_customer_orders", { p_tracking_tokens: tokens });
         if (cancelled) return;
         if (error) {
           console.error("Could not load saved orders:", error);
@@ -146,7 +141,7 @@ function CustomerOrderPage() {
         }
         setSavedOrders((data || []) as SavedOrder[]);
       } catch (error) {
-        console.warn("Could not read saved order codes:", error);
+        console.warn("Could not read saved order tokens:", error);
         if (!cancelled) setSavedOrders([]);
       } finally {
         if (!cancelled) setOrdersLoading(false);
@@ -197,6 +192,7 @@ function CustomerOrderPage() {
     }
     setIsSubmitting(true);
     const newOrderCode = "CINEMA-" + crypto.randomUUID().slice(0, 8).toUpperCase();
+    const trackingToken = crypto.randomUUID();
     const orderedFoodItems = Object.entries(cart).flatMap(([id, quantity]) => {
       const item = foodItems.find((food) => food.id === id);
       return item ? [{
@@ -212,6 +208,7 @@ function CustomerOrderPage() {
     try {
       const { error } = await supabase.from("orders").insert({
         order_code: newOrderCode,
+        tracking_token: trackingToken,
         movie: null,
         cinema_id: cinemaId,
         screen,
@@ -252,17 +249,20 @@ function CustomerOrderPage() {
     try {
       const previousCodes = JSON.parse(localStorage.getItem("cinema_order_codes") || "[]");
       localStorage.setItem("cinema_order_codes", JSON.stringify([...previousCodes, newOrderCode]));
+      const previousTokens = JSON.parse(localStorage.getItem("cinema_order_tracking_tokens") || "[]");
+      const safeTokens = Array.isArray(previousTokens) ? previousTokens.filter((token) => typeof token === "string") : [];
+      localStorage.setItem("cinema_order_tracking_tokens", JSON.stringify([...safeTokens, trackingToken].slice(-100)));
     } catch (error) {
       console.warn("Could not save order code on this device:", error);
     }
-    setSavedOrders((previous) => [{ order_code: newOrderCode, status: "NEW", screen, seat, created_at: new Date().toISOString(), delivery_option: deliveryOption }, ...previous.filter((item) => item.order_code !== newOrderCode)]);
+    setSavedOrders((previous) => [{ order_code: newOrderCode, tracking_token: trackingToken, status: "NEW", screen, seat, created_at: new Date().toISOString(), delivery_option: deliveryOption }, ...previous.filter((item) => item.order_code !== newOrderCode)]);
     setOrderCode(newOrderCode);
     setOrderPlaced(true);
     setIsSubmitting(false);
   }
 
   function trackOrder() {
-    if (orderCode) router.push("/order-status?order=" + encodeURIComponent(orderCode));
+    if (orderCode) { const saved = savedOrders.find((item) => item.order_code === orderCode); if (saved?.tracking_token) router.push("/order-status?token=" + encodeURIComponent(saved.tracking_token)); }
   }
   function backToMenu() {
     setCart({});
@@ -366,7 +366,7 @@ function CustomerOrderPage() {
               <div className="seatbite-drawer-saved-orders">
                 <h3>Track previous orders</h3>
                 {ordersLoading ? <p>Loading your orders…</p> : ordersError ? <p>{ordersError}</p> : savedOrders.length === 0 ? <p>Your placed orders will appear here.</p> :
-                  savedOrders.slice(0,3).map((savedOrder) => <div key={savedOrder.order_code}><span>{savedOrder.order_code}</span><button type="button" onClick={() => router.push("/order-status?order=" + encodeURIComponent(savedOrder.order_code))}>Track order →</button></div>)}
+                  savedOrders.slice(0,3).map((savedOrder) => <div key={savedOrder.order_code}><span>{savedOrder.order_code}</span><button type="button" onClick={() => router.push("/order-status?token=" + encodeURIComponent(savedOrder.tracking_token))}>Track order →</button></div>)}
               </div>
             </section>
           </div>

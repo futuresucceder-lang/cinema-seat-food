@@ -74,8 +74,7 @@ export default function MasterAdminPage() {
       setAuthReady(true);
       return false;
     }
-    const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle();
-    const allowed = user.app_metadata?.role === "master_admin" || profile?.role === "master_admin";
+    const allowed = user.app_metadata?.role === "master_admin";
     setIsMasterAdmin(Boolean(allowed));
     setAuthReady(true);
     return Boolean(allowed);

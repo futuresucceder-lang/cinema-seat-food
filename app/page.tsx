@@ -255,7 +255,7 @@ function CustomerOrderPage() {
     } catch (error) {
       console.warn("Could not save order code on this device:", error);
     }
-    setSavedOrders((previous) => [{ order_code: newOrderCode, tracking_token: trackingToken, status: "NEW", screen, seat, created_at: new Date().toISOString(), delivery_option: deliveryOption }, ...previous.filter((item) => item.order_code !== newOrderCode)]);
+    setSavedOrders((previous) => [{ order_code: newOrderCode, tracking_token: trackingToken, cinema_id: cinemaId, status: "NEW", screen, seat, created_at: new Date().toISOString(), delivery_option: deliveryOption }, ...previous.filter((item) => item.order_code !== newOrderCode)]);
     setOrderCode(newOrderCode);
     setOrderPlaced(true);
     setIsSubmitting(false);

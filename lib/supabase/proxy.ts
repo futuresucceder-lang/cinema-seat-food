@@ -68,8 +68,17 @@ export async function updateSession(request: NextRequest) {
 
   const role =
     (claims?.app_metadata as { role?: string } | undefined)?.role;
+  let profileRole: string | null = null;
+  if (masterAdminRoute && claims?.sub && role !== "master_admin") {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", claims.sub)
+      .maybeSingle();
+    profileRole = profile?.role ?? null;
+  }
 
-  if (masterAdminRoute && role !== "master_admin") {
+  if (masterAdminRoute && role !== "master_admin" && profileRole !== "master_admin") {
     const url = request.nextUrl.clone();
     url.pathname = "/master-login";
     url.search = "";

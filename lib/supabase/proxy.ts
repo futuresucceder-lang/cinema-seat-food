@@ -71,7 +71,7 @@ export async function updateSession(request: NextRequest) {
 
   if (masterAdminRoute && role !== "master_admin") {
     const url = request.nextUrl.clone();
-    url.pathname = "/manager-login";
+    url.pathname = "/master-login";
     url.search = "";
     return NextResponse.redirect(url);
   }

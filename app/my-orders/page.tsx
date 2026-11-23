@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 const supabase = createClient();
 const inr = (n:number) => new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(n);
 type FoodItem = {id:string|number;name:string;price:number;quantity:number;emoji?:string};
-type Order = {id:number;order_code:string;screen:string|null;seat:string|null;food_items:FoodItem[];total:number|null;status:string|null;created_at:string};
+type Order = {order_code:string;tracking_token:string;screen:string|null;seat:string|null;food_items:FoodItem[];total:number|null;status:string|null;created_at:string};
 
 function MyOrdersContent(){
   const router=useRouter(), params=useSearchParams();
@@ -20,9 +20,10 @@ function MyOrdersContent(){
     let active=true;
     async function load(){
       try{
-        const codes=JSON.parse(localStorage.getItem("cinema_order_codes")||"[]");
-        if(!Array.isArray(codes)||!codes.length){if(active){setOrders([]);setLoading(false);}return;}
-        const result=await supabase.from("orders").select("*").in("order_code",codes).order("created_at",{ascending:false});
+        const stored=JSON.parse(localStorage.getItem("cinema_order_tracking_tokens")||"[]");
+        const tokens=Array.isArray(stored)?[...new Set(stored.filter((token):token is string=>typeof token==="string"&&/^[0-9a-f-]{36}$/i.test(token)))].slice(-100):[];
+        if(!tokens.length){if(active){setOrders([]);setLoading(false);}return;}
+        const result=await supabase.rpc("get_customer_orders",{p_tracking_tokens:tokens});
         if(!active)return;
         if(result.error)console.error("Could not load customer orders",result.error);
         setOrders((result.data||[]) as Order[]);
@@ -30,16 +31,17 @@ function MyOrdersContent(){
       if(active)setLoading(false);
     }
     load();
-    const channel=supabase.channel("customer-order-history").on("postgres_changes",{event:"UPDATE",schema:"public",table:"orders"},payload=>{
-      const next=payload.new as Order;
-      setOrders(old=>old.map(o=>o.order_code===next.order_code?{...o,...next}:o));
-    }).subscribe();
-    return()=>{active=false;supabase.removeChannel(channel);};
+    const timer=window.setInterval(()=>{
+      const stored=JSON.parse(localStorage.getItem("cinema_order_tracking_tokens")||"[]");
+      const tokens=Array.isArray(stored)?stored.filter((token):token is string=>typeof token==="string"&&/^[0-9a-f-]{36}$/i.test(token)).slice(-100):[];
+      if(tokens.length)supabase.rpc("get_customer_orders",{p_tracking_tokens:tokens}).then(({data,error})=>{if(!error&&data)setOrders(data as Order[]);});
+    },5000);
+    return()=>{active=false;window.clearInterval(timer);};
   },[]);
   const status=(s:string|null)=>(s||"NEW").toUpperCase();
   const active=(s:string|null)=>["NEW","PREPARING","READY"].includes(status(s));
   const label=(s:string|null)=>({NEW:"● Received",PREPARING:"● Preparing",READY:"● Ready",COMPLETED:"✓ Delivered",CANCELLED:"× Cancelled"} as Record<string,string>)[status(s)]||"Received";
-  function track(code:string){router.push("/order-status?order="+encodeURIComponent(code));}
+  function track(token:string){router.push("/order-status?token="+encodeURIComponent(token));}
   return <main className="sb-customer-page"><div className="sb-page-shell">
     <header className="sb-header"><a href={menuUrl} className="sb-logo-link"><img src="/seatbite-logo.webp.jpg" alt="SeatBite"/></a><button className="sb-header-order" onClick={()=>router.push(menuUrl)}><span>🛒</span> My Order <b>0</b></button></header>
     <section className="sb-hero sb-hero-orders"><div className="sb-hero-copy"><p className="sb-kicker">YOUR MOVIE NIGHT, ALL IN ONE PLACE</p><h1>My Orders</h1><p>Your past orders &amp; latest status</p></div><div className="sb-hero-art" aria-hidden="true"><img src="/seatbite-cinema-hero.svg" alt=""/></div></section>
@@ -52,7 +54,7 @@ function MyOrdersContent(){
         <div className="sb-history-content">
           <div className="sb-history-top"><div><h3>Order #{order.order_code}</h3><p>▦ {new Date(order.created_at).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})}</p></div><span className={"sb-status-pill "+statusValue.toLowerCase()}>{label(order.status)}</span></div>
           <div className="sb-history-thumbs">{items.slice(0,3).map((item,i)=><span key={String(item.id)+i}>{item.emoji||"🍿"}</span>)}{items.length>3&&<small>+{items.length-3} more</small>}</div>
-          <div className="sb-history-bottom"><strong>Total: <b>{inr(Number(order.total)||0)}</b></strong>{active(order.status)?<button onClick={()=>track(order.order_code)}>Track Order ›</button>:<button onClick={()=>setExpanded(open?null:order.order_code)}>{open?"Hide Details":"View Details ›"}</button>}</div>
+          <div className="sb-history-bottom"><strong>Total: <b>{inr(Number(order.total)||0)}</b></strong>{active(order.status)?<button onClick={()=>track(order.tracking_token)}>Track Order ›</button>:<button onClick={()=>setExpanded(open?null:order.order_code)}>{open?"Hide Details":"View Details ›"}</button>}</div>
           {open&&<div className="sb-expanded-details"><p>Screen <b>{order.screen||"—"}</b> · Seat <b>{order.seat||"—"}</b></p>{items.map((item,i)=><div key={String(item.id)+i}><span>{item.emoji||"🍽️"} {item.name} × {item.quantity||1}</span><b>{inr((Number(item.price)||0)*(item.quantity||1))}</b></div>)}</div>}
         </div>
       </article>;

@@ -76,6 +76,16 @@ with check (
 );
 
 -- No anonymous/authenticated direct order reads. Customers use narrowly-scoped RPCs.
+-- Least-privilege SQL grants complement RLS: customers can insert only the checkout fields,
+-- and staff can update only the order status.
+revoke select on table public.orders from anon;
+revoke insert on table public.orders from anon;
+grant insert (order_code, movie, cinema_id, screen, seat, food_items, total, status, delivery_option, tracking_token)
+  on table public.orders to anon;
+
+revoke update on table public.orders from authenticated;
+grant update (status) on table public.orders to authenticated;
+
 drop policy if exists "Managers can delete food items" on public.food_items;
 drop policy if exists "Managers can insert food items" on public.food_items;
 drop policy if exists "Managers can update food items" on public.food_items;

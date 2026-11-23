@@ -26,7 +26,7 @@ function TrackingContent(){
     load();
     const timer=window.setInterval(load,5000);
     return()=>{active=false;window.clearInterval(timer);};
-  },[code]);
+  },[token]);
   if(loading)return <main className="sb-customer-page"><div className="sb-loading">🍿 Loading your order…</div></main>;
   if(error||!order)return <main className="sb-customer-page"><div className="sb-page-shell"><section className="sb-empty-state"><span>🍿</span><h2>Order not found</h2><p>{error}</p><button onClick={()=>router.push("/my-orders")}>Back to My Orders</button></section></div></main>;
   const status=(order.status||"NEW").toUpperCase();

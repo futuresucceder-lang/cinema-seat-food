@@ -34,7 +34,7 @@ function MyOrdersContent(){
     const timer=window.setInterval(()=>{
       const stored=JSON.parse(localStorage.getItem("cinema_order_tracking_tokens")||"[]");
       const tokens=Array.isArray(stored)?stored.filter((token):token is string=>typeof token==="string"&&/^[0-9a-f-]{36}$/i.test(token)).slice(-100):[];
-      if(tokens.length)supabase.rpc("get_customer_orders",{p_tracking_tokens:tokens}).then(({data,error})=>{if(!error&&data)setOrders(data as Order[]);});
+      if(tokens.length)supabase.rpc("get_customer_orders",{p_tracking_tokens:tokens}).then(({data,error})=>{if(!error&&data)setOrders((data as Order[]).filter((order)=>!cinema||order.cinema_id===cinema));});
     },5000);
     return()=>{active=false;window.clearInterval(timer);};
   },[cinema]);

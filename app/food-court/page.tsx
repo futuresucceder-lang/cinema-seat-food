@@ -55,12 +55,10 @@ export default function FoodCourtPage() {
     }
 
     const role =
-      user.app_metadata?.role ??
-      user.user_metadata?.role;
+      user.app_metadata?.role;
 
     const userCinemaId =
-      user.app_metadata?.cinema_id ??
-      user.user_metadata?.cinema_id;
+      user.app_metadata?.cinema_id;
 
     console.log("Food Court user:", user.email);
     console.log("Food Court role:", role);

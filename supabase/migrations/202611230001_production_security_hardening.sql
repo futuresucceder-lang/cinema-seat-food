@@ -16,12 +16,12 @@ returns boolean
 language sql
 security definer
 set search_path = public
-as $
+as $function$
   select exists (
     select 1 from public.cinemas c
     where c.id = p_cinema_id and c.is_active = true
   );
-$;
+$function$;
 revoke all on function public.is_active_cinema(uuid) from public;
 grant execute on function public.is_active_cinema(uuid) to anon, authenticated;
 
@@ -36,18 +36,18 @@ create policy "Staff can read orders in their cinema"
 on public.orders for select to authenticated
 using (
   (auth.jwt() -> 'app_metadata' ->> 'role') in ('manager', 'food_court')
-  and cinema_id::text = auth.jwt() -> 'app_metadata' ->> 'cinema_id'
+  and cinema_id::text = (auth.jwt() -> 'app_metadata' ->> 'cinema_id')
 );
 
 create policy "Staff can update orders in their cinema"
 on public.orders for update to authenticated
 using (
   (auth.jwt() -> 'app_metadata' ->> 'role') in ('manager', 'food_court')
-  and cinema_id::text = auth.jwt() -> 'app_metadata' ->> 'cinema_id'
+  and cinema_id::text = (auth.jwt() -> 'app_metadata' ->> 'cinema_id')
 )
 with check (
   (auth.jwt() -> 'app_metadata' ->> 'role') in ('manager', 'food_court')
-  and cinema_id::text = auth.jwt() -> 'app_metadata' ->> 'cinema_id'
+  and cinema_id::text = (auth.jwt() -> 'app_metadata' ->> 'cinema_id')
 );
 
 create policy "Customers can create valid cinema orders"
@@ -77,32 +77,32 @@ create policy "Managers can view their cinema food items"
 on public.food_items for select to authenticated
 using (
   (auth.jwt() -> 'app_metadata' ->> 'role') = 'manager'
-  and cinema_id::text = auth.jwt() -> 'app_metadata' ->> 'cinema_id'
+  and cinema_id::text = (auth.jwt() -> 'app_metadata' ->> 'cinema_id')
 );
 
 create policy "Managers can insert food items for their cinema"
 on public.food_items for insert to authenticated
 with check (
   (auth.jwt() -> 'app_metadata' ->> 'role') = 'manager'
-  and cinema_id::text = auth.jwt() -> 'app_metadata' ->> 'cinema_id'
+  and cinema_id::text = (auth.jwt() -> 'app_metadata' ->> 'cinema_id')
 );
 
 create policy "Managers can update food items in their cinema"
 on public.food_items for update to authenticated
 using (
   (auth.jwt() -> 'app_metadata' ->> 'role') = 'manager'
-  and cinema_id::text = auth.jwt() -> 'app_metadata' ->> 'cinema_id'
+  and cinema_id::text = (auth.jwt() -> 'app_metadata' ->> 'cinema_id')
 )
 with check (
   (auth.jwt() -> 'app_metadata' ->> 'role') = 'manager'
-  and cinema_id::text = auth.jwt() -> 'app_metadata' ->> 'cinema_id'
+  and cinema_id::text = (auth.jwt() -> 'app_metadata' ->> 'cinema_id')
 );
 
 create policy "Managers can delete food items in their cinema"
 on public.food_items for delete to authenticated
 using (
   (auth.jwt() -> 'app_metadata' ->> 'role') = 'manager'
-  and cinema_id::text = auth.jwt() -> 'app_metadata' ->> 'cinema_id'
+  and cinema_id::text = (auth.jwt() -> 'app_metadata' ->> 'cinema_id')
 );
 
 -- Public QR customers do not need direct access to the screen/seat tables.

@@ -212,10 +212,13 @@ begin
     raise exception 'The selected seat is not active for this screen.';
   end if;
 
-  if jsonb_typeof(new.food_items) <> 'array'
-     or jsonb_array_length(new.food_items) = 0
+  if jsonb_typeof(new.food_items) is distinct from 'array' then
+    raise exception 'The food item list is invalid.';
+  end if;
+
+  if jsonb_array_length(new.food_items) = 0
      or jsonb_array_length(new.food_items) > 30 then
-    raise exception 'Please select at least one food item.';
+    raise exception 'An order must contain between 1 and 30 food item lines.';
   end if;
 
   for v_item in select value from jsonb_array_elements(new.food_items)
@@ -227,7 +230,7 @@ begin
       raise exception 'The order contains an invalid food item.';
     end;
 
-    if v_quantity < 1 or v_quantity > 20 then
+    if v_quantity is null or v_quantity < 1 or v_quantity > 20 then
       raise exception 'Food item quantity must be between 1 and 20.';
     end if;
 

@@ -41,11 +41,12 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith("/admin") ||
     pathname.startsWith("/order-history") ||
     pathname.startsWith("/screens-seats") ||
-    pathname.startsWith("/qr-generator");
+    pathname.startsWith("/qr-generator") ||
+    pathname.startsWith("/show-schedule");
 
   // Do not protect the public Food Court login page itself.
   const foodCourtRoute =
-    pathname.startsWith("/food-court/") &&
+    (pathname === "/food-court" || pathname.startsWith("/food-court/")) &&
     !pathname.startsWith("/food-court-login");
 
   // Master Admin pages are protected independently from cinema staff routes.
@@ -60,7 +61,7 @@ export async function updateSession(request: NextRequest) {
   // Any protected page requires login.
   if ((managerRoutes || foodCourtRoute) && !claims) {
     const url = request.nextUrl.clone();
-    url.pathname = "/manager-login";
+    url.pathname = foodCourtRoute ? "/food-court-login" : "/manager-login";
     url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }

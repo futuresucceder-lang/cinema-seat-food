@@ -130,6 +130,105 @@ create index if not exists screens_cinema_id_idx
 create index if not exists orders_cinema_status_created_idx
   on public.orders (cinema_id, status, created_at desc);
 
+-- Validate every public order against the authoritative cinema, seat and menu records.
+-- This prevents forged prices, fake seats, unavailable items and client-supplied status values.
+create or replace function public.validate_customer_order()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $function$
+declare
+  v_screen_id uuid;
+  v_item jsonb;
+  v_item_id uuid;
+  v_quantity integer;
+  v_food record;
+  v_total numeric := 0;
+  v_normalized_items jsonb := '[]'::jsonb;
+begin
+  if not public.is_active_cinema(new.cinema_id) then
+    raise exception 'This cinema is not accepting online orders.';
+  end if;
+
+  if new.delivery_option not in ('NOW', 'INTERVAL') then
+    raise exception 'Invalid delivery option.';
+  end if;
+
+  select s.id into v_screen_id
+  from public.screens s
+  where s.cinema_id = new.cinema_id
+    and coalesce(nullif(regexp_replace(s.name, '[^0-9]', '', 'g'), ''), s.name) = new.screen
+  limit 1;
+
+  if v_screen_id is null then
+    raise exception 'The selected screen does not belong to this cinema.';
+  end if;
+
+  if not exists (
+    select 1 from public.seats st
+    where st.screen_id = v_screen_id
+      and st.seat_number = new.seat
+      and st.is_active = true
+  ) then
+    raise exception 'The selected seat is not active for this screen.';
+  end if;
+
+  if jsonb_typeof(new.food_items) <> 'array'
+     or jsonb_array_length(new.food_items) = 0 then
+    raise exception 'Please select at least one food item.';
+  end if;
+
+  for v_item in select value from jsonb_array_elements(new.food_items)
+  loop
+    begin
+      v_item_id := (v_item ->> 'id')::uuid;
+      v_quantity := (v_item ->> 'quantity')::integer;
+    exception when others then
+      raise exception 'The order contains an invalid food item.';
+    end;
+
+    if v_quantity < 1 or v_quantity > 20 then
+      raise exception 'Food item quantity must be between 1 and 20.';
+    end if;
+
+    select fi.id, fi.name, fi.price
+      into v_food
+    from public.food_items fi
+    where fi.id = v_item_id
+      and fi.cinema_id = new.cinema_id
+      and fi.is_available = true;
+
+    if not found then
+      raise exception 'A selected food item is unavailable for this cinema.';
+    end if;
+
+    v_total := v_total + (v_food.price * v_quantity);
+    v_normalized_items := v_normalized_items || jsonb_build_array(
+      jsonb_build_object(
+        'id', v_food.id,
+        'name', v_food.name,
+        'price', v_food.price,
+        'emoji', coalesce(nullif(v_item ->> 'emoji', ''), '🍿'),
+        'quantity', v_quantity
+      )
+    );
+  end loop;
+
+  new.food_items := v_normalized_items;
+  new.total := v_total;
+  new.status := 'NEW';
+  new.movie := null;
+  return new;
+end;
+$function$;
+
+drop trigger if exists validate_customer_order_before_insert on public.orders;
+create trigger validate_customer_order_before_insert
+before insert on public.orders
+for each row
+execute function public.validate_customer_order();
+
 -- Only return the small set of fields customers need to track their own order.
 create or replace function public.get_customer_order(p_tracking_token uuid)
 returns table (

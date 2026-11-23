@@ -48,6 +48,15 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith("/food-court/") &&
     !pathname.startsWith("/food-court-login");
 
+  // Master Admin pages are protected independently from cinema staff routes.
+  const masterAdminRoute = pathname === "/master-admin" || pathname.startsWith("/master-admin/");
+  if (masterAdminRoute && !claims) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/master-login";
+    url.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(url);
+  }
+
   // Any protected page requires login.
   if ((managerRoutes || foodCourtRoute) && !claims) {
     const url = request.nextUrl.clone();
@@ -58,6 +67,13 @@ export async function updateSession(request: NextRequest) {
 
   const role =
     (claims?.app_metadata as { role?: string } | undefined)?.role;
+
+  if (masterAdminRoute && role !== "master_admin") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/manager-login";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
 
   // Manager-only pages.
   if (managerRoutes && role !== "manager") {

@@ -20,8 +20,8 @@ export default function ShowSchedulePage() {
 
   async function load() {
     const { data: { user }, error: authError } = await supabase.auth.getUser();
-    const role = user?.app_metadata?.role ?? user?.user_metadata?.role;
-    const assignedCinema = user?.app_metadata?.cinema_id ?? user?.user_metadata?.cinema_id;
+    const role = user?.app_metadata?.role;
+    const assignedCinema = user?.app_metadata?.cinema_id;
     if (authError || !user || role !== "manager" || !assignedCinema) {
       setMessage("Please sign in with the manager account assigned to this cinema.");
       setLoading(false);

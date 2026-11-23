@@ -690,7 +690,7 @@ export default function FoodCourtPage() {
         {screenGroups.map(([screenName, screenOrders]) => (
           <section key={screenName} aria-label={`Orders for ${screenName}`}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap", marginBottom: "14px", padding: "13px 18px", borderRadius: "14px", background: "#242424", borderLeft: "5px solid #f45135", color: "#fff" }}>
-              <h2 style={{ margin: 0, fontSize: "20px" }}>🎬 {screenName === "Unassigned" ? "Screen not specified" : `Screen ${screenName.replace(/^screen\s*/i, "")}`}</h2>
+              <h2 style={{ margin: 0, fontSize: "20px", color: "#ffffff" }}>🎬 {screenName === "Unassigned" ? "Screen not specified" : `Screen ${screenName.replace(/^screen\s*/i, "")}`}</h2>
               <span style={{ background: "#f45135", color: "#fff", padding: "5px 11px", borderRadius: "20px", fontWeight: 800, fontSize: "13px" }}>{screenOrders.length} {screenOrders.length === 1 ? "order" : "orders"}</span>
             </div>
             <div className="seatbite-food-court-order-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px" }}>

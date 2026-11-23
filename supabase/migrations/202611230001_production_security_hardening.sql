@@ -134,6 +134,7 @@ $$;
 
 create or replace function public.get_customer_orders(p_tracking_tokens uuid[])
 returns table (
+  tracking_token uuid,
   order_code text,
   cinema_id uuid,
   screen text,
@@ -148,7 +149,7 @@ language sql
 security definer
 set search_path = public
 as $$
-  select o.order_code, o.cinema_id, o.screen, o.seat, o.food_items,
+  select o.tracking_token, o.order_code, o.cinema_id, o.screen, o.seat, o.food_items,
          o.total, o.status, o.created_at, o.delivery_option
   from public.orders o
   where o.tracking_token = any(coalesce(p_tracking_tokens, array[]::uuid[]))

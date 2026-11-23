@@ -67,7 +67,7 @@ drop policy if exists "Managers can update food items" on public.food_items;
 drop policy if exists "Allow public read access on food_items" on public.food_items;
 
 create policy "Public can view available items at active cinemas"
-on public.food_items for select to anon, authenticated
+on public.food_items for select to anon
 using (
   is_available = true
   and public.is_active_cinema(cinema_id)
@@ -100,6 +100,19 @@ with check (
 
 create policy "Managers can delete food items in their cinema"
 on public.food_items for delete to authenticated
+using (
+  (auth.jwt() -> 'app_metadata' ->> 'role') = 'manager'
+  and cinema_id::text = (auth.jwt() -> 'app_metadata' ->> 'cinema_id')
+);
+
+-- Keep public show-time lookup anonymous; signed-in staff see only their own cinema.
+drop policy if exists "Public can read show schedules" on public.show_schedules;
+create policy "Public can read show schedules"
+on public.show_schedules for select to anon
+using (true);
+
+create policy "Managers can view schedules for their cinema"
+on public.show_schedules for select to authenticated
 using (
   (auth.jwt() -> 'app_metadata' ->> 'role') = 'manager'
   and cinema_id::text = (auth.jwt() -> 'app_metadata' ->> 'cinema_id')

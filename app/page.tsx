@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import SeatBiteLanding from "@/app/components/SeatBiteLanding";
 
 type Category = "All" | "Burgers" | "Pizzas" | "Snacks" | "Drinks" | "Combo Deals";
-type SavedOrder = { order_code: string; tracking_token: string; status: string; screen: string; seat: string; created_at: string; delivery_option?: string | null };
+type SavedOrder = { order_code: string; tracking_token: string; cinema_id: string; status: string; screen: string; seat: string; created_at: string; delivery_option?: string | null };
 type ShowSchedule = { id: string; show_end_at: string };
 type DeliveryOption = "NOW" | "INTERVAL";
 type FoodItem = {
@@ -139,7 +139,7 @@ function CustomerOrderPage() {
           setOrdersError("We couldn't load your previous orders. Please try again.");
           return;
         }
-        setSavedOrders((data || []) as SavedOrder[]);
+        setSavedOrders(((data || []) as SavedOrder[]).filter((order) => order.cinema_id === cinemaId));
       } catch (error) {
         console.warn("Could not read saved order tokens:", error);
         if (!cancelled) setSavedOrders([]);

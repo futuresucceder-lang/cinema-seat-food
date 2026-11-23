@@ -79,7 +79,7 @@ export async function updateSession(request: NextRequest) {
   // Manager-only pages.
   if (managerRoutes && role !== "manager") {
     const url = request.nextUrl.clone();
-    url.pathname = "/food-court";
+    url.pathname = role === "food_court" ? "/food-court" : role === "master_admin" ? "/master-admin" : "/manager-login";
     url.search = "";
     return NextResponse.redirect(url);
   }
@@ -87,7 +87,7 @@ export async function updateSession(request: NextRequest) {
   // Food Court-only page.
   if (foodCourtRoute && role !== "food_court") {
     const url = request.nextUrl.clone();
-    url.pathname = "/admin";
+    url.pathname = role === "manager" ? "/admin" : role === "master_admin" ? "/master-admin" : "/food-court-login";
     url.search = "";
     return NextResponse.redirect(url);
   }

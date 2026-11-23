@@ -236,8 +236,8 @@ export default function FoodCourtPage() {
         .filter((screen) => screen.length > 0)
     )
   ).sort((a, b) => {
-    const aNumber = Number(a.replace(/\\D/g, ""));
-    const bNumber = Number(b.replace(/\\D/g, ""));
+    const aNumber = Number(a.replace(/\D/g, ""));
+    const bNumber = Number(b.replace(/\D/g, ""));
     if (aNumber && bNumber) return aNumber - bNumber;
     return a.localeCompare(b, undefined, { numeric: true });
   });
@@ -250,7 +250,7 @@ export default function FoodCourtPage() {
         );
 
   function screenButtonLabel(screen: string) {
-    return screen.replace(/^screen\\s*/i, "").trim();
+    return screen.replace(/^screen\s*/i, "").trim();
   }
 
   function screenOrderCount(screen: string) {

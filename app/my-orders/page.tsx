@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 const supabase = createClient();
 const inr = (n:number) => new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(n);
 type FoodItem = {id:string|number;name:string;price:number;quantity:number;emoji?:string};
-type Order = {order_code:string;tracking_token:string;screen:string|null;seat:string|null;food_items:FoodItem[];total:number|null;status:string|null;created_at:string};
+type Order = {order_code:string;tracking_token:string;cinema_id:string;screen:string|null;seat:string|null;food_items:FoodItem[];total:number|null;status:string|null;created_at:string};
 
 function MyOrdersContent(){
   const router=useRouter(), params=useSearchParams();
@@ -26,7 +26,7 @@ function MyOrdersContent(){
         const result=await supabase.rpc("get_customer_orders",{p_tracking_tokens:tokens});
         if(!active)return;
         if(result.error)console.error("Could not load customer orders",result.error);
-        setOrders((result.data||[]) as Order[]);
+        setOrders(((result.data||[]) as Order[]).filter((order)=>!cinema || order.cinema_id===cinema));
       }catch(e){console.error(e);}
       if(active)setLoading(false);
     }
@@ -37,7 +37,7 @@ function MyOrdersContent(){
       if(tokens.length)supabase.rpc("get_customer_orders",{p_tracking_tokens:tokens}).then(({data,error})=>{if(!error&&data)setOrders(data as Order[]);});
     },5000);
     return()=>{active=false;window.clearInterval(timer);};
-  },[]);
+  },[cinema]);
   const status=(s:string|null)=>(s||"NEW").toUpperCase();
   const active=(s:string|null)=>["NEW","PREPARING","READY"].includes(status(s));
   const label=(s:string|null)=>({NEW:"● Received",PREPARING:"● Preparing",READY:"● Ready",COMPLETED:"✓ Delivered",CANCELLED:"× Cancelled"} as Record<string,string>)[status(s)]||"Received";
@@ -49,7 +49,7 @@ function MyOrdersContent(){
     {loading?<div className="sb-loading">Loading your orders…</div>:orders.length===0?<section className="sb-empty-state"><span>🍿</span><h2>No orders yet!</h2><p>Your movie snack journey starts here.</p><button onClick={()=>router.push(menuUrl)}>Explore Menu</button></section>:
     <section className="sb-order-history-list">{orders.map(order=>{
       const items=order.food_items||[],statusValue=status(order.status),open=expanded===order.order_code;
-      return <article className="sb-history-card" key={order.id}>
+      return <article className="sb-history-card" key={order.order_code}>
         <div className="sb-history-main-image">{items[0]?.emoji||"🍿"}</div>
         <div className="sb-history-content">
           <div className="sb-history-top"><div><h3>Order #{order.order_code}</h3><p>▦ {new Date(order.created_at).toLocaleString("en-IN",{dateStyle:"medium",timeStyle:"short"})}</p></div><span className={"sb-status-pill "+statusValue.toLowerCase()}>{label(order.status)}</span></div>
